@@ -28,19 +28,26 @@ struct ContentView: View {
                 }
                 .tag(1)
 
+            // Reading Plans
+            ReadingPlansListView()
+                .tabItem {
+                    Label("Plans", systemImage: "list.bullet.clipboard.fill")
+                }
+                .tag(2)
+
             // Highlights
             HighlightsListView()
                 .tabItem {
                     Label("Highlights", systemImage: "highlighter")
                 }
-                .tag(2)
+                .tag(3)
 
             // Settings
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
-                .tag(3)
+                .tag(4)
         }
         .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
         .onChange(of: selectedTab) { oldValue, newTab in

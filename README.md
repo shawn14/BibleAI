@@ -43,9 +43,23 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
 - **Search highlights** by reference, verse text, or notes
 - Tap any verse while reading to highlight it
 
+### Reading Plans (NEW 📖)
+- **Pre-built reading plans** to guide your Bible study journey
+- **Progress tracking** with visual progress bars and checkmarks
+- **4 curated plans included**:
+  - Gospel Tour (8 days) - Experience Jesus's life through key moments
+  - Psalms in a Month (30 days) - Read all 150 Psalms with worship and reflection
+  - New Testament in 30 Days - Complete NT in one month
+  - Proverbs Wisdom (31 days) - Daily wisdom from Proverbs
+- **One-tap reading** - Jump directly from plan to Bible reader
+- **Daily reading organization** with chapter groupings
+- **Plan categories**: Overview, Devotional, Topical, Sequential
+- Mark days complete as you progress
+
 ### Tab-Based Navigation
 - **Home Tab**: Chat interface with Verse of the Day and suggestions
 - **Read Tab**: Complete Bible reader with KJV text
+- **Plans Tab**: Browse and follow structured reading plans
 - **Highlights Tab**: View and manage all your highlighted verses
 - **Settings Tab**: Usage tracking and preferences
 
