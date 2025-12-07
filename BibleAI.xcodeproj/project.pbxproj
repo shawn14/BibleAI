@@ -11,6 +11,7 @@
 		4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */; };
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
 		59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */; };
+		639D08FE7BDA04DBADEF3C43 /* Config.private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D05DC55C4854F9222C84474 /* Config.private.swift */; };
 		BA1000001 /* BibleAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000001 /* BibleAIApp.swift */; };
 		BA1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000002 /* ContentView.swift */; };
 		BA1000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA2000003 /* Assets.xcassets */; };
@@ -29,7 +30,6 @@
 		BA1000016 /* BibleBooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000017 /* BibleBooksListView.swift */; };
 		BA1000017 /* ChapterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000018 /* ChapterListView.swift */; };
 		BA1000018 /* ChapterReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000019 /* ChapterReadingView.swift */; };
-		BA1000019 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000020 /* Config.swift */; };
 		BA1000020 /* VerseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000021 /* VerseParser.swift */; };
 		BA1000021 /* VerseOfTheDayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000022 /* VerseOfTheDayService.swift */; };
 		BA1000022 /* VerseSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000023 /* VerseSearchView.swift */; };
@@ -44,6 +44,7 @@
 /* Begin PBXFileReference section */
 		0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanService.swift; sourceTree = "<group>"; };
 		2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlansListView.swift; sourceTree = "<group>"; };
+		6D05DC55C4854F9222C84474 /* Config.private.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Config.private.swift; sourceTree = "<group>"; };
 		87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanDetailView.swift; sourceTree = "<group>"; };
 		AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlan.swift; sourceTree = "<group>"; };
 		BA2000001 /* BibleAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleAIApp.swift; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 				BA5000008 /* Utilities */,
 				BA2000003 /* Assets.xcassets */,
 				BA2000004 /* Info.plist */,
+				6D05DC55C4854F9222C84474 /* Config.private.swift */,
 			);
 			path = BibleAI;
 			sourceTree = "<group>";
@@ -279,7 +281,6 @@
 				BA1000016 /* BibleBooksListView.swift in Sources */,
 				BA1000017 /* ChapterListView.swift in Sources */,
 				BA1000018 /* ChapterReadingView.swift in Sources */,
-				BA1000019 /* Config.swift in Sources */,
 				BA1000020 /* VerseParser.swift in Sources */,
 				BA1000021 /* VerseOfTheDayService.swift in Sources */,
 				BA1000022 /* VerseSearchView.swift in Sources */,
@@ -293,6 +294,7 @@
 				4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */,
 				1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */,
 				59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */,
+				639D08FE7BDA04DBADEF3C43 /* Config.private.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,7 +443,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shawncarpenter.bibleai-companion;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -472,7 +474,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shawncarpenter.bibleai-companion;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
