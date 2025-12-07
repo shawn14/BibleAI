@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatView: View {
     @StateObject private var viewModel: ChatViewModel
     @FocusState private var isInputFocused: Bool
+    @State private var verseOfTheDay: DailyVerse?
 
     init(conversation: Conversation) {
         _viewModel = StateObject(wrappedValue: ChatViewModel(conversation: conversation))
@@ -34,6 +35,15 @@ struct ChatView: View {
                                 Text("Bible AI")
                                     .font(.title2)
                                     .fontWeight(.semibold)
+                            }
+
+                            // Verse of the Day
+                            if let dailyVerse = verseOfTheDay {
+                                VerseOfTheDayCard(verse: dailyVerse) {
+                                    viewModel.currentMessage = "Tell me more about \(dailyVerse.reference)"
+                                    viewModel.sendMessage()
+                                }
+                                .padding(.horizontal, 20)
                             }
 
                             VStack(spacing: 12) {
@@ -78,7 +88,7 @@ struct ChatView: View {
                     }
                 }
                 .background(Color(.systemBackground))
-                .onChange(of: viewModel.conversation.messages.count) { _ in
+                .onChange(of: viewModel.conversation.messages.count) { oldValue, newValue in
                     if let lastMessage = viewModel.conversation.messages.last {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                             proxy.scrollTo(lastMessage.id, anchor: .bottom)
@@ -135,6 +145,12 @@ struct ChatView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(viewModel.errorMessage ?? "An unknown error occurred")
+        }
+        .task {
+            // Load verse of the day when view appears
+            if verseOfTheDay == nil {
+                verseOfTheDay = await VerseOfTheDayService.shared.getVerseOfTheDay()
+            }
         }
     }
 }
@@ -246,6 +262,58 @@ struct SuggestionCard: View {
             }
             .padding(16)
             .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct VerseOfTheDayCard: View {
+    let verse: DailyVerse
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "sunrise.fill")
+                        .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                        .font(.system(size: 18))
+
+                    Text("Verse of the Day")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+
+                    Spacer()
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("\"\(verse.text)\"")
+                        .font(.system(size: 16))
+                        .foregroundColor(.primary)
+                        .lineLimit(4)
+                        .multilineTextAlignment(.leading)
+
+                    Text(verse.reference)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                }
+            }
+            .padding(16)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 0.6, green: 0.4, blue: 0.2).opacity(0.1),
+                        Color(red: 0.6, green: 0.4, blue: 0.2).opacity(0.05)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color(red: 0.6, green: 0.4, blue: 0.2).opacity(0.3), lineWidth: 1)
+            )
             .cornerRadius(12)
         }
         .buttonStyle(PlainButtonStyle())

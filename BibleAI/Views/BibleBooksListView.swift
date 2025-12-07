@@ -10,6 +10,7 @@ import SwiftUI
 struct BibleBooksListView: View {
     @StateObject private var bibleService = EnhancedBibleService.shared
     @State private var selectedTestament: Testament? = nil
+    @State private var showSearch = false
 
     var oldTestamentBooks: [BibleBookInfo] {
         bibleService.getBooks(testament: .old)
@@ -72,6 +73,19 @@ struct BibleBooksListView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("Bible")
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    showSearch = true
+                }) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                }
+            }
+        }
+        .sheet(isPresented: $showSearch) {
+            VerseSearchView(isPresented: $showSearch)
+        }
     }
 }
 

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,15 @@
 		BA1000017 /* ChapterListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000018 /* ChapterListView.swift */; };
 		BA1000018 /* ChapterReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000019 /* ChapterReadingView.swift */; };
 		BA1000019 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000020 /* Config.swift */; };
+		BA1000020 /* VerseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000021 /* VerseParser.swift */; };
+		BA1000021 /* VerseOfTheDayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000022 /* VerseOfTheDayService.swift */; };
+		BA1000022 /* VerseSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000023 /* VerseSearchView.swift */; };
+		BA1000023 /* VerseReferenceText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000024 /* VerseReferenceText.swift */; };
+		BA1000024 /* SimpleVerseText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000025 /* SimpleVerseText.swift */; };
+		BA1000025 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000026 /* Highlight.swift */; };
+		BA1000026 /* HighlightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000027 /* HighlightService.swift */; };
+		BA1000027 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000028 /* NoteEditorView.swift */; };
+		BA1000028 /* HighlightsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000029 /* HighlightsListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +59,15 @@
 		BA2000018 /* ChapterListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterListView.swift; sourceTree = "<group>"; };
 		BA2000019 /* ChapterReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterReadingView.swift; sourceTree = "<group>"; };
 		BA2000020 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		BA2000021 /* VerseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseParser.swift; sourceTree = "<group>"; };
+		BA2000022 /* VerseOfTheDayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseOfTheDayService.swift; sourceTree = "<group>"; };
+		BA2000023 /* VerseSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseSearchView.swift; sourceTree = "<group>"; };
+		BA2000024 /* VerseReferenceText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseReferenceText.swift; sourceTree = "<group>"; };
+		BA2000025 /* SimpleVerseText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleVerseText.swift; sourceTree = "<group>"; };
+		BA2000026 /* Highlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
+		BA2000027 /* HighlightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightService.swift; sourceTree = "<group>"; };
+		BA2000028 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
+		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +99,7 @@
 				BA5000005 /* Views */,
 				BA5000006 /* ViewModels */,
 				BA5000007 /* Services */,
+				BA5000008 /* Utilities */,
 				BA2000003 /* Assets.xcassets */,
 				BA2000004 /* Info.plist */,
 			);
@@ -102,6 +121,7 @@
 				BA2000006 /* Conversation.swift */,
 				BA2000007 /* BibleVerse.swift */,
 				BA2000015 /* BibleBook.swift */,
+				BA2000026 /* Highlight.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -115,6 +135,9 @@
 				BA2000017 /* BibleBooksListView.swift */,
 				BA2000018 /* ChapterListView.swift */,
 				BA2000019 /* ChapterReadingView.swift */,
+				BA2000023 /* VerseSearchView.swift */,
+				BA2000029 /* HighlightsListView.swift */,
+				BA5000009 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -134,8 +157,28 @@
 				BA2000009 /* BibleService.swift */,
 				BA2000010 /* ConversationService.swift */,
 				BA2000016 /* EnhancedBibleService.swift */,
+				BA2000022 /* VerseOfTheDayService.swift */,
+				BA2000027 /* HighlightService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		BA5000008 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				BA2000021 /* VerseParser.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BA5000009 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				BA2000024 /* VerseReferenceText.swift */,
+				BA2000025 /* SimpleVerseText.swift */,
+				BA2000028 /* NoteEditorView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,8 +208,8 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					BA6000001 = {
 						CreatedOnToolsVersion = 15.0;
@@ -174,7 +217,7 @@
 				};
 			};
 			buildConfigurationList = BA7000002 /* Build configuration list for PBXProject "BibleAI" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -225,6 +268,15 @@
 				BA1000017 /* ChapterListView.swift in Sources */,
 				BA1000018 /* ChapterReadingView.swift in Sources */,
 				BA1000019 /* Config.swift in Sources */,
+				BA1000020 /* VerseParser.swift in Sources */,
+				BA1000021 /* VerseOfTheDayService.swift in Sources */,
+				BA1000022 /* VerseSearchView.swift in Sources */,
+				BA1000023 /* VerseReferenceText.swift in Sources */,
+				BA1000024 /* SimpleVerseText.swift in Sources */,
+				BA1000025 /* Highlight.swift in Sources */,
+				BA1000026 /* HighlightService.swift in Sources */,
+				BA1000027 /* NoteEditorView.swift in Sources */,
+				BA1000028 /* HighlightsListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +409,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = JM24HK4C8Q;
 				ENABLE_PREVIEWS = YES;
@@ -387,6 +440,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = JM24HK4C8Q;
 				ENABLE_PREVIEWS = YES;

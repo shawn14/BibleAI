@@ -15,6 +15,9 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
   - Auto-generated titles from first message
   - Delete and regenerate responses
 - **Modern UI**: Beautiful SwiftUI interface with typing indicators and smooth animations
+- **NEW:** Verse of the Day - Daily inspirational verse on home screen
+- **NEW:** Tappable verse references - Tap any verse mentioned in AI responses to view full text
+- **NEW:** Quick verse suggestions - Pre-built prompts to get started
 
 ### Settings & Configuration
 - OpenAI API key management (secure local storage)
@@ -28,10 +31,22 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
 - Adjustable font size (12-24pt)
 - Clean, distraction-free reading experience
 - Real-time loading from Bible API
+- **NEW:** Verse search functionality - jump to any verse instantly
+- **NEW:** Search supports abbreviations (e.g., "Jn 3:16", "Gen 1", "Ps 23:1-4")
+
+### Study Notes & Highlights (NEW ✨)
+- **Highlight verses** in 5 colors (yellow, green, blue, purple, orange)
+- **Add personal notes** to any verse
+- **View all highlights** in dedicated Highlights tab
+- **Edit or delete** highlights anytime
+- **Persistent storage** - your highlights are saved locally
+- **Search highlights** by reference, verse text, or notes
+- Tap any verse while reading to highlight it
 
 ### Tab-Based Navigation
-- **Chat Tab**: AI conversation interface
+- **Home Tab**: Chat interface with Verse of the Day and suggestions
 - **Read Tab**: Complete Bible reader with KJV text
+- **Highlights Tab**: View and manage all your highlighted verses
 - **Settings Tab**: Usage tracking and preferences
 
 ## 📋 Requirements

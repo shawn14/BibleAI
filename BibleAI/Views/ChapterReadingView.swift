@@ -12,6 +12,7 @@ struct ChapterReadingView: View {
     let chapter: Int
 
     @StateObject private var bibleService = EnhancedBibleService.shared
+    @StateObject private var highlightService = HighlightService.shared
     @State private var verses: [BibleVerse] = []
     @State private var isLoading = true
     @State private var fontSize: CGFloat = 16
@@ -41,7 +42,13 @@ struct ChapterReadingView: View {
             } else {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(verses) { verse in
-                        VerseRowView(verse: verse, fontSize: fontSize)
+                        VerseRowView(
+                            verse: verse,
+                            book: book.name,
+                            chapter: chapter,
+                            fontSize: fontSize,
+                            highlightService: highlightService
+                        )
                     }
                 }
                 .padding()
@@ -73,7 +80,17 @@ struct ChapterReadingView: View {
 
 struct VerseRowView: View {
     let verse: BibleVerse
+    let book: String
+    let chapter: Int
     let fontSize: CGFloat
+    @ObservedObject var highlightService: HighlightService
+
+    @State private var showHighlightMenu = false
+    @State private var showNoteEditor = false
+
+    private var existingHighlight: Highlight? {
+        highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse)
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -83,9 +100,74 @@ struct VerseRowView: View {
                 .foregroundColor(.secondary)
                 .frame(width: 30, alignment: .trailing)
 
-            Text(verse.text)
-                .font(.system(size: fontSize))
-                .textSelection(.enabled)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(verse.text)
+                    .font(.system(size: fontSize))
+                    .textSelection(.enabled)
+                    .padding(8)
+                    .background(existingHighlight?.color.color ?? Color.clear)
+                    .cornerRadius(4)
+                    .onTapGesture {
+                        showHighlightMenu = true
+                    }
+
+                if let highlight = existingHighlight, let note = highlight.note, !note.isEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: "note.text")
+                            .font(.caption)
+                            .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                        Text(note)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .italic()
+                    }
+                    .padding(.leading, 8)
+                    .onTapGesture {
+                        showNoteEditor = true
+                    }
+                }
+            }
+        }
+        .confirmationDialog("Highlight Options", isPresented: $showHighlightMenu, titleVisibility: .hidden) {
+            if existingHighlight != nil {
+                Button("Add/Edit Note") {
+                    showNoteEditor = true
+                }
+
+                Button("Change Color") {
+                    // Show color picker
+                }
+
+                Button("Remove Highlight", role: .destructive) {
+                    if let highlight = existingHighlight {
+                        highlightService.removeHighlight(id: highlight.id)
+                    }
+                }
+            } else {
+                ForEach(HighlightColor.allCases, id: \.self) { color in
+                    Button(color.displayName) {
+                        highlightService.addHighlight(
+                            book: book,
+                            chapter: chapter,
+                            verse: verse.verse,
+                            verseText: verse.text,
+                            color: color
+                        )
+                    }
+                }
+            }
+
+            Button("Cancel", role: .cancel) { }
+        }
+        .sheet(isPresented: $showNoteEditor) {
+            NoteEditorView(
+                highlight: existingHighlight,
+                book: book,
+                chapter: chapter,
+                verse: verse.verse,
+                verseText: verse.text,
+                isPresented: $showNoteEditor
+            )
         }
     }
 }

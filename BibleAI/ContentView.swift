@@ -28,29 +28,32 @@ struct ContentView: View {
                 }
                 .tag(1)
 
+            // Highlights
+            HighlightsListView()
+                .tabItem {
+                    Label("Highlights", systemImage: "highlighter")
+                }
+                .tag(2)
+
             // Settings
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
-                .tag(2)
+                .tag(3)
         }
         .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
-        .onChange(of: selectedTab) { newTab in
-            // When user taps Home tab, create new conversation to show suggestions
+        .onChange(of: selectedTab) { oldValue, newTab in
+            // When user taps Home tab, create fresh conversation to show Verse of the Day and suggestions
             if newTab == 0 {
                 let newConversation = conversationService.createConversation()
                 currentConversation = newConversation
             }
         }
         .onAppear {
-            // Create or load the current conversation
+            // Start with a fresh conversation on launch
             if currentConversation == nil {
-                if let latest = conversationService.conversations.first {
-                    currentConversation = latest
-                } else {
-                    currentConversation = conversationService.createConversation()
-                }
+                currentConversation = conversationService.createConversation()
             }
         }
     }
@@ -75,10 +78,6 @@ struct ChatContainerView: View {
                             }
                         }
                     }
-            } else {
-                EmptyChatView {
-                    currentConversation = conversationService.createConversation()
-                }
             }
         }
         .sheet(isPresented: $showConversationsList) {
