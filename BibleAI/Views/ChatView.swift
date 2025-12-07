@@ -20,10 +20,60 @@ struct ChatView: View {
             // Messages List - ChatGPT style centered layout
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.conversation.messages) { message in
-                            MessageRow(message: message)
-                                .id(message.id)
+                    if viewModel.conversation.messages.isEmpty {
+                        // Empty state with verse suggestions
+                        VStack(spacing: 40) {
+                            Spacer()
+                                .frame(height: 60)
+
+                            VStack(spacing: 12) {
+                                Image(systemName: "book.closed.fill")
+                                    .font(.system(size: 48))
+                                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+
+                                Text("Bible AI")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                            }
+
+                            VStack(spacing: 12) {
+                                Text("Try asking about...")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+
+                                VStack(spacing: 10) {
+                                    SuggestionCard(text: "Explain John 3:16", icon: "heart.fill") {
+                                        viewModel.currentMessage = "Explain John 3:16"
+                                        viewModel.sendMessage()
+                                    }
+
+                                    SuggestionCard(text: "What does Psalm 23 teach about trust?", icon: "leaf.fill") {
+                                        viewModel.currentMessage = "What does Psalm 23 teach about trust?"
+                                        viewModel.sendMessage()
+                                    }
+
+                                    SuggestionCard(text: "Context of Romans 8:28", icon: "book.fill") {
+                                        viewModel.currentMessage = "Context of Romans 8:28"
+                                        viewModel.sendMessage()
+                                    }
+
+                                    SuggestionCard(text: "Meaning of the Beatitudes", icon: "sparkles") {
+                                        viewModel.currentMessage = "Meaning of the Beatitudes"
+                                        viewModel.sendMessage()
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                            }
+
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                    } else {
+                        LazyVStack(spacing: 0) {
+                            ForEach(viewModel.conversation.messages) { message in
+                                MessageRow(message: message)
+                                    .id(message.id)
+                            }
                         }
                     }
                 }
@@ -167,6 +217,38 @@ struct TypingIndicator: View {
         .onAppear {
             animationAmount = 1.0
         }
+    }
+}
+
+struct SuggestionCard: View {
+    let text: String
+    let icon: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 16))
+                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                    .frame(width: 24)
+
+                Text(text)
+                    .font(.system(size: 15))
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.leading)
+
+                Spacer()
+
+                Image(systemName: "arrow.right.circle.fill")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2).opacity(0.6))
+            }
+            .padding(16)
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
