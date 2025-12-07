@@ -87,6 +87,7 @@ struct VerseRowView: View {
 
     @State private var showHighlightMenu = false
     @State private var showNoteEditor = false
+    @State private var showShareSheet = false
 
     private var existingHighlight: Highlight? {
         highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse)
@@ -129,6 +130,10 @@ struct VerseRowView: View {
             }
         }
         .confirmationDialog("Highlight Options", isPresented: $showHighlightMenu, titleVisibility: .hidden) {
+            Button("Share Verse") {
+                showShareSheet = true
+            }
+
             if existingHighlight != nil {
                 Button("Add/Edit Note") {
                     showNoteEditor = true
@@ -167,6 +172,16 @@ struct VerseRowView: View {
                 verse: verse.verse,
                 verseText: verse.text,
                 isPresented: $showNoteEditor
+            )
+        }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheetView(
+                content: .verse(
+                    text: verse.text,
+                    reference: "\(book) \(chapter):\(verse.verse)",
+                    note: existingHighlight?.note
+                ),
+                isPresented: $showShareSheet
             )
         }
     }

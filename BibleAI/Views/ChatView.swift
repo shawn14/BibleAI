@@ -157,6 +157,8 @@ struct ChatView: View {
 
 struct MessageRow: View {
     let message: Message
+    @State private var showShareSheet = false
+    @State private var userQuestion: String = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -194,6 +196,15 @@ struct MessageRow: View {
                                 .foregroundColor(.primary)
                                 .textSelection(.enabled)
                                 .fixedSize(horizontal: false, vertical: true)
+                                .contextMenu {
+                                    if message.role == .assistant {
+                                        Button {
+                                            showShareSheet = true
+                                        } label: {
+                                            Label("Share Insight", systemImage: "square.and.arrow.up")
+                                        }
+                                    }
+                                }
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -206,6 +217,16 @@ struct MessageRow: View {
             }
             .frame(maxWidth: .infinity)
             .background(message.role == .assistant ? Color(.systemGray6).opacity(0.3) : Color(.systemBackground))
+        }
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheetView(
+                content: .aiInsight(
+                    question: userQuestion,
+                    answer: message.content,
+                    verse: nil
+                ),
+                isPresented: $showShareSheet
+            )
         }
     }
 }

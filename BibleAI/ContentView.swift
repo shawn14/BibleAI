@@ -51,17 +51,15 @@ struct ContentView: View {
         }
         .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
         .onChange(of: selectedTab) { oldValue, newTab in
-            // When user taps Home tab, always show a fresh empty conversation
+            // When user switches to Home tab, always show fresh home screen
             if newTab == 0 {
-                // Always create a fresh temporary conversation (not saved until first message)
+                // Create a fresh temporary conversation (not saved until first message)
                 currentConversation = Conversation()
             }
         }
         .onAppear {
             // Start with an empty conversation on launch
-            if currentConversation == nil {
-                currentConversation = Conversation()
-            }
+            currentConversation = Conversation()
         }
     }
 }
@@ -75,6 +73,7 @@ struct ChatContainerView: View {
         NavigationView {
             if let conversation = currentConversation {
                 ChatView(conversation: conversation)
+                    .id(conversation.id) // Force recreate when conversation changes
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(action: {

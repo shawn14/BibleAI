@@ -11,6 +11,7 @@ struct HighlightsListView: View {
     @StateObject private var highlightService = HighlightService.shared
     @State private var selectedHighlight: Highlight?
     @State private var showNoteEditor = false
+    @State private var showShareSheet = false
     @State private var searchText = ""
 
     var filteredHighlights: [Highlight] {
@@ -33,6 +34,15 @@ struct HighlightsListView: View {
                     List {
                         ForEach(filteredHighlights) { highlight in
                             HighlightRowView(highlight: highlight)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button {
+                                        selectedHighlight = highlight
+                                        showShareSheet = true
+                                    } label: {
+                                        Label("Share", systemImage: "square.and.arrow.up")
+                                    }
+                                    .tint(Color(red: 0.6, green: 0.4, blue: 0.2))
+                                }
                                 .onTapGesture {
                                     selectedHighlight = highlight
                                     showNoteEditor = true
@@ -54,6 +64,19 @@ struct HighlightsListView: View {
                         verse: highlight.verse,
                         verseText: highlight.verseText,
                         isPresented: $showNoteEditor
+                    )
+                }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                if let highlight = selectedHighlight {
+                    ShareSheetView(
+                        content: .highlight(
+                            verse: highlight.verseText,
+                            reference: highlight.reference,
+                            note: highlight.note,
+                            color: highlight.color
+                        ),
+                        isPresented: $showShareSheet
                     )
                 }
             }

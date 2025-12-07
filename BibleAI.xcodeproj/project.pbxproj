@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		97B0DED793B04932A8F64066 /* ShareableContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9C1A8CC2764712B0EF566A /* ShareableContent.swift */; };
+		C87A270F731B4A1AB5049AB4 /* ShareImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98E4E2BA12924B698066B3C3 /* ShareImageRenderer.swift */; };
+		BB896E9E8F1845D098DB28D3 /* ShareTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FACC3762E7B4B6B810E146B /* ShareTemplateView.swift */; };
+		D4CD9C09156C4B3AA6C68394 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF22E5A38602468D83A48C35 /* ShareSheetView.swift */; };
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
 		4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */; };
 		1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */; };
@@ -42,6 +46,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B9C1A8CC2764712B0EF566A /* ShareableContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareableContent.swift; sourceTree = "<group>"; };
+		98E4E2BA12924B698066B3C3 /* ShareImageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImageRenderer.swift; sourceTree = "<group>"; };
+		4FACC3762E7B4B6B810E146B /* ShareTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTemplateView.swift; sourceTree = "<group>"; };
+		CF22E5A38602468D83A48C35 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlan.swift; sourceTree = "<group>"; };
 		0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanService.swift; sourceTree = "<group>"; };
 		2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlansListView.swift; sourceTree = "<group>"; };
@@ -131,6 +139,7 @@
 				BA2000015 /* BibleBook.swift */,
 				BA2000026 /* Highlight.swift */,
 				AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */,
+				1B9C1A8CC2764712B0EF566A /* ShareableContent.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -179,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				BA2000021 /* VerseParser.swift */,
+				98E4E2BA12924B698066B3C3 /* ShareImageRenderer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -189,6 +199,8 @@
 				BA2000024 /* VerseReferenceText.swift */,
 				BA2000025 /* SimpleVerseText.swift */,
 				BA2000028 /* NoteEditorView.swift */,
+				4FACC3762E7B4B6B810E146B /* ShareTemplateView.swift */,
+				CF22E5A38602468D83A48C35 /* ShareSheetView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -293,6 +305,10 @@
 				4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */,
 				1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */,
 				59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */,
+				97B0DED793B04932A8F64066 /* ShareableContent.swift in Sources */,
+				C87A270F731B4A1AB5049AB4 /* ShareImageRenderer.swift in Sources */,
+				BB896E9E8F1845D098DB28D3 /* ShareTemplateView.swift in Sources */,
+				D4CD9C09156C4B3AA6C68394 /* ShareSheetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
