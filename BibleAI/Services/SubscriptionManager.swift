@@ -21,8 +21,8 @@ class SubscriptionManager: ObservableObject {
     @Published var products: [Product] = []
 
     // Product IDs - These must match App Store Connect
-    private let monthlyProductID = "com.shawncarpenter.bibleai.premium.monthly"
-    private let yearlyProductID = "com.shawncarpenter.bibleai.premium.yearly"
+    private let monthlyProductID = "com.shawncarpenter.bibleai_companion.premium.monthly"
+    private let yearlyProductID = "com.shawncarpenter.bibleai_companion.premium.yearly"
 
     // Free tier limits
     let freeQuestionsPerDay = 5
