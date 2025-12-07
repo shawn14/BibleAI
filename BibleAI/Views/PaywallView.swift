@@ -47,7 +47,7 @@ struct PaywallView: View {
 
                     // Pricing
                     VStack(spacing: 16) {
-                        if let offering = revenueCatManager.offerings?.current {
+                        if revenueCatManager.offerings?.current != nil {
                             // Yearly package (recommended)
                             if let yearlyPackage = revenueCatManager.yearlyPackage {
                                 PackageButton(
