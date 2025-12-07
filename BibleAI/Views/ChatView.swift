@@ -79,29 +79,8 @@ struct ChatView: View {
                 .background(Color(.systemBackground))
             }
         }
-        .navigationTitle(viewModel.conversation.title)
+        .navigationTitle("Bible AI")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button(action: {
-                        viewModel.regenerateLastResponse()
-                    }) {
-                        Label("Regenerate Response", systemImage: "arrow.clockwise")
-                    }
-                    .disabled(viewModel.conversation.messages.isEmpty)
-
-                    Button(role: .destructive, action: {
-                        viewModel.clearConversation()
-                    }) {
-                        Label("Clear Conversation", systemImage: "trash")
-                    }
-                    .disabled(viewModel.conversation.messages.isEmpty)
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
-            }
-        }
         .alert("Error", isPresented: $viewModel.showError) {
             Button("OK", role: .cancel) { }
         } message: {
