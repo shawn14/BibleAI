@@ -44,16 +44,16 @@ struct ContentView: View {
         }
         .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
         .onChange(of: selectedTab) { oldValue, newTab in
-            // When user taps Home tab, create fresh conversation to show Verse of the Day and suggestions
+            // When user taps Home tab, always show a fresh empty conversation
             if newTab == 0 {
-                let newConversation = conversationService.createConversation()
-                currentConversation = newConversation
+                // Always create a fresh temporary conversation (not saved until first message)
+                currentConversation = Conversation()
             }
         }
         .onAppear {
-            // Start with a fresh conversation on launch
+            // Start with an empty conversation on launch
             if currentConversation == nil {
-                currentConversation = conversationService.createConversation()
+                currentConversation = Conversation()
             }
         }
     }
