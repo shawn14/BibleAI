@@ -1,0 +1,237 @@
+# BibleAI
+
+An AI-powered Bible companion app for iOS, designed to enhance Bible study and spiritual growth through intelligent insights and modern technology.
+
+## 🌟 Current Features
+
+### AI Bible Chat (MVP - COMPLETE)
+- **Conversational AI Assistant**: Chat with an AI that understands biblical context, history, and theology
+- **Multi-perspective Analysis**: Presents interpretations from different Christian traditions (Catholic, Protestant, Orthodox)
+- **Cross-references**: Automatically suggests related verses and passages
+- **Historical Context**: Explains original Greek/Hebrew meanings and cultural background
+- **Conversation Management**:
+  - Create multiple conversations
+  - Persistent chat history
+  - Auto-generated titles from first message
+  - Delete and regenerate responses
+- **Modern UI**: Beautiful SwiftUI interface with typing indicators and smooth animations
+
+### Settings & Configuration
+- OpenAI API key management (secure local storage)
+- Bible translation preferences
+- Quick links to resources
+
+### Tab-Based Navigation
+- **Chat Tab**: AI conversation interface
+- **Read Tab**: Bible reader (coming soon)
+- **Settings Tab**: App configuration
+
+## 📋 Requirements
+
+- iOS 17.0+
+- Xcode 15.0+
+- OpenAI API Key (for AI chat functionality)
+
+## 🚀 Getting Started
+
+### 1. Clone and Open Project
+```bash
+cd /Users/shawncarpenter/Desktop/BibleAI
+open BibleAI.xcodeproj
+```
+
+### 2. Get an OpenAI API Key
+1. Visit [platform.openai.com](https://platform.openai.com/api-keys)
+2. Create an account if you don't have one
+3. Generate a new API key
+4. Copy the key
+
+### 3. Configure the App
+1. Build and run the app in simulator (`Cmd + R`)
+2. Go to Settings tab
+3. Paste your OpenAI API key
+4. Select your preferred Bible translation
+
+### 4. Start Chatting!
+1. Go to Chat tab
+2. Tap "Start New Conversation"
+3. Ask questions about scripture!
+
+## 💡 Example Questions to Try
+
+- "What does John 3:16 mean?"
+- "Explain the context of Romans 8:28"
+- "What is the significance of Jesus's conversation with Nicodemus?"
+- "Compare different interpretations of Revelation 21"
+- "What can Psalm 23 teach me about trust?"
+
+## 🏗 Project Structure
+
+```
+BibleAI/
+├── BibleAI/
+│   ├── BibleAIApp.swift          # App entry point
+│   ├── ContentView.swift          # Main tab view
+│   ├── Models/                    # Data models
+│   │   ├── Message.swift         # Chat message model
+│   │   ├── Conversation.swift    # Conversation model
+│   │   └── BibleVerse.swift      # Bible verse model
+│   ├── Views/                     # SwiftUI views
+│   │   ├── ChatView.swift        # Main chat interface
+│   │   ├── ConversationListView.swift  # Conversation history
+│   │   └── SettingsView.swift    # Settings screen
+│   ├── ViewModels/                # Business logic
+│   │   └── ChatViewModel.swift   # Chat state management
+│   ├── Services/                  # Backend services
+│   │   ├── AIService.swift       # OpenAI API integration
+│   │   ├── BibleService.swift    # Bible data management
+│   │   └── ConversationService.swift  # Conversation persistence
+│   └── Assets.xcassets/          # App assets
+├── README.md
+├── CLAUDE.md                      # Development guidelines
+└── .gitignore
+```
+
+## 🎯 Architecture
+
+### MVVM Pattern
+- **Models**: Data structures (Message, Conversation, BibleVerse)
+- **Views**: SwiftUI UI components
+- **ViewModels**: Business logic and state management
+- **Services**: API calls and data persistence
+
+### Data Flow
+```
+User Input → ChatViewModel → AIService → OpenAI API
+                ↓                          ↓
+         ConversationService ← Response ←─┘
+                ↓
+          UserDefaults (Persistence)
+```
+
+### AI System Prompt
+The AI is configured to:
+- Provide historical and theological context
+- Reference original languages (Greek/Hebrew)
+- Show multiple Christian perspectives
+- Ask Socratic questions to deepen understanding
+- Suggest practical applications
+- Maintain warmth and accessibility
+
+## 🔮 Planned Features (Roadmap)
+
+### Phase 2: Enhanced Chat (Weeks 4-6)
+- [ ] AI-generated daily devotionals
+- [ ] Smart prayer journal with AI insights
+- [ ] Verse reference detection and inline display
+- [ ] Voice input for questions
+- [ ] Share conversations
+
+### Phase 3: Bible Reader (Weeks 7-9)
+- [ ] Full Bible text with multiple translations
+- [ ] Advanced search functionality
+- [ ] Highlights and bookmarks
+- [ ] Reading plans
+- [ ] Notes and annotations
+
+### Phase 4: Community Features (Weeks 10-12)
+- [ ] AI-facilitated group Bible studies
+- [ ] Discussion forums
+- [ ] Prayer request sharing
+- [ ] Insight synthesis from group conversations
+
+### Phase 5: Advanced AI Features (Months 4-6)
+- [ ] AI-generated visual aids (maps, timelines)
+- [ ] Scripture memory system with spaced repetition
+- [ ] Theological question answering
+- [ ] Personalized study recommendations
+- [ ] Cross-tradition dialogue mode
+
+## 🔐 Privacy & Security
+
+- **API Keys**: Stored locally in UserDefaults (not in iCloud)
+- **Conversations**: Stored locally on device only
+- **No Analytics**: Zero tracking or data collection
+- **OpenAI**: Follows OpenAI's data usage policies
+
+## 🛠 Development Commands
+
+### Build for Simulator
+```bash
+xcodebuild -project BibleAI.xcodeproj -scheme BibleAI -sdk iphonesimulator -configuration Debug build
+```
+
+### Build for Device
+```bash
+xcodebuild -project BibleAI.xcodeproj -scheme BibleAI -sdk iphoneos -configuration Release build
+```
+
+### Run Tests
+```bash
+xcodebuild test -project BibleAI.xcodeproj -scheme BibleAI -destination 'platform=iOS Simulator,name=iPhone 15'
+```
+
+## 📊 Competitive Differentiation
+
+Unlike existing Bible apps, BibleAI offers:
+
+1. **Conversational AI**: Not just verse lookup, but deep discussion and understanding
+2. **Multi-perspective**: Shows different theological interpretations fairly
+3. **Contextual Intelligence**: Understands your questions in context of previous conversation
+4. **Socratic Teaching**: Asks questions to deepen understanding
+5. **Personalization**: Adapts to your learning style and theological background
+
+## 💰 Monetization Strategy (Future)
+
+### Free Tier
+- Basic Bible reading
+- Daily verses
+- 5 AI conversations per day
+
+### Premium ($9.99/month)
+- Unlimited AI conversations
+- AI-generated devotionals
+- Prayer journal with insights
+- Study groups
+- Advanced features
+
+### Pro Tier ($19.99/month)
+- Everything in Premium
+- AI study group facilitator
+- Priority responses
+- Advanced analytics
+- Early access to features
+
+## 📱 App Store Preparation
+
+Before submitting to App Store:
+1. Update bundle identifier if needed
+2. Configure code signing with your Apple Developer account
+3. Create app icon (1024x1024px)
+4. Take screenshots for all required device sizes
+5. Write App Store description
+6. Set up in-app purchases (if using premium features)
+7. Archive and submit via Xcode
+
+## 🐛 Known Issues / TODO
+
+- [ ] Add proper Bible API integration (currently using sample data)
+- [ ] Implement error retry mechanism for failed API calls
+- [ ] Add loading states for Bible verse lookups
+- [ ] Implement conversation export/sharing
+- [ ] Add dark mode toggle
+- [ ] Optimize API token usage
+
+## 📄 License
+
+Copyright 2025. All rights reserved.
+
+## 🙏 Acknowledgments
+
+- OpenAI for GPT-4 API
+- Bible API providers (to be integrated)
+- SwiftUI community
+
+---
+
+**Built with ❤️ for Bible study and spiritual growth**
