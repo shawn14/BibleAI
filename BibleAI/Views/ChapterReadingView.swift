@@ -134,10 +134,6 @@ struct VerseRowView: View {
                     showNoteEditor = true
                 }
 
-                Button("Change Color") {
-                    // Show color picker
-                }
-
                 Button("Remove Highlight", role: .destructive) {
                     if let highlight = existingHighlight {
                         highlightService.removeHighlight(id: highlight.id)
