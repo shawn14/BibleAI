@@ -21,10 +21,18 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
 - Bible translation preferences
 - Quick links to resources
 
+### Bible Reader (COMPLETE ✅)
+- Complete KJV Bible with all 66 books
+- Browse by Old Testament and New Testament
+- Chapter-by-chapter reading
+- Adjustable font size (12-24pt)
+- Clean, distraction-free reading experience
+- Real-time loading from Bible API
+
 ### Tab-Based Navigation
 - **Chat Tab**: AI conversation interface
-- **Read Tab**: Bible reader (coming soon)
-- **Settings Tab**: App configuration
+- **Read Tab**: Complete Bible reader with KJV text
+- **Settings Tab**: Usage tracking and preferences
 
 ## 📋 Requirements
 
@@ -34,10 +42,10 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
 
 ## 🚀 Getting Started
 
-### 1. Clone and Open Project
+### 1. Clone the Repository
 ```bash
-cd /Users/shawncarpenter/Desktop/BibleAI
-open BibleAI.xcodeproj
+git clone https://github.com/shawn14/BibleAI.git
+cd BibleAI
 ```
 
 ### 2. Get an OpenAI API Key
@@ -47,12 +55,23 @@ open BibleAI.xcodeproj
 4. Copy the key
 
 ### 3. Configure the App
-1. Build and run the app in simulator (`Cmd + R`)
-2. Go to Settings tab
-3. Paste your OpenAI API key
-4. Select your preferred Bible translation
+1. Open `BibleAI/Config.swift`
+2. Replace `YOUR_API_KEY_HERE` with your actual OpenAI API key:
+```swift
+struct Config {
+    static let openAIAPIKey = "sk-proj-YOUR_KEY_HERE"
+}
+```
+3. Save the file
 
-### 4. Start Chatting!
+**Important**: Never commit your actual API key to version control! The `Config.private.swift` file is gitignored for this reason.
+
+### 4. Build and Run
+1. Open `BibleAI.xcodeproj` in Xcode
+2. Select a simulator or device
+3. Press `Cmd + R` to build and run
+
+### 5. Start Chatting!
 1. Go to Chat tab
 2. Tap "Start New Conversation"
 3. Ask questions about scripture!
@@ -127,8 +146,11 @@ The AI is configured to:
 - [ ] Voice input for questions
 - [ ] Share conversations
 
-### Phase 3: Bible Reader (Weeks 7-9)
-- [ ] Full Bible text with multiple translations
+### Phase 3: Bible Reader (COMPLETE ✅)
+- [x] Full Bible text with KJV translation
+- [x] All 66 books (Old and New Testament)
+- [x] Chapter-by-chapter reading
+- [x] Adjustable font size
 - [ ] Advanced search functionality
 - [ ] Highlights and bookmarks
 - [ ] Reading plans
@@ -213,14 +235,30 @@ Before submitting to App Store:
 6. Set up in-app purchases (if using premium features)
 7. Archive and submit via Xcode
 
+## 💰 Cost Optimization
+
+The app uses **GPT-4o-mini** (~$0.15 per 1M tokens) instead of GPT-4 (~$30 per 1M tokens) - **200x cheaper!**
+
+### Built-in Cost Controls:
+- **Daily Limit**: 50 requests per day (resets at midnight)
+- **Rate Limit**: 10 requests per minute
+- **Token Limit**: 500 tokens max per response
+- **Context Window**: Only last 5 messages sent for context
+
+### Estimated Costs:
+- **50 messages/day**: ~$0.60/month
+- **1,500 messages/month**: ~$0.60/month (with limits)
+
+See `AI_COST_OPTIMIZATIONS.md` for detailed analysis.
+
 ## 🐛 Known Issues / TODO
 
-- [ ] Add proper Bible API integration (currently using sample data)
+- [x] Add proper Bible API integration (using bible-api.com)
 - [ ] Implement error retry mechanism for failed API calls
-- [ ] Add loading states for Bible verse lookups
+- [x] Add loading states for Bible verse lookups
 - [ ] Implement conversation export/sharing
 - [ ] Add dark mode toggle
-- [ ] Optimize API token usage
+- [x] Optimize API token usage (GPT-4o-mini + rate limits)
 
 ## 📄 License
 
