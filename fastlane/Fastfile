@@ -1,0 +1,103 @@
+# Fastfile for BibleAI Companion
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Create app in App Store Connect and set up IAP products"
+  lane :setup_app_store do
+    # Create app in App Store Connect
+    produce(
+      username: "shawncarpenter@mac.com",
+      app_identifier: "com.shawncarpenter.bibleai-companion",
+      app_name: "BibleAI Companion",
+      language: "English",
+      app_version: "1.0",
+      sku: "bibleai-companion-001",
+      team_name: "Stock Alarm" # or your team name
+    )
+
+    # Note: Fastlane doesn't have built-in IAP product creation
+    # IAP products must be created manually or via App Store Connect API
+    UI.success("✅ App created in App Store Connect!")
+    UI.important("⚠️  You still need to manually create IAP products:")
+    UI.message("1. Go to https://appstoreconnect.apple.com")
+    UI.message("2. Select your app")
+    UI.message("3. Go to Features > In-App Purchases")
+    UI.message("4. Create these products:")
+    UI.message("   - com.shawncarpenter.bibleai-companion.premium.monthly ($6.99/month)")
+    UI.message("   - com.shawncarpenter.bibleai-companion.premium.yearly ($49.99/year)")
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    # Increment build number
+    increment_build_number(xcodeproj: "BibleAI.xcodeproj")
+
+    # Build the app
+    build_app(
+      scheme: "BibleAI",
+      export_method: "app-store",
+      output_directory: "./build"
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      username: "shawncarpenter@mac.com",
+      skip_waiting_for_build_processing: true
+    )
+
+    UI.success("✅ Build uploaded to TestFlight!")
+  end
+
+  desc "Build and upload to App Store"
+  lane :release do
+    # Increment build number
+    increment_build_number(xcodeproj: "BibleAI.xcodeproj")
+
+    # Build the app
+    build_app(
+      scheme: "BibleAI",
+      export_method: "app-store",
+      output_directory: "./build"
+    )
+
+    # Upload to App Store
+    upload_to_app_store(
+      username: "shawncarpenter@mac.com",
+      skip_metadata: false,
+      skip_screenshots: true,
+      submit_for_review: false
+    )
+
+    UI.success("✅ Build uploaded to App Store!")
+  end
+
+  desc "Take screenshots for App Store"
+  lane :screenshots do
+    snapshot
+  end
+
+  desc "Download metadata from App Store Connect"
+  lane :download_metadata do
+    download_metadata(
+      username: "shawncarpenter@mac.com",
+      app_identifier: "com.shawncarpenter.bibleai-companion"
+    )
+  end
+
+  desc "Upload metadata to App Store Connect"
+  lane :upload_metadata do
+    upload_to_app_store(
+      username: "shawncarpenter@mac.com",
+      skip_binary_upload: true,
+      skip_screenshots: true
+    )
+  end
+
+  # Error handling
+  error do |lane, exception|
+    UI.error("❌ Error in lane #{lane}")
+    UI.error(exception.message)
+  end
+end
