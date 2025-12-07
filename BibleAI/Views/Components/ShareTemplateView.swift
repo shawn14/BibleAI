@@ -95,11 +95,12 @@ struct VerseShareContent: View {
 
             // Verse text
             Text(text)
-                .font(template == .bold ? .system(size: 36, weight: .bold) : .system(size: 32, weight: .regular))
+                .font(template == .bold ? .system(size: 34, weight: .bold) : .system(size: 30, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
                 .lineSpacing(8)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 60)
+                .fixedSize(horizontal: false, vertical: true)
 
             // Reference
             Text(reference)
@@ -149,12 +150,13 @@ struct AIInsightShareContent: View {
                 .background(template.accentColor.opacity(0.3))
 
             // Answer (truncated if too long)
-            Text(answer.prefix(300) + (answer.count > 300 ? "..." : ""))
-                .font(.system(size: 22, weight: .regular))
+            Text(answer.prefix(280) + (answer.count > 280 ? "..." : ""))
+                .font(.system(size: 20, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
                 .lineSpacing(6)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 60)
+                .fixedSize(horizontal: false, vertical: true)
 
             // Related verse if available
             if let verse = verse {
@@ -188,16 +190,17 @@ struct HighlightShareContent: View {
 
             // Verse with highlight background
             Text(verse)
-                .font(.system(size: 30, weight: .medium))
+                .font(.system(size: 28, weight: .medium))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
                 .lineSpacing(8)
-                .padding(24)
+                .padding(20)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(color.color.opacity(template == .bold ? 0.3 : 0.6))
                 )
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 50)
+                .fixedSize(horizontal: false, vertical: true)
 
             // Reference
             Text(reference)
