@@ -21,38 +21,41 @@ struct ShareTemplateView: View {
                 endPoint: .bottomTrailing
             )
 
-            VStack(spacing: 24) {
-                Spacer()
+            VStack(spacing: 0) {
+                Spacer(minLength: 100)
 
                 // Content based on type
-                switch content {
-                case .verse(let text, let reference, let note):
-                    VerseShareContent(
-                        text: text,
-                        reference: reference,
-                        note: note,
-                        template: template
-                    )
+                Group {
+                    switch content {
+                    case .verse(let text, let reference, let note):
+                        VerseShareContent(
+                            text: text,
+                            reference: reference,
+                            note: note,
+                            template: template
+                        )
 
-                case .aiInsight(let question, let answer, let verse):
-                    AIInsightShareContent(
-                        question: question,
-                        answer: answer,
-                        verse: verse,
-                        template: template
-                    )
+                    case .aiInsight(let question, let answer, let verse):
+                        AIInsightShareContent(
+                            question: question,
+                            answer: answer,
+                            verse: verse,
+                            template: template
+                        )
 
-                case .highlight(let verse, let reference, let note, let color):
-                    HighlightShareContent(
-                        verse: verse,
-                        reference: reference,
-                        note: note,
-                        color: color,
-                        template: template
-                    )
+                    case .highlight(let verse, let reference, let note, let color):
+                        HighlightShareContent(
+                            verse: verse,
+                            reference: reference,
+                            note: note,
+                            color: color,
+                            template: template
+                        )
+                    }
                 }
+                .layoutPriority(1)
 
-                Spacer()
+                Spacer(minLength: 60)
 
                 // Watermark
                 if includeWatermark {
@@ -69,10 +72,11 @@ struct ShareTemplateView: View {
                             .font(.system(size: 12))
                             .foregroundColor(template.textColor.opacity(0.6))
                     }
-                    .padding(.bottom, 32)
+                    .padding(.bottom, 40)
+                } else {
+                    Spacer(minLength: 40)
                 }
             }
-            .padding(40)
         }
         .frame(width: 1080, height: 1080) // Instagram square format
     }
@@ -95,11 +99,11 @@ struct VerseShareContent: View {
 
             // Verse text
             Text(text)
-                .font(template == .bold ? .system(size: 30, weight: .bold) : .system(size: 26, weight: .regular))
+                .font(template == .bold ? .system(size: 28, weight: .bold) : .system(size: 24, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
-                .lineSpacing(8)
-                .frame(width: 880)
+                .lineSpacing(10)
+                .frame(width: 900)
                 .fixedSize(horizontal: false, vertical: true)
 
             // Reference
