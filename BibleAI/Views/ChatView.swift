@@ -146,6 +146,9 @@ struct ChatView: View {
         } message: {
             Text(viewModel.errorMessage ?? "An unknown error occurred")
         }
+        .sheet(isPresented: $viewModel.showPaywall) {
+            PaywallView(isPresented: $viewModel.showPaywall)
+        }
         .task {
             // Load verse of the day when view appears
             if verseOfTheDay == nil {

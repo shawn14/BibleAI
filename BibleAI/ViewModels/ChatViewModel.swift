@@ -15,6 +15,7 @@ class ChatViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var showError: Bool = false
+    @Published var showPaywall: Bool = false
 
     private let aiService = AIService.shared
     private let conversationService = ConversationService.shared
@@ -76,8 +77,13 @@ class ChatViewModel: ObservableObject {
                 // Remove typing indicator
                 conversation.messages.removeAll { $0.isTyping }
 
-                errorMessage = error.localizedDescription
-                showError = true
+                // Show paywall for daily limit
+                if case .dailyLimitExceeded = error {
+                    showPaywall = true
+                } else {
+                    errorMessage = error.localizedDescription
+                    showError = true
+                }
                 isLoading = false
             } catch {
                 // Remove typing indicator

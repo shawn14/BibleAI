@@ -158,6 +158,12 @@ class AIService {
     }
 
     func sendMessage(conversation: [Message], userMessage: String) async throws -> String {
+        // Check subscription limits
+        let subscriptionManager = await SubscriptionManager.shared
+        guard await subscriptionManager.canAskQuestion() else {
+            throw AIServiceError.dailyLimitExceeded
+        }
+
         // Check rate limits BEFORE making request
         try checkRateLimits()
 
@@ -244,8 +250,9 @@ class AIService {
                 throw AIServiceError.invalidResponse
             }
 
-            // Increment usage counter AFTER successful response
+            // Increment usage counters AFTER successful response
             incrementDailyUsage()
+            await subscriptionManager.incrementQuestionCount()
 
             print("✅ Response received successfully")
             return responseMessage
