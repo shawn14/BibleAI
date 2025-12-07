@@ -97,25 +97,28 @@ struct SimpleVerseImageView: View {
 
                 // Verse text - simple and centered
                 Text(text)
-                    .font(.system(size: 32, weight: .medium))
+                    .font(.system(size: 24, weight: .medium))
                     .foregroundColor(Color(red: 0.2, green: 0.15, blue: 0.1))
                     .multilineTextAlignment(.center)
-                    .lineSpacing(8)
-                    .padding(.horizontal, 60)
+                    .lineSpacing(6)
+                    .padding(.horizontal, 80)
+                    .minimumScaleFactor(0.5)
+                    .lineLimit(10)
 
                 // Reference
                 Text(reference)
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 22, weight: .bold))
                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
                 // Note if exists
                 if let note = note, !note.isEmpty {
                     Text(note)
-                        .font(.system(size: 24))
+                        .font(.system(size: 18))
                         .italic()
                         .foregroundColor(Color(red: 0.4, green: 0.3, blue: 0.2))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 80)
+                        .padding(.horizontal, 100)
+                        .lineLimit(3)
                 }
 
                 Spacer()
