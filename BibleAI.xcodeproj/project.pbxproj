@@ -12,6 +12,7 @@
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
 		54AA380B2C92886CC9ADFC3C /* SimpleShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2730FD76C798D33BA3DF3E56 /* SimpleShareView.swift */; };
 		59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */; };
+		8271D663BF0A56290B540AF0 /* SimpleImageShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7815CA56E80753FB00F936F /* SimpleImageShareView.swift */; };
 		97B0DED793B04932A8F64066 /* ShareableContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9C1A8CC2764712B0EF566A /* ShareableContent.swift */; };
 		BA1000001 /* BibleAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000001 /* BibleAIApp.swift */; };
 		BA1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000002 /* ContentView.swift */; };
@@ -86,6 +87,7 @@
 		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
 		BA3000001 /* BibleAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BibleAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF22E5A38602468D83A48C35 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
+		E7815CA56E80753FB00F936F /* SimpleImageShareView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimpleImageShareView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +206,7 @@
 				4FACC3762E7B4B6B810E146B /* ShareTemplateView.swift */,
 				CF22E5A38602468D83A48C35 /* ShareSheetView.swift */,
 				2730FD76C798D33BA3DF3E56 /* SimpleShareView.swift */,
+				E7815CA56E80753FB00F936F /* SimpleImageShareView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				BB896E9E8F1845D098DB28D3 /* ShareTemplateView.swift in Sources */,
 				D4CD9C09156C4B3AA6C68394 /* ShareSheetView.swift in Sources */,
 				54AA380B2C92886CC9ADFC3C /* SimpleShareView.swift in Sources */,
+				8271D663BF0A56290B540AF0 /* SimpleImageShareView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

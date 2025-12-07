@@ -175,12 +175,10 @@ struct VerseRowView: View {
             )
         }
         .sheet(isPresented: $showShareSheet) {
-            SimpleShareView(
-                shareText: .formatVerseShare(
-                    text: verse.text,
-                    reference: "\(book) \(chapter):\(verse.verse)",
-                    note: existingHighlight?.note
-                ),
+            SimpleImageShareView(
+                text: verse.text,
+                reference: "\(book) \(chapter):\(verse.verse)",
+                note: existingHighlight?.note,
                 isPresented: $showShareSheet
             )
         }
