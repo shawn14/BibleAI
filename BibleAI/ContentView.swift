@@ -65,6 +65,17 @@ struct ChatContainerView: View {
                                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
                             }
                         }
+
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            // Home button - creates new conversation to show suggestions
+                            Button(action: {
+                                let newConversation = conversationService.createConversation()
+                                currentConversation = newConversation
+                            }) {
+                                Image(systemName: "house.fill")
+                                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                            }
+                        }
                     }
             } else {
                 EmptyChatView {
