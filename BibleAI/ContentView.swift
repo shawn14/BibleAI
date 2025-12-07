@@ -65,15 +65,6 @@ struct ChatContainerView: View {
                                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
                             }
                         }
-
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {
-                                currentConversation = conversationService.createConversation()
-                            }) {
-                                Image(systemName: "square.and.pencil")
-                                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
-                            }
-                        }
                     }
             } else {
                 EmptyChatView {
@@ -138,26 +129,48 @@ struct ConversationListSheet: View {
 
     var body: some View {
         List {
-            ForEach(conversationService.conversations) { conversation in
+            // New Chat button at the top
+            Section {
                 Button(action: {
-                    currentConversation = conversation
+                    let newConversation = conversationService.createConversation()
+                    currentConversation = newConversation
                     isPresented = false
                 }) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(conversation.title)
-                            .font(.headline)
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                        Text("New Chat")
                             .foregroundColor(.primary)
-                            .lineLimit(1)
-
-                        Text(conversation.preview)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(2)
+                            .fontWeight(.medium)
                     }
-                    .padding(.vertical, 4)
                 }
             }
-            .onDelete(perform: deleteConversations)
+
+            // Existing conversations
+            Section {
+                ForEach(conversationService.conversations) { conversation in
+                    Button(action: {
+                        currentConversation = conversation
+                        isPresented = false
+                    }) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(conversation.title)
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                                .lineLimit(1)
+
+                            Text(conversation.preview)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .lineLimit(2)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+                .onDelete(perform: deleteConversations)
+            } header: {
+                Text("Recent")
+            }
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Conversations")
