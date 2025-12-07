@@ -95,14 +95,12 @@ struct VerseShareContent: View {
 
             // Verse text
             Text(text)
-                .font(template == .bold ? .system(size: 32, weight: .bold) : .system(size: 28, weight: .regular))
+                .font(template == .bold ? .system(size: 30, weight: .bold) : .system(size: 26, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
-                .lineSpacing(6)
-                .padding(.horizontal, 80)
-                .frame(maxWidth: 1000)
+                .lineSpacing(8)
+                .frame(width: 880)
                 .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(nil)
 
             // Reference
             Text(reference)
@@ -156,11 +154,9 @@ struct AIInsightShareContent: View {
                 .font(.system(size: 20, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
-                .lineSpacing(6)
-                .padding(.horizontal, 80)
-                .frame(maxWidth: 920)
+                .lineSpacing(8)
+                .frame(width: 880)
                 .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(nil)
 
             // Related verse if available
             if let verse = verse {
@@ -193,20 +189,20 @@ struct HighlightShareContent: View {
                 .foregroundColor(template.accentColor)
 
             // Verse with highlight background
-            Text(verse)
-                .font(.system(size: 26, weight: .medium))
-                .foregroundColor(template.textColor)
-                .multilineTextAlignment(.center)
-                .lineSpacing(6)
-                .padding(20)
-                .frame(maxWidth: 920)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(nil)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(color.color.opacity(template == .bold ? 0.3 : 0.6))
-                )
-                .padding(.horizontal, 80)
+            VStack {
+                Text(verse)
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(template.textColor)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(8)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(width: 840)
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(color.color.opacity(template == .bold ? 0.3 : 0.6))
+            )
 
             // Reference
             Text(reference)
