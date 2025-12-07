@@ -14,19 +14,21 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Main Chat View (opens directly like ChatGPT)
+            // Home - New conversation with suggestions
             ChatContainerView(currentConversation: $currentConversation)
                 .tabItem {
-                    Label("Chat", systemImage: "message.fill")
+                    Label("Home", systemImage: "house.fill")
                 }
                 .tag(0)
 
+            // Bible Reader
             BibleReaderView()
                 .tabItem {
                     Label("Read", systemImage: "book.fill")
                 }
                 .tag(1)
 
+            // Settings
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
@@ -34,6 +36,13 @@ struct ContentView: View {
                 .tag(2)
         }
         .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+        .onChange(of: selectedTab) { newTab in
+            // When user taps Home tab, create new conversation to show suggestions
+            if newTab == 0 {
+                let newConversation = conversationService.createConversation()
+                currentConversation = newConversation
+            }
+        }
         .onAppear {
             // Create or load the current conversation
             if currentConversation == nil {
@@ -62,17 +71,6 @@ struct ChatContainerView: View {
                                 showConversationsList = true
                             }) {
                                 Image(systemName: "line.3.horizontal")
-                                    .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
-                            }
-                        }
-
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            // Home button - creates new conversation to show suggestions
-                            Button(action: {
-                                let newConversation = conversationService.createConversation()
-                                currentConversation = newConversation
-                            }) {
-                                Image(systemName: "house.fill")
                                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
                             }
                         }
