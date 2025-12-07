@@ -69,12 +69,11 @@ struct HighlightsListView: View {
             }
             .sheet(isPresented: $showShareSheet) {
                 if let highlight = selectedHighlight {
-                    ShareSheetView(
-                        content: .highlight(
+                    SimpleShareView(
+                        shareText: .formatHighlightShare(
                             verse: highlight.verseText,
                             reference: highlight.reference,
-                            note: highlight.note,
-                            color: highlight.color
+                            note: highlight.note
                         ),
                         isPresented: $showShareSheet
                     )

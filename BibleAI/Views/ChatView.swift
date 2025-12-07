@@ -219,11 +219,10 @@ struct MessageRow: View {
             .background(message.role == .assistant ? Color(.systemGray6).opacity(0.3) : Color(.systemBackground))
         }
         .sheet(isPresented: $showShareSheet) {
-            ShareSheetView(
-                content: .aiInsight(
+            SimpleShareView(
+                shareText: .formatInsightShare(
                     question: userQuestion,
-                    answer: message.content,
-                    verse: nil
+                    answer: message.content
                 ),
                 isPresented: $showShareSheet
             )

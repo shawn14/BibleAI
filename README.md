@@ -57,17 +57,14 @@ An AI-powered Bible companion app for iOS, designed to enhance Bible study and s
 - Mark days complete as you progress
 
 ### Share & Export (NEW 🎨)
-- **Beautiful shareable images** of verses, highlights, and AI insights
-- **3 design templates**: Minimal, Elegant, and Bold styles
-- **Instagram-ready format** (1080x1080 square images)
+- **Simple text sharing** for verses, highlights, and AI insights
 - **Share from anywhere**:
   - Tap any verse while reading → Share Verse
   - Long-press AI responses → Share Insight
   - Swipe highlights → Share button
-- **Customizable branding** - Include or remove BibleAI watermark
-- **Native iOS sharing** - Share to Instagram, Twitter, Messages, Email, etc.
-- **Offline image generation** - No internet required, instant rendering
-- Perfect for social media, study groups, and personal archives
+- **Native iOS sharing** - Share to Messages, Email, Notes, etc.
+- **Formatted text** with verse references and notes
+- Perfect for texting, study groups, and personal notes
 
 ### Tab-Based Navigation
 - **Home Tab**: Chat interface with Verse of the Day and suggestions
