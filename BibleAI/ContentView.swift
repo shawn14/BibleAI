@@ -9,8 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var conversationService = ConversationService.shared
+    @EnvironmentObject var revenueCatManager: RevenueCatManager
     @State private var selectedTab = 0
     @State private var currentConversation: Conversation?
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -60,6 +62,14 @@ struct ContentView: View {
         .onAppear {
             // Start with an empty conversation on launch
             currentConversation = Conversation()
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView(isPresented: $showOnboarding)
+                .environmentObject(revenueCatManager)
+                .onDisappear {
+                    // Mark onboarding as completed
+                    UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+                }
         }
     }
 }

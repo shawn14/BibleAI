@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct BibleAIApp: App {
+    @StateObject private var revenueCatManager = RevenueCatManager.shared
+
     init() {
         // Set API key from Config if not already set
         if UserDefaults.standard.string(forKey: "openai_api_key") == nil {
@@ -19,6 +21,7 @@ struct BibleAIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(revenueCatManager)
         }
     }
 }

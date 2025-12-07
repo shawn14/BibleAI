@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
-import StoreKit
+import RevenueCat
+import RevenueCatUI
 
 struct PaywallView: View {
-    @StateObject private var subscriptionManager = SubscriptionManager.shared
+    @EnvironmentObject var revenueCatManager: RevenueCatManager
     @Binding var isPresented: Bool
     @State private var isPurchasing = false
     @State private var showError = false
@@ -46,24 +47,29 @@ struct PaywallView: View {
 
                     // Pricing
                     VStack(spacing: 16) {
-                        if let yearly = subscriptionManager.yearlyProduct {
-                            SubscriptionButton(
-                                product: yearly,
-                                isPurchasing: $isPurchasing,
-                                recommended: true,
-                                savings: subscriptionManager.monthlySavings,
-                                onPurchase: purchase
-                            )
-                        }
+                        if let offering = revenueCatManager.offerings?.current {
+                            // Yearly package (recommended)
+                            if let yearlyPackage = revenueCatManager.yearlyPackage {
+                                PackageButton(
+                                    package: yearlyPackage,
+                                    isPurchasing: $isPurchasing,
+                                    recommended: true,
+                                    onPurchase: purchase
+                                )
+                            }
 
-                        if let monthly = subscriptionManager.monthlyProduct {
-                            SubscriptionButton(
-                                product: monthly,
-                                isPurchasing: $isPurchasing,
-                                recommended: false,
-                                savings: nil,
-                                onPurchase: purchase
-                            )
+                            // Monthly package
+                            if let monthlyPackage = revenueCatManager.monthlyPackage {
+                                PackageButton(
+                                    package: monthlyPackage,
+                                    isPurchasing: $isPurchasing,
+                                    recommended: false,
+                                    onPurchase: purchase
+                                )
+                            }
+                        } else {
+                            ProgressView("Loading...")
+                                .padding()
                         }
                     }
                     .padding(.horizontal)
@@ -72,8 +78,8 @@ struct PaywallView: View {
                     Button {
                         Task {
                             do {
-                                try await subscriptionManager.restorePurchases()
-                                if subscriptionManager.subscriptionStatus == .premium {
+                                try await revenueCatManager.restorePurchases()
+                                if revenueCatManager.isPremium {
                                     isPresented = false
                                 }
                             } catch {
@@ -91,7 +97,7 @@ struct PaywallView: View {
                     VStack(spacing: 8) {
                         Text("Free Plan")
                             .font(.headline)
-                        Text("5 AI questions per day • Limited highlights • Basic features")
+                        Text("\(revenueCatManager.freeQuestionsPerDay) AI questions per day • Limited highlights • Basic features")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
@@ -118,11 +124,11 @@ struct PaywallView: View {
         }
     }
 
-    private func purchase(_ product: Product) {
+    private func purchase(_ package: Package) {
         Task {
             isPurchasing = true
             do {
-                let success = try await subscriptionManager.purchase(product)
+                let success = try await revenueCatManager.purchase(package: package)
                 if success {
                     isPresented = false
                 }
@@ -160,16 +166,15 @@ struct FeatureRow: View {
     }
 }
 
-struct SubscriptionButton: View {
-    let product: Product
+struct PackageButton: View {
+    let package: Package
     @Binding var isPurchasing: Bool
     let recommended: Bool
-    let savings: String?
-    let onPurchase: (Product) -> Void
+    let onPurchase: (Package) -> Void
 
     var body: some View {
         Button {
-            onPurchase(product)
+            onPurchase(package)
         } label: {
             VStack(spacing: 8) {
                 if recommended {
@@ -181,12 +186,12 @@ struct SubscriptionButton: View {
 
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(product.displayName)
+                        Text(package.storeProduct.localizedTitle)
                             .font(.headline)
                             .foregroundColor(.primary)
 
-                        if let savings = savings {
-                            Text("Save \(savings)")
+                        if recommended {
+                            Text("Save 40%")
                                 .font(.caption)
                                 .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
                         }
@@ -194,7 +199,7 @@ struct SubscriptionButton: View {
 
                     Spacer()
 
-                    Text(product.displayPrice)
+                    Text(package.localizedPriceString)
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
@@ -214,4 +219,5 @@ struct SubscriptionButton: View {
 
 #Preview {
     PaywallView(isPresented: .constant(true))
+        .environmentObject(RevenueCatManager.shared)
 }
