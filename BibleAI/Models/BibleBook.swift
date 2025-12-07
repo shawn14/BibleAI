@@ -35,7 +35,7 @@ struct CompleteBibleBook: Identifiable, Codable {
 }
 
 // Bible Books metadata
-struct BibleBookInfo {
+struct BibleBookInfo: Hashable {
     let name: String
     let abbreviation: String
     let testament: Testament

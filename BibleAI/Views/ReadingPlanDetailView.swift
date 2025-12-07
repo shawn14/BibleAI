@@ -277,7 +277,7 @@ struct DailyReadingRow: View {
 struct ReadingReferenceSheet: View {
     let reference: ReadingReference
     @Binding var isPresented: ReadingReference?
-    @State private var navigateToReader = false
+    @State private var navigationPath = NavigationPath()
 
     var bookInfo: BibleBookInfo? {
         BibleBookInfo.allBooks.first { $0.name == reference.book }
@@ -303,24 +303,14 @@ struct ReadingReferenceSheet: View {
                 }
 
                 if let book = bookInfo {
-                    NavigationLink(
-                        destination: ChapterReadingView(
-                            book: book,
-                            chapter: reference.startChapter
-                        ),
-                        isActive: $navigateToReader
-                    ) {
-                        Button(action: {
-                            navigateToReader = true
-                        }) {
-                            Text("Start Reading")
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: 300)
-                                .padding(.vertical, 16)
-                                .background(Color(red: 0.6, green: 0.4, blue: 0.2))
-                                .cornerRadius(12)
-                        }
+                    NavigationLink(value: book) {
+                        Text("Start Reading")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: 300)
+                            .padding(.vertical, 16)
+                            .background(Color(red: 0.6, green: 0.4, blue: 0.2))
+                            .cornerRadius(12)
                     }
                 } else {
                     Text("Book not found")
@@ -338,6 +328,12 @@ struct ReadingReferenceSheet: View {
                         isPresented = nil
                     }
                 }
+            }
+            .navigationDestination(for: BibleBookInfo.self) { book in
+                ChapterReadingView(
+                    book: book,
+                    chapter: reference.startChapter
+                )
             }
         }
     }
