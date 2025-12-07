@@ -16,53 +16,71 @@ struct ChatView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Messages List
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(viewModel.conversation.messages) { message in
-                            MessageRow(message: message)
-                                .id(message.id)
+        ZStack {
+            // Background gradient
+            LinearGradient(
+                colors: [
+                    Color(red: 0.1, green: 0.15, blue: 0.3),
+                    Color(red: 0.05, green: 0.1, blue: 0.2)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Messages List
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: 16) {
+                            ForEach(viewModel.conversation.messages) { message in
+                                MessageRow(message: message)
+                                    .id(message.id)
+                            }
+                        }
+                        .padding()
+                    }
+                    .onChange(of: viewModel.conversation.messages.count) { _ in
+                        if let lastMessage = viewModel.conversation.messages.last {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
+                            }
                         }
                     }
-                    .padding()
                 }
-                .onChange(of: viewModel.conversation.messages.count) { _ in
-                    if let lastMessage = viewModel.conversation.messages.last {
-                        withAnimation {
-                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                        }
+
+                // Input Area with glass effect
+                HStack(alignment: .bottom, spacing: 12) {
+                    TextField("Ask about scripture...", text: $viewModel.currentMessage, axis: .vertical)
+                        .textFieldStyle(.plain)
+                        .padding(12)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(20)
+                        .focused($isInputFocused)
+                        .lineLimit(1...6)
+                        .tint(.white)
+
+                    Button(action: {
+                        viewModel.sendMessage()
+                        isInputFocused = true
+                    }) {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .font(.system(size: 32))
+                            .foregroundColor(
+                                viewModel.currentMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                ? .gray
+                                : .blue
+                            )
                     }
+                    .disabled(viewModel.currentMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isLoading)
                 }
+                .padding()
+                .background(.thinMaterial)
             }
-
-            Divider()
-
-            // Input Area
-            HStack(alignment: .bottom, spacing: 12) {
-                TextField("Ask about scripture...", text: $viewModel.currentMessage, axis: .vertical)
-                    .textFieldStyle(.plain)
-                    .padding(12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(20)
-                    .focused($isInputFocused)
-                    .lineLimit(1...6)
-
-                Button(action: {
-                    viewModel.sendMessage()
-                    isInputFocused = true
-                }) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.system(size: 32))
-                        .foregroundColor(viewModel.currentMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .gray : .blue)
-                }
-                .disabled(viewModel.currentMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isLoading)
-            }
-            .padding()
         }
         .navigationTitle(viewModel.conversation.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
@@ -98,19 +116,33 @@ struct MessageRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             if message.role == .assistant {
-                // AI Avatar
+                // AI Avatar with glass effect
                 Circle()
-                    .fill(LinearGradient(
-                        colors: [.blue, .purple],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ))
-                    .frame(width: 36, height: 36)
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 40, height: 40)
                     .overlay(
-                        Image(systemName: "brain.head.profile")
-                            .foregroundColor(.white)
-                            .font(.system(size: 16))
+                        Circle()
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [.blue.opacity(0.6), .purple.opacity(0.6)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
                     )
+                    .overlay(
+                        Image(systemName: "sparkles")
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.blue, .cyan],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .font(.system(size: 18, weight: .semibold))
+                    )
+                    .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
             }
 
             VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 8) {
@@ -118,11 +150,23 @@ struct MessageRow: View {
                     TypingIndicator()
                 } else {
                     Text(message.content)
-                        .padding(12)
-                        .background(message.role == .user ? Color.blue : Color(.systemGray5))
+                        .padding(16)
+                        .background {
+                            if message.role == .user {
+                                LinearGradient(
+                                    colors: [Color.blue, Color.cyan],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            } else {
+                                Color.clear
+                                    .background(.ultraThinMaterial)
+                            }
+                        }
                         .foregroundColor(message.role == .user ? .white : .primary)
-                        .cornerRadius(16)
+                        .cornerRadius(20)
                         .textSelection(.enabled)
+                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
                 }
 
                 Text(message.timestamp, style: .time)
@@ -132,15 +176,27 @@ struct MessageRow: View {
             .frame(maxWidth: .infinity, alignment: message.role == .user ? .trailing : .leading)
 
             if message.role == .user {
-                // User Avatar
+                // User Avatar with glass effect
                 Circle()
-                    .fill(Color.blue)
-                    .frame(width: 36, height: 36)
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [.blue.opacity(0.6), .cyan.opacity(0.6)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                    )
                     .overlay(
                         Image(systemName: "person.fill")
                             .foregroundColor(.white)
-                            .font(.system(size: 16))
+                            .font(.system(size: 18))
                     )
+                    .shadow(color: .blue.opacity(0.3), radius: 8, x: 0, y: 4)
             }
         }
     }
@@ -150,12 +206,18 @@ struct TypingIndicator: View {
     @State private var animationAmount = 0.0
 
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 6) {
             ForEach(0..<3) { index in
                 Circle()
-                    .fill(Color.secondary)
-                    .frame(width: 8, height: 8)
-                    .scaleEffect(animationAmount == Double(index) ? 1.0 : 0.5)
+                    .fill(
+                        LinearGradient(
+                            colors: [.blue.opacity(0.6), .cyan.opacity(0.6)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .frame(width: 10, height: 10)
+                    .scaleEffect(animationAmount == Double(index) ? 1.2 : 0.8)
                     .animation(
                         Animation.easeInOut(duration: 0.6)
                             .repeatForever()
@@ -164,9 +226,10 @@ struct TypingIndicator: View {
                     )
             }
         }
-        .padding(12)
-        .background(Color(.systemGray5))
-        .cornerRadius(16)
+        .padding(16)
+        .background(.ultraThinMaterial)
+        .cornerRadius(20)
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
         .onAppear {
             animationAmount = 1.0
         }

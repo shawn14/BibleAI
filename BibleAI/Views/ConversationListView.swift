@@ -13,25 +13,49 @@ struct ConversationListView: View {
 
     var body: some View {
         NavigationView {
-            Group {
-                if conversationService.conversations.isEmpty {
-                    EmptyConversationsView(onCreateNew: createNewConversation)
-                } else {
-                    List {
-                        ForEach(conversationService.conversations) { conversation in
-                            NavigationLink(destination: ChatView(conversation: conversation)) {
-                                ConversationRowView(conversation: conversation)
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.1, green: 0.15, blue: 0.3),
+                        Color(red: 0.05, green: 0.1, blue: 0.2)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+
+                Group {
+                    if conversationService.conversations.isEmpty {
+                        EmptyConversationsView(onCreateNew: createNewConversation)
+                    } else {
+                        ScrollView {
+                            LazyVStack(spacing: 12) {
+                                ForEach(conversationService.conversations) { conversation in
+                                    NavigationLink(destination: ChatView(conversation: conversation)) {
+                                        ConversationRowView(conversation: conversation)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
                             }
+                            .padding()
                         }
-                        .onDelete(perform: deleteConversations)
                     }
                 }
             }
             .navigationTitle("AI Bible Chat")
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: createNewConversation) {
                         Image(systemName: "square.and.pencil")
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.blue, .cyan],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
                     }
                 }
             }
@@ -77,10 +101,23 @@ struct ConversationRowView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(conversation.title)
-                .font(.headline)
-                .lineLimit(1)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "message.fill")
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.blue, .cyan],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .font(.system(size: 16))
+
+                Text(conversation.title)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+            }
 
             Text(conversation.preview)
                 .font(.subheadline)
@@ -89,9 +126,13 @@ struct ConversationRowView: View {
 
             Text(timeAgoString(from: conversation.updatedAt))
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.secondary.opacity(0.8))
         }
-        .padding(.vertical, 4)
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.ultraThinMaterial)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
     }
 }
 
@@ -99,30 +140,59 @@ struct EmptyConversationsView: View {
     let onCreateNew: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "bubble.left.and.bubble.right")
-                .font(.system(size: 60))
-                .foregroundColor(.secondary)
+        VStack(spacing: 24) {
+            ZStack {
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 100, height: 100)
+                    .shadow(color: .blue.opacity(0.3), radius: 20, x: 0, y: 10)
 
-            Text("No Conversations Yet")
-                .font(.title2)
-                .fontWeight(.semibold)
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .font(.system(size: 50))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.blue, .cyan],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+            .padding(.top, 40)
 
-            Text("Start a conversation with your AI Bible study assistant")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            VStack(spacing: 12) {
+                Text("No Conversations Yet")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+
+                Text("Start a conversation with your AI Bible study assistant")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
 
             Button(action: onCreateNew) {
-                Label("Start New Conversation", systemImage: "plus.circle.fill")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
+                HStack(spacing: 8) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 20))
+                    Text("Start New Conversation")
+                        .font(.headline)
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
+                .background(
+                    LinearGradient(
+                        colors: [.blue, .cyan],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .cornerRadius(16)
+                .shadow(color: .blue.opacity(0.4), radius: 12, x: 0, y: 6)
             }
-            .padding(.top)
+            .padding(.top, 8)
         }
         .padding()
     }
