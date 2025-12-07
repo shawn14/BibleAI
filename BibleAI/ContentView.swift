@@ -14,7 +14,7 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             ConversationListView()
                 .tabItem {
-                    Label("Chat", systemImage: "bubble.left.and.bubble.right.fill")
+                    Label("Chat", systemImage: "message.fill")
                 }
                 .tag(0)
 
@@ -30,17 +30,7 @@ struct ContentView: View {
                 }
                 .tag(2)
         }
-        .onAppear {
-            // Apply liquid glass effect to tab bar
-            let appearance = UITabBarAppearance()
-            appearance.configureWithTransparentBackground()
-            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-
-            UITabBar.appearance().standardAppearance = appearance
-            if #available(iOS 15.0, *) {
-                UITabBar.appearance().scrollEdgeAppearance = appearance
-            }
-        }
+        .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
     }
 }
 
