@@ -95,12 +95,14 @@ struct VerseShareContent: View {
 
             // Verse text
             Text(text)
-                .font(template == .bold ? .system(size: 34, weight: .bold) : .system(size: 30, weight: .regular))
+                .font(template == .bold ? .system(size: 32, weight: .bold) : .system(size: 28, weight: .regular))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
-                .lineSpacing(8)
-                .padding(.horizontal, 60)
+                .lineSpacing(6)
+                .padding(.horizontal, 80)
+                .frame(maxWidth: 1000)
                 .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
 
             // Reference
             Text(reference)
@@ -155,8 +157,10 @@ struct AIInsightShareContent: View {
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
                 .lineSpacing(6)
-                .padding(.horizontal, 60)
+                .padding(.horizontal, 80)
+                .frame(maxWidth: 920)
                 .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
 
             // Related verse if available
             if let verse = verse {
@@ -190,17 +194,19 @@ struct HighlightShareContent: View {
 
             // Verse with highlight background
             Text(verse)
-                .font(.system(size: 28, weight: .medium))
+                .font(.system(size: 26, weight: .medium))
                 .foregroundColor(template.textColor)
                 .multilineTextAlignment(.center)
-                .lineSpacing(8)
+                .lineSpacing(6)
                 .padding(20)
+                .frame(maxWidth: 920)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(nil)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(color.color.opacity(template == .bold ? 0.3 : 0.6))
                 )
-                .padding(.horizontal, 50)
-                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 80)
 
             // Reference
             Text(reference)
