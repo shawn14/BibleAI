@@ -106,7 +106,7 @@ struct PaywallView: View {
 
                     // Legal links
                     HStack(spacing: 16) {
-                        Link("Privacy Policy", destination: URL(string: "https://www.bibleaicompanion.com/privacy-policy")!)
+                        Link("Privacy Policy", destination: URL(string: "https://www.bibleaicompanion.com/privacy")!)
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
@@ -114,7 +114,7 @@ struct PaywallView: View {
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
-                        Link("Terms of Service", destination: URL(string: "https://www.bibleaicompanion.com/terms-of-service")!)
+                        Link("Terms of Service", destination: URL(string: "https://www.bibleaicompanion.com/terms")!)
                             .font(.caption2)
                             .foregroundColor(.secondary)
 
