@@ -11,7 +11,7 @@ import Foundation
 struct RevenueCatConfig {
     // Public SDK key from RevenueCat dashboard
     // This is NOT the secret API key - use the PUBLIC iOS SDK key
-    static let publicSDKKey = "test_byVCjpLeACgUIxloNdjPyQhNtdo"
+    static let publicSDKKey = "appl_LjNylWCOFmMRUgRNfWRxpnvQVjU"
 
     // Entitlement ID (must match RevenueCat dashboard)
     static let premiumEntitlementID = "premium"
