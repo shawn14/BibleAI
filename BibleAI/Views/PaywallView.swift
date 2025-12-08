@@ -104,6 +104,30 @@ struct PaywallView: View {
                     }
                     .padding(.horizontal)
 
+                    // Legal links
+                    HStack(spacing: 16) {
+                        Link("Privacy Policy", destination: URL(string: "https://www.bibleaicompanion.com/privacy-policy")!)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+
+                        Link("Terms of Service", destination: URL(string: "https://www.bibleaicompanion.com/terms-of-service")!)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+
+                        Link("Support", destination: URL(string: "https://www.bibleaicompanion.com/support")!)
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.top, 8)
+
                     Spacer(minLength: 40)
                 }
             }
