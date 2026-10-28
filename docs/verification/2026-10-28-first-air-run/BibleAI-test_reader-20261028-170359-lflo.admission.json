@@ -1,0 +1,16 @@
+{
+  "job": "BibleAI-test_reader-20261028-170359-lflo",
+  "authorization": "Shawn: Allow one Air test run, capped at 20 minutes, with resource guards",
+  "at": "2026-10-28T17:04:01-05:00",
+  "resources": {
+    "idle_seconds": 77.940184958,
+    "load_1m": 4.25927734375,
+    "memory_free_pct": 63
+  },
+  "disk_free_gib": 18.302539825439453,
+  "before_sha256": "4c7983bcd8b584d981b2358a20b0c1d082cc3770a6f7892a6ab81d85b48ba9fa",
+  "before_flags": 0,
+  "admission_unconfirmed": true,
+  "restored_at": "2026-10-28T17:04:56-05:00",
+  "settings_restored": true
+}

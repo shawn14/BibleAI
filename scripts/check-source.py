@@ -25,6 +25,14 @@ for name in ('ScriptureFeedModel', 'ScriptureReaderView', 'PassagePickerView', '
     assert len(matches) == 1, name
 r = subprocess.run(['git', 'diff', '--check'], cwd=root, capture_output=True, text=True)
 assert r.returncode == 0, r.stdout + r.stderr
-print('Source registration, asset JSON and whitespace checks passed. Native compilation: UNRUN.')
+# A missing test product name produced a real -Runner.app/PlugIns/.xctest collision.
+# Read both target configurations through the project parser so this cannot silently return.
+subprocess.run(['ruby', '-rxcodeproj', '-e',
+    'p=Xcodeproj::Project.open("BibleAI.xcodeproj"); '
+    't=p.targets.find { |v| v.name == "BibleAIUITests" }; abort "Missing UI test target" unless t; '
+    't.build_configurations.each { |c| abort "Missing UI test product name in #{c.name}" '
+    'unless c.build_settings["PRODUCT_NAME"] == "$(TARGET_NAME)" }'], cwd=root, check=True)
+print('Source registration, target product names, lockfile, asset JSON and whitespace checks passed.')
+print('Native compilation and UI outcomes are not proven by this source check.')
 print('CocoaPods checkout:', 'present' if (root/'Pods/Manifest.lock').exists() else 'MISSING; run canonical prepare_dependencies on the allowed Mac')
 print('Private AI configuration: not required for reading; provider study UNVERIFIED.')
