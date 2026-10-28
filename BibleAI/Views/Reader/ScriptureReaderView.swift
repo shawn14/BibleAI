@@ -154,7 +154,7 @@ struct ScriptureReaderView: View {
             .scrollTargetLayout()
         }
         .scrollIndicators(.hidden)
-        .scrollTargetBehavior(.viewAligned)
+        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
         .scrollPosition(id: $model.visibleID)
         .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
         .accessibilityIdentifier("reader.feed")

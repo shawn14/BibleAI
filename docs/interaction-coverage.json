@@ -1496,7 +1496,7 @@
     "BibleAI/Services/ScriptureFeedModel.swift": "06339d88c789c3a8ff9fd638440fd19807aca5cf7a1ad07134fb996aea5f269d",
     "BibleAI/Services/SubscriptionManager.swift": "b6d3bfcddc8fd0e75bed36b2c590ae40c84db5ddd66b61c2396609f665ccf65e",
     "BibleAI/Services/VerseOfTheDayService.swift": "5741a5e9082953c8a16650d8aa9f09359cb624bc0e883819e72798744ad2f7e1",
-    "BibleAI/Utilities/VerseParser.swift": "20dfa0776dd9fe1eb3c11e53bed88a26054ce2489e11bc87538fce681681a32a",
+    "BibleAI/Utilities/VerseParser.swift": "f317a1a51f787cac90e1f5638f24cc7a1fa12d6f9ff4c7fc56a819a17ad51f50",
     "BibleAI/ViewModels/ChatViewModel.swift": "638de92d47babce342e603bb6518419515cd4b33e373e00dac9f010de08253ff",
     "BibleAI/Views/BibleBooksListView.swift": "00ed16589b99c0d00bfebb313314f68b7b586850bfe8e6d2f4ffef2d983f69d5",
     "BibleAI/Views/ChapterListView.swift": "9ccc48e24d124434c3b999bf76b5b5bb992bc1833716a35581eb49dd6a562cd9",
@@ -1510,16 +1510,16 @@
     "BibleAI/Views/OnboardingView.swift": "b78f0aa8c2a4cdd61817ae2a9a58b33ae5acffb5ebc99c52e33e864a6c5569f4",
     "BibleAI/Views/PaywallView.swift": "56fbf09d304b65de9cb08adee0e1076022d6ee97347dbc2eec9728310a0e87e5",
     "BibleAI/Views/Reader/PassagePickerView.swift": "1db2acf2936624304a50929b856cacf382c87489d7c2ba1819a5b8c5e0a8b6dd",
-    "BibleAI/Views/Reader/ScriptureReaderView.swift": "4b18b7e720ec3acc1ab476c4159fe67370044a134fe2a8535f9d841ed1e3d163",
+    "BibleAI/Views/Reader/ScriptureReaderView.swift": "fd4bba69d829b2b252604eb14f0387d55ada6a909f6ad03dd74baa493106cace",
     "BibleAI/Views/Reader/VerseStudySheet.swift": "94565b4e900d2966b5744f035c3511a94d83ff563b46b0e5c087a347ef16255f",
     "BibleAI/Views/ReadingPlanDetailView.swift": "9c775ff65c73196a71232c491867e4846dfa3729ad062a90e7ddb1a0f356ed99",
     "BibleAI/Views/ReadingPlansListView.swift": "475f050b20cf2c48be7065be9a9ed6ea60e481d59b936fd3a207c3bdf7690ef0",
     "BibleAI/Views/SettingsView.swift": "12b1d5b0bb9d25b6f39c6c3b97e3cd3c0ea305ff61f317bba41733ede547d1ab",
     "BibleAI/Views/VerseSearchView.swift": "08bab59b0967b1aa8c6aeb50b75b6a02145897fb9425b93e0202bf9babf9783e",
-    "BibleAIUITests/ReaderJourneyTests.swift": "dd37848865e3808a94712b5f21b9d3e6bcad18a1e1c51559ae69c051c6800f86",
+    "BibleAIUITests/ReaderJourneyTests.swift": "ff2f5ed8ac48cc9507689776977bda2a2d96a8d292b29a1d4213580d6dcc04a3",
     "generate_icon.swift": "03800f7769ed4eef813c83ea9fff2c55a8c00f12ae89de2be6d586ad04390b7a"
   },
-  "source_index_sha256": "1eac157ab45c0dec3a76d31fb9f24465880b954bcf6c1e3384f916d776d790c8",
+  "source_index_sha256": "7e63fbfeb0005cc15fb5f676d33f292cd6d8569c18a8b5db8e90b0a22a33075b",
   "problems": [],
   "status": "source candidates only; runtime outcome/state/test mappings pending"
 }

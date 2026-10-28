@@ -48,6 +48,11 @@ final class ReaderJourneyTests: XCTestCase {
         reopened.typeText(" Cancelled change")
         app.buttons["Cancel"].tap()
         XCTAssertFalse(app.staticTexts["A quiet moment with Scripture. Cancelled change"].exists)
+        app.terminate()
+        app.launch()
+        app.tabBars.buttons["Saved"].tap()
+        XCTAssertTrue(app.staticTexts["A quiet moment with Scripture."].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["A quiet moment with Scripture. Cancelled change"].exists)
         print("INTERACTION_ASSERTED note.cancel")
 
         app.tabBars.buttons["Read"].tap()
