@@ -8,7 +8,8 @@ Native SwiftUI iOS17+ Bible reader. Shawn's2026-10-28 request: transform around 
 then make the experience natural Apple UX. Use system navigation, tabs, sheets, search, semantic
 colors, Dynamic Type and plain lists. Read / Plans / Saved; one verse at a time is the primary job.
 No marketing hero above the reader, content cards, copied branding, fake testimonials or invented
-trial terms. Native introduction is three pages. Keep free Scripture reading accessible.
+trial terms. The first-pass introduction is three pages; this is not an explicit user lock on
+funnel parity. Keep free Scripture reading accessible.
 
 ## Source and services
 

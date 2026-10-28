@@ -1,82 +1,69 @@
 # BibleAI status — 2026-10-28
 
-## Goal and decisions locked
+## Goal and current design
 
-Transform the app around Scroll the Bible from Shawn's X reference, with Shawn's later direction
-to use natural Apple UX. Native Read / Plans / Saved, verse scrolling and native sheets. Short
-three-page onboarding replaces the copied funnel; free reading stays directly accessible.
-Full product scope and unresolved parity are in docs/design.md. No fake testimonials or trial claims.
+Transform BibleAI around Shawn's Scroll the Bible reference, with his later instruction to make
+it feel natural on iOS. The source uses Read / Plans / Saved, one-verse scrolling, system navigation,
+sheets, semantic colors and plain lists. The three-page introduction is a first-pass design choice,
+not an explicit user lock on funnel length. Full reference parity is not proven. See docs/design.md.
 
-## Completed source work (native verification incomplete)
+## Source implemented, runtime unverified
 
-- Read-first SwiftUI shell; stable reading-place persistence, per-chapter validated KJV fetch/cache,
-  bounded in-memory chapter window, native passage picker, study sheet and verse save/share/note.
-- Native system navigation/list patterns across onboarding, plans, saved notes, settings and Premium.
-  Dynamic Type in the new reader; semantic light/dark colors; no decorative content cards.
-- Existing RevenueCat products/prices preserved; prices come from offerings; loading/failure states
-  are explicit. No subscription purchase or AI request executed. Placeholder AI key never sent.
-- Xcode project references all new sources. Missing ignored Config.private.swift replaced by the
-  existing tracked placeholder Config.swift source reference; no secret added.
-- Real XCTest reader journey and committed mac-run actions prepared. No source changes to other apps.
+- Native reader with stable reading-place storage, bounded chapter memory, real per-chapter KJV
+  download/cache, passage picker, study sheet, verse save/share/note and reading settings.
+- Native onboarding, plan list/details, Saved/notes, settings and Premium layouts. RevenueCat
+  products/prices stay sourced from the existing integration. No paid call or purchase was tested.
+- Placeholder AI configuration is not sent. Missing ignored Config.private.swift was replaced
+  by the tracked Config.swift build reference; no secret was introduced.
+- All 40 app sources and one UI-test source are registered. Cheap source checks pass; they do
+  not establish compilation or behavior.
+- Pending XCTest now captures all three introduction pages, reader, Saved, study, settings and
+  all four plan details. It also asserts live Scripture, save/note/cancel persistence, reading-place
+  restore, reference search, and day-one completion persistence for every plan after relaunch.
+  These assertions are UNRUN. Saved rows have stable accessibility identifiers for those checks.
 
 ## Observed evidence
 
-- Initial main and freshly fetched origin/main:872beac405913046496effcf9aeaffdcd76b1184.
-- Public bible-api.com John3 KJV read returned HTTP200,36 ordered verses, correct John3:16.
-  This proves the provider response, not app runtime behavior.
-- Ruby xcodeproj reopened the project; all40app source files and1UI-test source exist.
-- Source registration/JSON/whitespace checks pass. Test shell syntax passes.
-- Shared interaction gate refused: directory not enrolled,0joined proofs. Candidate discovery is
-  saved locally as docs/interaction-coverage.json; outcomes remain UNRUN.
-- AppleCharts roadmap stopped: local tsx/node_modules absent. No invented market/review counts.
-- Pinned CocoaPods installation passed (5.49.2); the first native run failed before app launch.
-  Native compile, screenshot review,
-  persistence, all-plan coverage, study provider, subscription/trial/reminder and full offline
-  catalog are still unverified. Do not claim the clone complete or release-ready.
+GitHub main at clone/fetch: `872beac405913046496effcf9aeaffdcd76b1184`. Work is on
+`codex/scroll-bible`, intentionally local pending acceptable feature proof. No main push or release.
 
-## Authorization and next execution
+Public bible-api.com John 3 KJV returned HTTP 200, 36 ordered verses and the actual John 3:16 text.
+That proves the provider response only. The AppleCharts roadmap stopped because local tsx and
+node_modules are absent. No review counts were invented. Shared interaction QA refused because
+this directory is not enrolled and has zero joined runtime proofs; source candidates are not proof.
 
-Shawn explicitly approved ONE Air test run, capped at20minutes, with resource guards, in this chat
-on2026-10-28. Reuse that authorization; do not ask again. That run was consumed by the failed123.8-second job below. No authorization for additional runs,
-paid calls, store edits, uploads or main push. Preserve15GiBminimum, normal load8/memory guards,
-one simulator, current queue/failure cooldowns. Native job must be classified heavy by its
-simulator-named wrapper. Never globally unlock the Air or admit unrelated work. Restore exact
-settings bytes/flags immediately after scoped admission.
+Locked dependency preparation first failed at a stale Podfile checksum already present in GitHub.
+The checksum-only correction preserved RevenueCat and RevenueCatUI 5.49.2. The same canonical
+prepare then passed in 22.3 seconds: `BibleAI-prepare_dependencies-20261028-165804-kmid`.
+Installed Pods/Manifest.lock exactly matches Podfile.lock.
 
-1. Commit source so mac-run can read docs/os.yaml. Prepare CocoaPods through canonical
-   prepare_dependencies; stop on first infrastructure failure and retain output.
-2. Reconcile any generated project changes before proof. Execute exact test_reader once through
-   runner when safe. Keep job id and real process until terminal; don't duplicate a waiting job.
-3. Inspect actual XCTest failure or captured screens. Independent runtime refutation is required
-   after builder checks pass. Full shared enrollment/evidence and remaining parity stay open.
+The ONE approved Air native run was `BibleAI-test_reader-20261028-170359-lflo` at source
+`64bb1cf9672f1f4c9844fa4df44d4c6d6f56a2a6`. It ran 123.8 seconds and exited 65 before app launch:
+UI-test PRODUCT_NAME was missing, producing duplicate output `-Runner.app/PlugIns/.xctest`.
+Commit c84107e sets `$(TARGET_NAME)` in both test configurations and adds a source guard.
+The correction has NOT been verified by Xcode. No screenshots or UI assertions were produced.
+Raw log, job result, admission and cleanup receipts: docs/verification/2026-10-28-first-air-run/.
 
-Current feature branch: codex/scroll-bible. No push while local feature proof remains unsuccessful.
-The owned simulator was removed and the runner returned idle after the first test.
+## Authorization, cleanup and next action
 
-## Dependency preparation — actual red check
+Shawn's one-run, 20-minute Air approval is CONSUMED by the failed job above. A single cached retry
+capped at 15 minutes was explicitly requested in chat and remains PENDING. The committed runner
+timeout is prepared at 15 minutes; that configuration is not authorization. Do not queue native
+work until Shawn answers. No paid calls, store edits, uploads, main push or release is authorized.
 
-Canonical job BibleAI-prepare_dependencies-20261028-165400-vkfl failed3.1seconds before
-installation/build: deployment-mode Podfile checksum mismatch. Both current Podfile and
-origin/main:Podfile hash to3e545cdce3f217add1574b56ed82859de6a84b06; the cloned lockfile retained
-c42e42e8043278277cfda8cbc157d066c1c663c2. Updated only the stale checksum, keeping RevenueCat
-and RevenueCatUI pinned at5.49.2 and all spec checksums unchanged. check_source now rejects
-future Podfile/lock checksum drift. Same canonical prepare must run again after this concrete
-configuration correction. This was a source/config failure, not a network flake. Native test
-has not started; the one-run20-minute authorization is unused.
+The exact original Air settings bytes/flags were restored at 17:05:36 CDT. Owned simulator
+F1DF7111-32A4-4453-A2F5-4882ADC8ED27 was deleted. No BibleAI job remains queued or running.
+The small 8.5 MB build cache is retained only for the pending cached retry. Preserve 15 GiB disk,
+normal load 8 / memory guards, a single simulator, existing queue ownership and failure cooldowns.
 
-## First Air run — 17:07 CDT
+After explicit retry approval: claim the repo, refresh real resource/queue checks, and run the
+existing mac-run test_reader action once. The temporary scoped-admission helper still encodes
+20 minutes and the original approval text: update it to the actual new approval before use.
+Do not admit unrelated work. Restore exact standing settings immediately after admission.
+Inspect actual logs/screens and obtain independent runtime/visual refutation after builder checks.
 
-Dependency preparation `BibleAI-prepare_dependencies-20261028-165804-kmid` passed22.3seconds;
-installed manifest exactly matches locked RevenueCat/RevenueCatUI5.49.2.
-The ONE approved native job `BibleAI-test_reader-20261028-170359-lflo` ran123.8seconds and
-exited65 before app launch. Actual failure: UI-test target PRODUCT_NAME absent in both configs,
-producing duplicate output `-Runner.app/PlugIns/.xctest`. Added the canonical `$(TARGET_NAME)`
-value and a source guard. This correction is NOT yet verified by Xcode.
-Raw evidence: docs/verification/2026-10-28-first-air-run/.
-The Air policy was restored byte-for-byte at17:05:36; owned simulator was deleted. No UI screens
-or successful behavioral assertions exist. The authorization is consumed; obtain a new explicit
-run allowance before executing the corrected test. No release/main push is authorized.
-
-A single cached retry capped at15minutes has been proposed in this chat; approval is pending.
-The committed runner timeout is reduced to15minutes in preparation. Do not infer approval from
-that configuration change. Retain the small8.5MB build cache only while this question is pending.
+Remaining completion evidence: native compile and rendered UX; full control/state coverage and
+shared QA enrollment; chapter boundaries/offline reopening; plan reset/cancel/navigation outcomes;
+real study-provider configuration/authorization; verified premium/trial/reminder parity; dark mode,
+Dynamic Type and device coverage. Full offline catalog/translations are also unresolved reference
+parity. Do not call the clone complete or release-ready.

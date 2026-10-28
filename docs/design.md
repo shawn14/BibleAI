@@ -19,14 +19,15 @@ AppleCharts roadmap was attempted with its existing CLI for `scroll the bible`, 
 two review pages, six months. It stopped because tsx/node_modules are not installed. No package
 installation, broad crawl, or review numbers were invented. Market evidence remains incomplete.
 
-## Locked direction
+## User direction and current design choices
 
 - 2026-10-28: Shawn asked for Apple UX that looks natural. Use NavigationStack, native tabs,
   toolbars, sheets, searchable, SF Symbols, Dynamic Type, system backgrounds and semantic colors.
 - Read / Plans / Saved. Reading opens to one verse at a time, restores the last position, and
   continues across chapter boundaries. Real KJV data only, never generated Scripture.
-- Three brief native introduction pages replace the reference's ten-screen marketing funnel.
-  Start Reading and Skip lead to the reader. Premium is a separate explicit choice.
+- The first pass uses three brief native introduction pages. Start Reading and Skip lead to
+  the reader; Premium is a separate explicit choice. This is an implementation choice, not an
+  explicit user lock or proof of full reference-funnel parity. Trial/reminder parity stays open.
 - Keep BibleAI identity. No copied brand/icon, borrowed testimonials, fabricated review counts,
   unsupported translation options, hardcoded prices or unverified seven-day trial promises.
 - No content cards/chips: hierarchy, spacing, and row separators. Bordered/prominent controls
@@ -67,7 +68,11 @@ source: it must never claim scholarly word-level accuracy without a validated da
 1. Build and launch the actual source through a committed mac-run action in an allowed native
    execution environment. Never weaken the Air lock or use a second simulator.
 2. Exercise onboarding → live verse → swipe → save → note/cancel/save → relaunch → search.
+   Capture all three introduction pages, reader, Saved, study, settings and all four plan
+   detail screens. Start each plan, complete day one and assert all four survive app relaunch.
    Retain native screenshots, actual XCTest result/log, app artifact identity and cleanup.
+   This script is unrun; dark appearance, Dynamic Type, chapter-boundary/offline, removal,
+   reset and all remaining controls still need actual outcome evidence.
 3. Review the screenshots independently and expand coverage to all controls/states. Shared QA
    currently refuses (directory unenrolled,137 source candidates before final first-pass edits).
    No completion or release claim until this and the existing gates pass.

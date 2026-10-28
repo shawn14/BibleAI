@@ -9,7 +9,11 @@ final class ReaderJourneyTests: XCTestCase {
         app.launch()
         let next = app.buttons["onboarding.continue"]
         XCTAssertTrue(next.waitForExistence(timeout: 10))
-        for _ in 0..<3 { next.tap() }
+        for page in 1...3 {
+            XCTAssertTrue(app.staticTexts["onboarding.title"].exists)
+            capture("onboarding-\(page)")
+            next.tap()
+        }
         XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 30))
         XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].exists)
         capture("reader-initial")
@@ -22,7 +26,7 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["reader.save"].tap()
         XCTAssertEqual(app.buttons["reader.save"].label, "Remove Saved Verse")
         app.tabBars.buttons["Saved"].tap()
-        let saved = app.buttons.containing(.staticText, identifier: "Genesis 1:2").firstMatch
+        let saved = app.buttons["saved.verse.Genesis|1|2"]
         XCTAssertTrue(saved.waitForExistence(timeout: 5))
         saved.tap()
         let note = app.textViews["note.text"]
@@ -30,7 +34,7 @@ final class ReaderJourneyTests: XCTestCase {
         note.tap()
         note.typeText("A quiet moment with Scripture.")
         app.buttons["note.save"].tap()
-        XCTAssertTrue(app.staticTexts["A quiet moment with Scripture."].waitForExistence(timeout: 5))
+        assertSavedNote(app, equals: "A quiet moment with Scripture.")
         print("INTERACTION_ASSERTED reader.save")
         print("INTERACTION_ASSERTED note.save")
         capture("saved-note")
@@ -39,20 +43,20 @@ final class ReaderJourneyTests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.buttons["reader.verse.Genesis|1|2"].waitForExistence(timeout: 30))
         app.tabBars.buttons["Saved"].tap()
-        XCTAssertTrue(app.staticTexts["A quiet moment with Scripture."].waitForExistence(timeout: 5))
+        assertSavedNote(app, equals: "A quiet moment with Scripture.")
         print("INTERACTION_ASSERTED reader.resume")
-        app.buttons.containing(.staticText, identifier: "Genesis 1:2").firstMatch.tap()
+        app.buttons["saved.verse.Genesis|1|2"].tap()
         let reopened = app.textViews["note.text"]
         XCTAssertEqual(reopened.value as? String, "A quiet moment with Scripture.")
         reopened.tap()
         reopened.typeText(" Cancelled change")
         app.buttons["Cancel"].tap()
-        XCTAssertFalse(app.staticTexts["A quiet moment with Scripture. Cancelled change"].exists)
+        XCTAssertFalse(app.buttons["saved.verse.Genesis|1|2"].label.contains("Cancelled change"))
         app.terminate()
         app.launch()
         app.tabBars.buttons["Saved"].tap()
-        XCTAssertTrue(app.staticTexts["A quiet moment with Scripture."].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.staticTexts["A quiet moment with Scripture. Cancelled change"].exists)
+        assertSavedNote(app, equals: "A quiet moment with Scripture.")
+        XCTAssertFalse(app.buttons["saved.verse.Genesis|1|2"].label.contains("Cancelled change"))
         print("INTERACTION_ASSERTED note.cancel")
 
         app.tabBars.buttons["Read"].tap()
@@ -75,6 +79,80 @@ final class ReaderJourneyTests: XCTestCase {
         capture("verse-study")
         app.buttons["Done"].tap()
         print("INTERACTION_ASSERTED reader.study")
+
+        app.buttons["reader.options"].tap()
+        app.buttons["Reading Settings"].tap()
+        XCTAssertTrue(app.sliders["settings.textSize"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.switches["Serif Type"].exists)
+        capture("reading-settings")
+        app.buttons["Done"].tap()
+        XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 5))
+        print("INTERACTION_ASSERTED settings.openClose")
+
+        try exerciseAllPlanPersistence(app)
+    }
+
+    private func assertSavedNote(_ app: XCUIApplication, equals note: String,
+                                 file: StaticString = #filePath, line: UInt = #line) {
+        let row = app.buttons["saved.verse.Genesis|1|2"]
+        XCTAssertTrue(row.waitForExistence(timeout: 5), file: file, line: line)
+        XCTAssertTrue(row.label.contains(note), "Saved row must expose the persisted note", file: file, line: line)
+    }
+
+    private func exerciseAllPlanPersistence(_ app: XCUIApplication) throws {
+        let plans = [("Gospel Tour", 8), ("Psalms in a Month", 30),
+                     ("New Testament in 30 Days", 30), ("Proverbs Wisdom", 31)]
+        app.tabBars.buttons["Plans"].tap()
+        capture("reading-plans")
+        for (title, duration) in plans {
+            openPlan(title, in: app)
+            capture("plan-\(title)")
+            let start = app.buttons["plan.start"]
+            XCTAssertTrue(start.waitForExistence(timeout: 5))
+            start.tap()
+            let complete = app.buttons["plan.complete.1"]
+            reveal(complete, in: app)
+            complete.tap()
+            XCTAssertTrue(app.staticTexts["Completed"].waitForExistence(timeout: 5))
+            app.buttons["Done"].tap()
+            let row = app.buttons["plans.open.\(title)"]
+            XCTAssertTrue(row.waitForExistence(timeout: 5))
+            XCTAssertTrue(row.label.contains("1 of \(duration) readings complete"))
+            print("INTERACTION_ASSERTED plan.complete.\(title).1")
+        }
+        // The same real app store must survive process death for every built-in plan.
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.tabBars.buttons["Plans"].waitForExistence(timeout: 10))
+        app.tabBars.buttons["Plans"].tap()
+        for (title, duration) in plans {
+            let row = app.buttons["plans.open.\(title)"]
+            reveal(row, in: app)
+            XCTAssertTrue(row.label.contains("1 of \(duration) readings complete"),
+                          "\(title) must retain its day-one completion after relaunch")
+            row.tap()
+            XCTAssertFalse(app.buttons["plan.start"].exists)
+            XCTAssertTrue(app.staticTexts["Completed"].exists)
+            XCTAssertFalse(app.buttons["plan.complete.1"].exists)
+            capture("plan-restored-\(title)")
+            app.buttons["Done"].tap()
+            print("INTERACTION_ASSERTED plan.resume.\(title)")
+        }
+    }
+
+    private func openPlan(_ title: String, in app: XCUIApplication) {
+        let row = app.buttons["plans.open.\(title)"]
+        reveal(row, in: app)
+        row.tap()
+        XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 5))
+    }
+
+    private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<5 {
+            if element.exists && element.isHittable { return }
+            app.swipeUp()
+        }
+        XCTFail("Expected control was not reachable: \(element.identifier)")
     }
 
     private func capture(_ name: String) {

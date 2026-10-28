@@ -34,6 +34,7 @@ struct HighlightsListView: View {
                                     }
                                 }.padding(.vertical, 8)
                             }
+                            .accessibilityIdentifier("saved.verse.\(highlight.book)|\(highlight.chapter)|\(highlight.verse)")
                             .swipeActions {
                                 Button("Remove", role: .destructive) { pendingRemoval = highlight }
                             }
