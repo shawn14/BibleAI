@@ -30,7 +30,8 @@ GitHub main at clone/fetch: `872beac405913046496effcf9aeaffdcd76b1184`. Work is 
 Public bible-api.com John 3 KJV returned HTTP 200, 36 ordered verses and the actual John 3:16 text.
 That proves the provider response only. The AppleCharts roadmap stopped because local tsx and
 node_modules are absent. No review counts were invented. Shared interaction QA refused because
-this directory is not enrolled and has zero joined runtime proofs; source candidates are not proof.
+this directory is not enrolled and has zero joined runtime proofs. The refreshed inventory has
+134 unverified source candidates; candidates are not proof.
 
 Locked dependency preparation first failed at a stale Podfile checksum already present in GitHub.
 The checksum-only correction preserved RevenueCat and RevenueCatUI 5.49.2. The same canonical

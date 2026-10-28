@@ -674,7 +674,7 @@
     {
       "id": "BibleAI/Views/HighlightsListView.swift#da6472b8266e0ba8:1",
       "source": "BibleAI/Views/HighlightsListView.swift",
-      "line": 37,
+      "line": 38,
       "kind": "swipeActions",
       "anchor_sha256": "35b39c0c0638eeb2b46b6be66da284423b5857e8d9dde2d6119d9ffbab56ce72",
       "expected": "",
@@ -685,7 +685,7 @@
     {
       "id": "BibleAI/Views/HighlightsListView.swift#e0e6a4f89d683034:1",
       "source": "BibleAI/Views/HighlightsListView.swift",
-      "line": 38,
+      "line": 39,
       "kind": "Button",
       "anchor_sha256": "edb6da91d404689274044a1e66b0b03ab123b2cf512544a2e76fb228c873f129",
       "expected": "",
@@ -696,7 +696,7 @@
     {
       "id": "BibleAI/Views/HighlightsListView.swift#f1e463221baafb9e:1",
       "source": "BibleAI/Views/HighlightsListView.swift",
-      "line": 47,
+      "line": 48,
       "kind": "searchable",
       "anchor_sha256": "6329af491cc6cdae328dacf72043cd6287d0d1c865606e1db3937aabd781671c",
       "expected": "",
@@ -707,7 +707,7 @@
     {
       "id": "BibleAI/Views/HighlightsListView.swift#18779bdc5fc3892f:1",
       "source": "BibleAI/Views/HighlightsListView.swift",
-      "line": 56,
+      "line": 57,
       "kind": "Button",
       "anchor_sha256": "f7066da040fd24ebd2480d6dc9306ec2a40b52ce045cc7600e3be10377c1cf53",
       "expected": "",
@@ -718,7 +718,7 @@
     {
       "id": "BibleAI/Views/HighlightsListView.swift#8c1efc2ec83a70c8:1",
       "source": "BibleAI/Views/HighlightsListView.swift",
-      "line": 60,
+      "line": 61,
       "kind": "Button",
       "anchor_sha256": "636a4bd9604e6abff036164cf54dd56aa33f285085a47448d211aae311f5c5c7",
       "expected": "",
@@ -1506,7 +1506,7 @@
     "BibleAI/Views/Components/SimpleVerseText.swift": "13eb81538be57b1be7c2d819a8de19dd9d55e36bbebb89cf1cca7dfde2773110",
     "BibleAI/Views/Components/VerseReferenceText.swift": "1f803f4eb898c29ffcc7f91508090cee81011cf963043f2885a2dc641523ec82",
     "BibleAI/Views/ConversationListView.swift": "caf4a289a992642866ad19ba75237fcbb37b70fd077cd9f939eeec1bde5fe260",
-    "BibleAI/Views/HighlightsListView.swift": "155bd5b4ac6ff56b08e7333d76ef93397d87276d7919ba9cffee62ceb4cf6901",
+    "BibleAI/Views/HighlightsListView.swift": "5a439040b80c4691c4d5d24a21fe3f44db1febc6f61e290ab76875252e2d2664",
     "BibleAI/Views/OnboardingView.swift": "b78f0aa8c2a4cdd61817ae2a9a58b33ae5acffb5ebc99c52e33e864a6c5569f4",
     "BibleAI/Views/PaywallView.swift": "56fbf09d304b65de9cb08adee0e1076022d6ee97347dbc2eec9728310a0e87e5",
     "BibleAI/Views/Reader/PassagePickerView.swift": "1db2acf2936624304a50929b856cacf382c87489d7c2ba1819a5b8c5e0a8b6dd",
@@ -1516,10 +1516,10 @@
     "BibleAI/Views/ReadingPlansListView.swift": "475f050b20cf2c48be7065be9a9ed6ea60e481d59b936fd3a207c3bdf7690ef0",
     "BibleAI/Views/SettingsView.swift": "12b1d5b0bb9d25b6f39c6c3b97e3cd3c0ea305ff61f317bba41733ede547d1ab",
     "BibleAI/Views/VerseSearchView.swift": "08bab59b0967b1aa8c6aeb50b75b6a02145897fb9425b93e0202bf9babf9783e",
-    "BibleAIUITests/ReaderJourneyTests.swift": "ff2f5ed8ac48cc9507689776977bda2a2d96a8d292b29a1d4213580d6dcc04a3",
+    "BibleAIUITests/ReaderJourneyTests.swift": "a0b3e128cbb8fcfd1b193e5319064c000e8e7eb231ba5fa43d0a62a98a35e7d3",
     "generate_icon.swift": "03800f7769ed4eef813c83ea9fff2c55a8c00f12ae89de2be6d586ad04390b7a"
   },
-  "source_index_sha256": "7e63fbfeb0005cc15fb5f676d33f292cd6d8569c18a8b5db8e90b0a22a33075b",
+  "source_index_sha256": "1fb4e85fb1581aa90b6df1e73245005aff13fc0dcda14bb95a0c627c85dcaefe",
   "problems": [],
-  "status": "source candidates only; runtime outcome/state/test mappings pending"
+  "status": "source-candidates-only; not runtime evidence"
 }
