@@ -1,97 +1,47 @@
-//
-//  SettingsView.swift
-//  BibleAI
-//
-//  Created on 2025-12-06.
-//
-
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("preferred_translation") private var preferredTranslation: String = "KJV"
-    @State private var tapCount = 0
-    @State private var showResetAlert = false
-
-    let translations = ["KJV", "NIV", "ESV", "NASB", "NLT"]
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var subscriptions: RevenueCatManager
+    @AppStorage("reader.useSerif") private var useSerif = true
+    @AppStorage("reader.textSize") private var textSize = 28.0
+    @State private var showPremium = false
+    @State private var showIntroduction = false
 
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    Picker("Preferred Translation", selection: $preferredTranslation) {
-                        ForEach(translations, id: \.self) { translation in
-                            Text(translation).tag(translation)
+        NavigationStack {
+            List {
+                Section("Reading") {
+                    Toggle("Serif Type", isOn: $useSerif)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Text Size")
+                        Slider(value: $textSize, in: 20...38, step: 2) {
+                            Text("Text Size")
+                        } minimumValueLabel: {
+                            Image(systemName: "textformat.size.smaller")
+                        } maximumValueLabel: {
+                            Image(systemName: "textformat.size.larger")
                         }
+                        .accessibilityIdentifier("settings.textSize")
                     }
-                } header: {
-                    Text("Bible Settings")
+                    LabeledContent("Translation", value: "King James Version")
                 }
-
                 Section {
-                    HStack {
-                        Text("Requests Remaining Today")
-                        Spacer()
-                        Text("\(AIService.shared.getRemainingDailyRequests()) / 50")
-                            .foregroundColor(AIService.shared.getRemainingDailyRequests() < 10 ? .orange : .secondary)
-                    }
-                } header: {
-                    Text("Usage")
-                } footer: {
-                    Text("Daily limit resets at midnight.")
+                    Text("Opened chapters are cached on this iPhone. New chapters need a connection.")
+                        .font(.footnote).foregroundStyle(.secondary)
                 }
-
-                Section {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.0.0")
-                            .foregroundColor(.secondary)
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        tapCount += 1
-                        if tapCount >= 5 {
-                            showResetAlert = true
-                            tapCount = 0
-                        }
-                        // Reset tap count after 2 seconds
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            tapCount = 0
-                        }
-                    }
-                } header: {
-                    Text("About")
+                Section("BibleAI") {
+                    Button(subscriptions.isPremium ? "Your Subscription" : "Explore Premium") { showPremium = true }
+                    Button("Show Introduction") { showIntroduction = true }
+                    LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                 }
             }
-            .navigationTitle("Settings")
-            .alert("Reset App", isPresented: $showResetAlert) {
-                Button("Cancel", role: .cancel) { }
-                Button("Reset", role: .destructive) {
-                    resetApp()
-                }
-            } message: {
-                Text("This will clear onboarding, question count, and all app data. The app will restart.")
-            }
+            .listStyle(.plain)
+            .navigationTitle("Reading Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
+            .sheet(isPresented: $showPremium) { PaywallView(isPresented: $showPremium) }
+            .fullScreenCover(isPresented: $showIntroduction) { OnboardingView(isPresented: $showIntroduction) }
         }
     }
-
-    private func resetApp() {
-        // Clear onboarding flag
-        UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
-
-        // Clear question counts
-        UserDefaults.standard.removeObject(forKey: "daily_question_count")
-        UserDefaults.standard.removeObject(forKey: "last_question_date")
-
-        // Clear AI usage
-        UserDefaults.standard.removeObject(forKey: "ai_daily_usage")
-        UserDefaults.standard.removeObject(forKey: "ai_last_reset_date")
-
-        // Exit the app (on simulator this will just close it, user needs to reopen)
-        exit(0)
-    }
-}
-
-#Preview {
-    SettingsView()
 }

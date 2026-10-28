@@ -1,0 +1,29 @@
+name: BibleAI
+summary: Native iOS verse scrolling, Bible study, reading plans and saved notes
+profile: ios-native
+spec: docs/design.md
+app:
+  bundle_id: com.shawncarpenter.bibleai-companion
+  minimum_ios: '17.0'
+  project: BibleAI.xcodeproj
+  workspace: BibleAI.xcworkspace
+data_sources:
+  - https://bible-api.com/ (KJV, requested one chapter at a time)
+  - On-device saved reading position, highlights, notes and reading-plan progress
+  - Existing AIService and RevenueCat integration (provider/store verification outstanding)
+canvas: null
+canonical_deploy_script: null
+canonical_scripts:
+  check_source: python3 scripts/check-source.py
+  prepare_dependencies: pod install --deployment --no-repo-update
+  test_reader: bash scripts/simulator-reader-proof.sh
+  verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
+mac_runner:
+  timeout_minutes: 20
+  ask_first: []
+capabilities:
+  - ~/projects/CAPABILITIES.md (mac-run native execution)
+  - ~/projects/my-ai-brain/playbooks/interaction-verification.md
+release:
+  status: unverified
+  note: Existing fastlane files require source/store audit. No deploy or release action authorized.

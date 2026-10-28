@@ -14,6 +14,8 @@ class RevenueCatManager: ObservableObject {
 
     @Published var isPremium: Bool = false
     @Published var offerings: Offerings?
+    @Published var loadingOfferings = false
+    @Published var offeringsError: String?
 
     // Free tier limits
     let freeQuestionsPerDay = 5
@@ -57,11 +59,14 @@ class RevenueCatManager: ObservableObject {
     // MARK: - Offerings
 
     func loadOfferings() async {
+        guard !loadingOfferings else { return }
+        loadingOfferings = true
+        offeringsError = nil
+        defer { loadingOfferings = false }
         do {
             offerings = try await Purchases.shared.offerings()
-            print("✅ Loaded offerings: \(offerings?.current?.availablePackages.count ?? 0) packages")
         } catch {
-            print("❌ Failed to load offerings: \(error)")
+            offeringsError = "Subscription plans couldn't be loaded. Check your connection and try again."
         }
     }
 

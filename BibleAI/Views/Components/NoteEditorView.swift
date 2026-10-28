@@ -1,10 +1,3 @@
-//
-//  NoteEditorView.swift
-//  BibleAI
-//
-//  Created on 2025-12-06.
-//
-
 import SwiftUI
 
 struct NoteEditorView: View {
@@ -14,114 +7,53 @@ struct NoteEditorView: View {
     let verse: Int
     let verseText: String
     @Binding var isPresented: Bool
-
-    @StateObject private var highlightService = HighlightService.shared
-    @State private var noteText: String = ""
-    @State private var selectedColor: HighlightColor = .yellow
+    @StateObject private var highlights = HighlightService.shared
+    @State private var note = ""
+    @State private var color: HighlightColor = .yellow
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                // Verse reference
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("\(book) \(chapter):\(verse)")
-                        .font(.headline)
-                        .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
-
-                    Text(verseText)
-                        .font(.body)
-                        .foregroundColor(.primary)
-                        .padding(12)
-                        .background(selectedColor.color)
-                        .cornerRadius(8)
-                }
-                .padding()
-                .background(Color(.systemGray6))
-
-                Form {
-                    Section {
-                        HStack(spacing: 12) {
-                            ForEach(HighlightColor.allCases, id: \.self) { color in
-                                Circle()
-                                    .fill(color.color)
-                                    .frame(width: 40, height: 40)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(selectedColor == color ? Color(red: 0.6, green: 0.4, blue: 0.2) : Color.clear, lineWidth: 3)
-                                    )
-                                    .onTapGesture {
-                                        selectedColor = color
-                                    }
-                            }
-                        }
-                        .padding(.vertical, 8)
-                    } header: {
-                        Text("Highlight Color")
+        NavigationStack {
+            List {
+                Section {
+                    Text(verseText).font(.system(.body, design: .serif)).lineSpacing(4)
+                        .textSelection(.enabled)
+                    ShareLink(item: "\(verseText)\n\n\(book) \(chapter):\(verse) (KJV)") {
+                        Label("Share Verse", systemImage: "square.and.arrow.up")
                     }
-
-                    Section {
-                        TextEditor(text: $noteText)
-                            .frame(minHeight: 150)
-                    } header: {
-                        Text("Note (Optional)")
-                    } footer: {
-                        Text("Add your thoughts, insights, or reflections about this verse")
+                }
+                Section("Your Note") {
+                    TextEditor(text: $note)
+                        .frame(minHeight: 180)
+                        .accessibilityLabel("Your Note")
+                        .accessibilityIdentifier("note.text")
+                }
+                Section("Highlight") {
+                    Picker("Color", selection: $color) {
+                        ForEach(HighlightColor.allCases, id: \.self) { color in Text(color.displayName).tag(color) }
                     }
                 }
             }
-            .navigationTitle("Edit Highlight")
+            .listStyle(.plain)
+            .navigationTitle("\(book) \(chapter):\(verse)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        isPresented = false
-                    }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { isPresented = false } }
+                ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        saveHighlight()
+                        if let highlight {
+                            highlights.updateHighlight(id: highlight.id, color: color, note: note)
+                        } else {
+                            highlights.addHighlight(book: book, chapter: chapter, verse: verse,
+                                                    verseText: verseText, color: color, note: note)
+                        }
                         isPresented = false
-                    }
-                    .fontWeight(.semibold)
+                    }.accessibilityIdentifier("note.save")
                 }
             }
         }
         .onAppear {
-            if let highlight = highlight {
-                noteText = highlight.note ?? ""
-                selectedColor = highlight.color
-            }
+            note = highlight?.note ?? ""
+            color = highlight?.color ?? .yellow
         }
     }
-
-    private func saveHighlight() {
-        if let existing = highlight {
-            highlightService.updateHighlight(
-                id: existing.id,
-                color: selectedColor,
-                note: noteText.isEmpty ? nil : noteText
-            )
-        } else {
-            highlightService.addHighlight(
-                book: book,
-                chapter: chapter,
-                verse: verse,
-                verseText: verseText,
-                color: selectedColor,
-                note: noteText.isEmpty ? nil : noteText
-            )
-        }
-    }
-}
-
-#Preview {
-    NoteEditorView(
-        highlight: nil,
-        book: "John",
-        chapter: 3,
-        verse: 16,
-        verseText: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.",
-        isPresented: .constant(true)
-    )
 }

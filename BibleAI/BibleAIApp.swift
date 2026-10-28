@@ -13,7 +13,8 @@ struct BibleAIApp: App {
 
     init() {
         // Set API key from Config if not already set
-        if UserDefaults.standard.string(forKey: "openai_api_key") == nil {
+        if UserDefaults.standard.string(forKey: "openai_api_key") == nil,
+           !Config.openAIAPIKey.isEmpty, Config.openAIAPIKey != "YOUR_API_KEY_HERE" {
             UserDefaults.standard.set(Config.openAIAPIKey, forKey: "openai_api_key")
         }
     }

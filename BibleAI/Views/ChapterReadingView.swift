@@ -102,7 +102,7 @@ struct VerseRowView: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(verse.text)
-                    .font(.system(size: fontSize))
+                    .font(.system(size: fontSize, design: .serif))
                     .textSelection(.enabled)
                     .padding(8)
                     .background(existingHighlight?.color.color ?? Color.clear)
@@ -115,7 +115,7 @@ struct VerseRowView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "note.text")
                             .font(.caption)
-                            .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
+                            .foregroundStyle(.tint)
                         Text(note)
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -183,7 +183,7 @@ struct ReadingSettingsView: View {
                         Slider(value: $fontSize, in: 12...24, step: 1)
 
                         Text("Sample text at selected size")
-                            .font(.system(size: fontSize))
+                            .font(.system(size: fontSize, design: .serif))
                             .padding()
                             .background(Color(.systemGray6))
                             .cornerRadius(8)
