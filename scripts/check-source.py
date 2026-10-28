@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Cheap source/readiness checks. This does not compile or prove native behavior."""
+import hashlib
 import json
 import pathlib
 import re
@@ -8,6 +9,9 @@ import subprocess
 root = pathlib.Path(__file__).resolve().parents[1]
 project = root / 'BibleAI.xcodeproj/project.pbxproj'
 text = project.read_text()
+checksum = hashlib.sha1((root/'Podfile').read_bytes()).hexdigest()
+assert 'PODFILE CHECKSUM: ' + checksum in (root/'Podfile.lock').read_text(), 'Podfile.lock checksum is stale; stop before installing'
+
 assert 'ScriptureReaderView.swift in Sources' in text
 assert 'ScriptureFeedModel.swift in Sources' in text
 assert 'PassagePickerView.swift in Sources' in text

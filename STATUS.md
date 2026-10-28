@@ -51,3 +51,14 @@ settings bytes/flags immediately after scoped admission.
 
 Current feature branch: codex/scroll-bible. No push while local feature proof remains unrun;
 no native server/simulator started by this session at this checkpoint.
+
+## Dependency preparation — actual red check
+
+Canonical job BibleAI-prepare_dependencies-20261028-165400-vkfl failed3.1seconds before
+installation/build: deployment-mode Podfile checksum mismatch. Both current Podfile and
+origin/main:Podfile hash to3e545cdce3f217add1574b56ed82859de6a84b06; the cloned lockfile retained
+c42e42e8043278277cfda8cbc157d066c1c663c2. Updated only the stale checksum, keeping RevenueCat
+and RevenueCatUI pinned at5.49.2 and all spec checksums unchanged. check_source now rejects
+future Podfile/lock checksum drift. Same canonical prepare must run again after this concrete
+configuration correction. This was a source/config failure, not a network flake. Native test
+has not started; the one-run20-minute authorization is unused.
