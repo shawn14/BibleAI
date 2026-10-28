@@ -30,7 +30,7 @@ xcrun simctl boot "$owned"
 xcrun simctl bootstatus "$owned" -b
 {
   echo "SOURCE $(git rev-parse HEAD)"
-  xcodebuild test -workspace BibleAI.xcworkspace -scheme BibleAIReaderTests \
+  xcodebuild test -jobs 2 -workspace BibleAI.xcworkspace -scheme BibleAIReaderTests \
     -destination "platform=iOS Simulator,id=$owned" -derivedDataPath build/reader \
     -resultBundlePath "$result" -parallel-testing-enabled NO \
     -test-timeouts-enabled YES -default-test-execution-time-allowance 180 \
