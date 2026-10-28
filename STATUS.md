@@ -76,3 +76,7 @@ Raw evidence: docs/verification/2026-10-28-first-air-run/.
 The Air policy was restored byte-for-byte at17:05:36; owned simulator was deleted. No UI screens
 or successful behavioral assertions exist. The authorization is consumed; obtain a new explicit
 run allowance before executing the corrected test. No release/main push is authorized.
+
+A single cached retry capped at15minutes has been proposed in this chat; approval is pending.
+The committed runner timeout is reduced to15minutes in preparation. Do not infer approval from
+that configuration change. Retain the small8.5MB build cache only while this question is pending.

@@ -19,7 +19,7 @@ canonical_scripts:
   test_reader: bash scripts/simulator-reader-proof.sh
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
 mac_runner:
-  timeout_minutes: 20
+  timeout_minutes: 15
   ask_first: []
 capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
