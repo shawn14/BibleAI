@@ -1,4 +1,60 @@
 import SwiftUI
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
+
+/// Verse study runs on Apple Intelligence on the device: no API key, no server, nothing leaves the phone.
+enum AppleStudy {
+    static var isAvailable: Bool {
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *), case .available = SystemLanguageModel.default.availability { return true }
+        #endif
+        return false
+    }
+
+    static var unavailableReason: String {
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *) {
+            switch SystemLanguageModel.default.availability {
+            case .available:
+                return ""
+            case .unavailable(let reason):
+                switch reason {
+                case .appleIntelligenceNotEnabled:
+                    return "Turn on Apple Intelligence in Settings to use verse study. You can still read, save and share Scripture."
+                case .modelNotReady:
+                    return "Apple Intelligence is still getting ready on this iPhone. Try again in a few minutes."
+                case .deviceNotEligible:
+                    return "Verse study uses Apple Intelligence, which needs iPhone 15 Pro or newer. You can still read, save and share Scripture."
+                @unknown default:
+                    return "Verse study isn't available on this iPhone right now."
+                }
+            }
+        }
+        #endif
+        return "Verse study uses Apple Intelligence, which needs iOS 26 on iPhone 15 Pro or newer. You can still read, save and share Scripture."
+    }
+
+    static func study(_ prompt: String) async throws -> String {
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *) {
+            let session = LanguageModelSession(instructions: """
+                You are a careful, warm Bible study guide for everyday readers. Use the King James Version \
+                text you are given. Write plain, concise prose with short paragraphs. Distinguish what the \
+                text says from interpretation, and note where Christian traditions differ. Never invent \
+                quotations, statistics, Strong's numbers or sources. Only cite Bible references you are sure of.
+                """)
+            let response = try await session.respond(to: prompt)
+            return response.content
+        }
+        #endif
+        throw StudyUnavailable()
+    }
+
+    struct StudyUnavailable: LocalizedError {
+        var errorDescription: String? { AppleStudy.unavailableReason }
+    }
+}
 
 struct VerseStudySheet: View {
     let verse: BibleVerse
@@ -7,6 +63,7 @@ struct VerseStudySheet: View {
     @State private var answer: String?
     @State private var error: String?
     @State private var loading = false
+    @State private var showPaywall = false
 
     private enum StudyMode: String, CaseIterable, Identifiable {
         case meaning = "Explain This Verse"
@@ -64,7 +121,7 @@ struct VerseStudySheet: View {
                         Text(selected.rawValue).font(.title2.bold())
                         Text(.init(answer)).textSelection(.enabled).lineSpacing(4)
                             .accessibilityIdentifier("study.answer")
-                        Text("AI-assisted study · Read alongside the chapter")
+                        Text("Apple Intelligence study · Read alongside the chapter")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -74,6 +131,7 @@ struct VerseStudySheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
         }
+        .sheet(isPresented: $showPaywall) { PaywallView(isPresented: $showPaywall) }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
@@ -82,16 +140,26 @@ struct VerseStudySheet: View {
         selected = mode
         answer = nil
         error = nil
-        guard AIService.shared.isConfigured else {
-            error = "Verse study is currently unavailable. You can still read, save, and share Scripture."
+        guard AppleStudy.isAvailable else {
+            error = AppleStudy.unavailableReason
+            return
+        }
+        let subscriptions = RevenueCatManager.shared
+        guard subscriptions.canAskQuestion() else {
+            error = "You've used today's \(subscriptions.freeQuestionsPerDay) free studies. Premium unlocks unlimited studies."
+            showPaywall = true
             return
         }
         loading = true
         Task {
             do {
-                answer = try await AIService.shared.sendMessage(conversation: [], userMessage:
-                    "Study \(verse.fullReference): \(verse.text)\n\(mode.instruction)")
-            } catch { self.error = error.localizedDescription }
+                answer = try await AppleStudy.study(
+                    "Study \(verse.fullReference): \"\(verse.text)\"\n\(mode.instruction)")
+                subscriptions.incrementQuestionCount()
+            } catch {
+                self.error = (error as? LocalizedError)?.errorDescription.flatMap { $0.isEmpty ? nil : $0 }
+                    ?? "This study couldn't be prepared. Please try again or pick another study."
+            }
             loading = false
         }
     }
