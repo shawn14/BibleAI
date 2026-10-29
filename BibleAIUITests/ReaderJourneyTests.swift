@@ -9,11 +9,18 @@ final class ReaderJourneyTests: XCTestCase {
         app.launch()
         let next = app.buttons["onboarding.continue"]
         XCTAssertTrue(next.waitForExistence(timeout: 10))
-        for page in 1...3 {
-            XCTAssertTrue(app.staticTexts["onboarding.title"].exists)
+        // Intro pages, then the paywall sequence; the plan picker's close keeps free reading.
+        var page = 1
+        while !app.buttons["paywall.close"].exists {
+            XCTAssertLessThanOrEqual(page, 12, "Onboarding never reached the plan picker")
+            XCTAssertTrue(next.waitForExistence(timeout: 5))
             capture("onboarding-\(page)")
             next.tap()
+            page += 1
+            _ = app.buttons["paywall.close"].waitForExistence(timeout: 1)
         }
+        capture("onboarding-plans")
+        app.buttons["paywall.close"].tap()
         XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 30))
         XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].exists)
         capture("reader-initial")
@@ -59,7 +66,7 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertFalse(app.buttons["saved.verse.Genesis|1|2"].label.contains("Cancelled change"))
         print("INTERACTION_ASSERTED note.cancel")
 
-        app.tabBars.buttons["Read"].tap()
+        app.tabBars.buttons["The Bible"].tap()
         app.buttons["reader.passage"].tap()
         let search = app.searchFields.firstMatch
         XCTAssertTrue(search.waitForExistence(timeout: 5))

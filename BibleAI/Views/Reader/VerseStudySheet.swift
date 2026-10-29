@@ -10,6 +10,7 @@ struct VerseStudySheet: View {
 
     private enum StudyMode: String, CaseIterable, Identifiable {
         case meaning = "Explain This Verse"
+        case simpler = "Explain It Simply"
         case context = "Historical Context"
         case related = "Related Scripture"
         case language = "Original Language"
@@ -17,6 +18,7 @@ struct VerseStudySheet: View {
         var icon: String {
             switch self {
             case .meaning: return "text.alignleft"
+            case .simpler: return "lightbulb"
             case .context: return "clock"
             case .related: return "link"
             case .language: return "character.book.closed"
@@ -25,6 +27,7 @@ struct VerseStudySheet: View {
         var instruction: String {
             switch self {
             case .meaning: return "Explain this verse in plain language, then give one reflection question."
+            case .simpler: return "Explain this verse as simply as possible, as if to a new reader, in under 80 words. Then give one everyday way to live it out."
             case .context: return "Explain the historical and literary context. Distinguish established facts from disputed interpretations."
             case .related: return "Give three related Bible references and explain the connection. Do not invent quotations."
             case .language: return "Discuss key words in the original language. Clearly label uncertain meanings. Do not invent an interlinear text or Strong's numbers."

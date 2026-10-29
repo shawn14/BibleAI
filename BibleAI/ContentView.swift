@@ -13,11 +13,11 @@ struct ContentView: View {
     var body: some View {
         TabView {
             ScriptureReaderView()
-                .tabItem { Label("Read", systemImage: "book") }
+                .tabItem { Label("The Bible", systemImage: "book") }
             ReadingPlansListView()
                 .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }
             HighlightsListView()
-                .tabItem { Label("Saved", systemImage: "bookmark") }
+                .tabItem { Label("Saved", systemImage: "heart") }
         }
         .tint(.accentColor)
         .fullScreenCover(isPresented: $showOnboarding) {

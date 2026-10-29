@@ -7,9 +7,12 @@ Read STATUS.md and docs/design.md first. AGENTS.md and CLAUDE.md carry identical
 Native SwiftUI iOS17+ Bible reader. Shawn's2026-10-28 request: transform around Scroll the Bible,
 then make the experience natural Apple UX. Use system navigation, tabs, sheets, search, semantic
 colors, Dynamic Type and plain lists. Read / Plans / Saved; one verse at a time is the primary job.
-No marketing hero above the reader, content cards, copied branding, fake testimonials or invented
-trial terms. The first-pass introduction is three pages; this is not an explicit user lock on
-funnel parity. Keep free Scripture reading accessible.
+2026-10-29: Shawn asked to match the reference app as closely as possible. Onboarding now mirrors
+its funnel: hook stat, four feature pages with phone mockups, reviews (only real ones, from
+SocialProof; skipped while empty), then paywall pages (hooked, features, trial reminder, trial
+timeline, plan picker). Trial length/price come only from the store product and RevenueCat
+eligibility. No copied branding, fake testimonials or invented trial terms. Every paywall page has
+a close button; free Scripture reading stays accessible.
 
 ## Source and services
 
@@ -42,6 +45,6 @@ Fresh-context runtime/visual refutation follows builder proof. No native/device 
 
 ## Source control and release
 
-Work on codex/scroll-bible until local proof is acceptable. Main starts at872beac; no main push,
+Work on claude/scroll-parity (from codex/scroll-bible) until local proof is acceptable. Main starts at872beac; no main push,
 store changes, billing changes, deployment or submission is authorized. Existing fastlane paths need
 current-source/store audit before reuse. See docs/os.yaml; no release alias is offered yet.

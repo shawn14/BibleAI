@@ -1,4 +1,29 @@
-# BibleAI status — 2026-10-28
+# BibleAI status — 2026-10-29
+
+## Scroll The Bible parity pass (branch claude/scroll-parity)
+
+Shawn: "Make as close as you can to the app I shared." Reference video stepped frame by frame:
+hook stat → "scrolling fed your soul" → plans → study → search → reviews → "Get Addicted…"
+→ premium checklist → "We'll remind you" (2 or 3 days) → trial timeline → plan picker.
+
+Built (source only, not yet compiled):
+- OnboardingView.swift: that 11-step flow in the reference look (white, serif, black capsule
+  Continue, phone mockups with real KJV text). Reviews step skipped until real reviews are added
+  to SocialProof. Reminder/timeline steps appear only when RevenueCat says the annual product has
+  an eligible free trial.
+- PaywallView.swift: shared style, footer (Terms | Privacy | Restore), trial math from the store
+  product, local trial-ending reminder scheduled after a trial purchase, plan picker with
+  "Try for $0.00" when a trial applies. Settings/Chat paywall uses the same screen.
+- Reader: no nav bar; KJV pill + passage button + search + options on top; TikTok-style right
+  rail (heart save, study, note, share). Tabs: The Bible / Plans / Saved.
+- Study: added "Explain It Simply".
+- UI test walks the variable-length onboarding to the plan picker and closes it.
+
+Needs Shawn: real App Store reviews/rating for SocialProof; a 7-day free trial intro offer on
+the yearly product in App Store Connect (otherwise trial steps hide themselves).
+
+## Previous status (2026-10-28)
+
 
 ## Goal and current design
 

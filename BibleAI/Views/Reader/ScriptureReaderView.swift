@@ -38,34 +38,9 @@ struct ScriptureReaderView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemBackground))
-            .navigationTitle("Read")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Button { sheet = .passage } label: {
-                        HStack(spacing: 5) {
-                            Text(model.current.map { "\($0.book) \($0.chapter)" } ?? "Choose a Passage")
-                                .font(.headline)
-                            Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
-                        }
-                    }
-                    .accessibilityIdentifier("reader.passage")
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button { sheet = .passage } label: { Label("Find a Passage", systemImage: "magnifyingglass") }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button("Read Full Chapter", systemImage: "text.alignleft") { sheet = .chapter }
-                            .disabled(model.current == nil)
-                        Button("Previous Chapter", systemImage: "arrow.up") { Task { await model.previousChapter() } }
-                            .disabled(!model.hasPreviousChapter)
-                        Button("Reading Settings", systemImage: "textformat.size") { showSettings = true }
-                    } label: { Label("Reading Options", systemImage: "ellipsis.circle") }
-                    .accessibilityIdentifier("reader.options")
-                }
-            }
-            .safeAreaInset(edge: .bottom, spacing: 0) {
+            .toolbar(.hidden, for: .navigationBar)
+            .overlay(alignment: .top) { topBar }
+            .overlay(alignment: .trailing) {
                 if let verse = model.current { actions(for: verse) }
             }
             .task { await model.start() }
@@ -137,7 +112,7 @@ struct ScriptureReaderView: View {
                             .font(.caption).foregroundStyle(.secondary)
                             .padding(.bottom, 12)
                     }
-                    .padding(.horizontal, 28)
+                    .padding(.leading, 28).padding(.trailing, 60)
                     .frame(maxWidth: .infinity)
                     .frame(minHeight: geometry.size.height)
                     .id(verse.passageID)
@@ -161,36 +136,73 @@ struct ScriptureReaderView: View {
         }
     }
 
+    /// Minimal top chrome: translation pill, passage button, options.
+    private var topBar: some View {
+        HStack(spacing: 10) {
+            Text("KJV")
+                .font(.caption.weight(.semibold))
+                .padding(.horizontal, 10).padding(.vertical, 5)
+                .overlay(Capsule().stroke(Color.primary.opacity(0.15)))
+                .accessibilityLabel("King James Version")
+            Spacer(minLength: 0)
+            Button { sheet = .passage } label: {
+                HStack(spacing: 5) {
+                    Text(model.current.map { "\($0.book) \($0.chapter)" } ?? "Choose a Passage")
+                        .font(.subheadline.weight(.semibold))
+                    Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
+                }
+                .foregroundStyle(.primary)
+            }
+            .accessibilityIdentifier("reader.passage")
+            Spacer(minLength: 0)
+            Button { sheet = .passage } label: {
+                Image(systemName: "magnifyingglass").frame(width: 36, height: 36)
+            }
+            .accessibilityLabel("Find a Passage")
+            Menu {
+                Button("Read Full Chapter", systemImage: "text.alignleft") { sheet = .chapter }
+                    .disabled(model.current == nil)
+                Button("Previous Chapter", systemImage: "arrow.up") { Task { await model.previousChapter() } }
+                    .disabled(!model.hasPreviousChapter)
+                Button("Reading Settings", systemImage: "textformat.size") { showSettings = true }
+            } label: {
+                Image(systemName: "ellipsis").frame(width: 36, height: 36)
+            }
+            .accessibilityLabel("Reading Options")
+            .accessibilityIdentifier("reader.options")
+        }
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 16)
+        .padding(.top, 4)
+    }
+
+    /// TikTok-style action rail on the right edge.
     private func actions(for verse: BibleVerse) -> some View {
-        HStack(spacing: 28) {
+        VStack(spacing: 22) {
             Button {
                 if let highlight = saved(verse) { pendingRemoval = highlight }
                 else { highlights.addHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse,
                                                verseText: verse.text, color: .yellow) }
             } label: {
-                Label(saved(verse) == nil ? "Save Verse" : "Remove Saved Verse",
-                      systemImage: saved(verse) == nil ? "bookmark" : "bookmark.fill")
-                    .labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
+                Image(systemName: saved(verse) == nil ? "heart" : "heart.fill")
+                    .foregroundStyle(saved(verse) == nil ? Color.primary : Color.red)
             }
+            .accessibilityLabel(saved(verse) == nil ? "Save Verse" : "Remove Saved Verse")
             .accessibilityIdentifier("reader.save")
-            Spacer(minLength: 0)
-            Button("Study Verse", systemImage: "text.book.closed") { sheet = .study }
-                .buttonStyle(.borderedProminent).controlSize(.regular)
+            Button { sheet = .study } label: { Image(systemName: "text.book.closed") }
+                .accessibilityLabel("Study Verse")
                 .accessibilityIdentifier("reader.study")
-            Spacer(minLength: 0)
-            Menu {
-                Button("Add a Note", systemImage: "square.and.pencil") { sheet = .note }
-                ShareLink(item: "\(verse.text)\n\n\(verse.fullReference)") {
-                    Label("Share Verse", systemImage: "square.and.arrow.up")
-                }
-            } label: {
-                Label("Verse Actions", systemImage: "square.and.arrow.up").labelStyle(.iconOnly)
-                    .frame(minWidth: 44, minHeight: 44)
+            Button { sheet = .note } label: { Image(systemName: "square.and.pencil") }
+                .accessibilityLabel("Add a Note")
+            ShareLink(item: "\(verse.text)\n\n\(verse.fullReference)") {
+                Image(systemName: "square.and.arrow.up")
             }
+            .accessibilityLabel("Share Verse")
         }
-        .padding(.horizontal, 20).padding(.vertical, 8)
-        .background(.bar)
+        .font(.system(size: 22, weight: .regular))
+        .foregroundStyle(.primary)
+        .frame(width: 44)
+        .padding(.trailing, 10)
     }
 
     private func saved(_ verse: BibleVerse) -> Highlight? {
