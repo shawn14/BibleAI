@@ -1,3 +1,22 @@
+# BibleAI status — 2026-10-30 (afternoon)
+
+## Ready for App Review (submit queued; runner failure cap until ~19:27 UTC)
+- Build 2.0 (6) uploaded 13:15 CDT, VALID, compliance set, attached to version 2.0; TestFlight group Beta.
+  Contents: streak + "Well done" day-complete, daily reminder, 7-day trial checkout + reminder,
+  personalized onboarding with hold-to-commit, new logo (open Bible + cross), iPad layout fixes.
+- Level 3 suite passed on this source: BibleAI-test_reader-20261030-175938-zjrm (iPhone) and
+  BibleAI-ipad_shots-20261030-172802-coxd (iPad 13").
+- ASC 2.0 en-US: 6x iPhone 6.9", 6x iPad 13" (docs/aso/screenshots-*), 30 s preview, header video
+  (3840x1646) and search-results video (3840x2560) placed DEFAULT_PROFILE, copyright, 6.5" set removed.
+  All assets COMPLETE (asset_state). Age rating: socialMedia=false (Apple's Sept 2026 required question).
+- Website main 83b5ae5 live: new mark, Habit/streak section, 7-day trial CTA.
+- New runner actions: age_rating, asset_state, fix_stuck_shots (Apple can leave a screenshot at
+  UPLOAD_COMPLETE; re-encode + re-upload clears it).
+
+## Next
+- submit_review app:bibleai version:2.0 build:6, verify WAITING_FOR_REVIEW, restore ask_first.
+- Merge claude/scroll-parity into main.
+
 # BibleAI status — 2026-10-29 (evening)
 
 ## Shipped
