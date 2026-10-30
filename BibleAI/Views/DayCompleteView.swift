@@ -72,12 +72,10 @@ struct DayCompleteView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("\(streak)").font(.largeTitle.bold()).monospacedDigit()
                                     .accessibilityIdentifier("streak.count")
-                                Text(streak == 1 ? "DAY STREAK" : "DAY STREAK")
+                                Text("DAY STREAK")
                                     .font(.caption.weight(.semibold)).kerning(1.2).foregroundStyle(.secondary)
                             }
                         }
-                        .accessibilityElement(children: .combine)
-                        .accessibilityLabel("\(streak) day streak")
                         Text(caption).font(.subheadline).foregroundStyle(.secondary)
                         HStack(spacing: 0) {
                             ForEach(streaks.lastSevenDays(), id: \.date) { day in
