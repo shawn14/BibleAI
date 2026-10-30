@@ -13,9 +13,11 @@ final class ReaderJourneyTests: XCTestCase {
         var page = 1
         while !app.buttons["paywall.close"].exists {
             XCTAssertLessThanOrEqual(page, 12, "Onboarding never reached the plan picker")
-            XCTAssertTrue(next.waitForExistence(timeout: 5))
+            let allPlans = app.buttons["onboarding.allPlans"]
+            XCTAssertTrue(next.waitForExistence(timeout: 5) || allPlans.exists)
             capture("onboarding-\(page)")
-            next.tap()
+            // The trial timeline's main button starts a purchase; take "View all plans" instead.
+            if allPlans.exists { allPlans.tap() } else { next.tap() }
             page += 1
             _ = app.buttons["paywall.close"].waitForExistence(timeout: 1)
         }
