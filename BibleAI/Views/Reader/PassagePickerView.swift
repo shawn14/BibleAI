@@ -57,7 +57,7 @@ struct PassagePickerView: View {
                 }
             }
             .listStyle(.plain)
-            .searchable(text: $query, prompt: "Book or verse, such as John 3:16")
+            .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Book or verse, such as John 3:16")
             .autocorrectionDisabled()
             .navigationTitle("Find a Passage")
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
