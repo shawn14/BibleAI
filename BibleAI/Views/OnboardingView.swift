@@ -49,40 +49,7 @@ struct OnboardingView: View {
     private var steps: [IntroStep] {
         IntroStep.allCases.filter { step in
             switch step {
-            case .goal:
-            IntroPage(title: "What brings you to the Bible?", subtitle: "We'll shape your reading around it.",
-                      buttonEnabled: goal != nil, action: next) {
-                ChoiceList(options: Self.goals.map { ($0, nil) }, selection: $goal)
-            }
-        case .familiarity:
-            IntroPage(title: "How well do you know the Bible?", subtitle: "There's no wrong answer.",
-                      buttonEnabled: familiarity != nil, action: next) {
-                ChoiceList(options: Self.familiarities.map { ($0, nil) }, selection: $familiarity)
-            }
-        case .minutes:
-            IntroPage(title: "How much time can you give each day?", subtitle: "Small and steady beats big and rare.",
-                      buttonEnabled: minutes != nil, action: next) {
-                ChoiceList(options: [("5 minutes", "A verse and a short study"), ("10 minutes", "A chapter a day"),
-                                     ("15+ minutes", "Read through whole books")],
-                           selection: Binding(get: { minutes.flatMap { Self.minuteChoices.firstIndex(of: $0) } },
-                                              set: { minutes = $0.map { Self.minuteChoices[$0] } }))
-            }
-        case .readingTime:
-            IntroPage(title: "When should we remind you to read?", subtitle: "One gentle nudge a day. Change it anytime in Settings.",
-                      buttonEnabled: readingTime != nil,
-                      action: { Task { await DailyReminder.set(readingTime ?? .off); next() } }) {
-                ChoiceList(options: [DailyReminder.morning, .midday, .evening].map { ($0.title, $0.detail) },
-                           selection: Binding(get: { readingTime.flatMap { [DailyReminder.morning, .midday, .evening].firstIndex(of: $0) } },
-                                              set: { readingTime = $0.map { [DailyReminder.morning, .midday, .evening][$0] } }))
-            }
-        case .commit:
-            CommitPage(plan: recommendedPlan, goal: goal.map { Self.goals[$0] }, minutes: minutes, reminder: readingTime) {
-                if let plan = recommendedPlan, ReadingPlanService.shared.getProgress(for: plan.id) == nil {
-                    ReadingPlanService.shared.startPlan(plan)
-                }
-                next()
-            }
-        case .reviews: return !SocialProof.reviews.isEmpty
+            case .reviews: return !SocialProof.reviews.isEmpty
             case .reminder, .trialTimeline: return annualTrial != nil && !subscriptions.isPremium
             case .hooked, .features, .choosePlan: return !subscriptions.isPremium
             default: return true
@@ -144,6 +111,39 @@ struct OnboardingView: View {
             IntroPage(title: "Search any verse and go deeper than ever before.",
                       subtitle: "Jump to any passage in all 66 books.", action: next) {
                 PhoneMock { SearchMock() }
+            }
+        case .goal:
+            IntroPage(title: "What brings you to the Bible?", subtitle: "We'll shape your reading around it.",
+                      buttonEnabled: goal != nil, action: next) {
+                ChoiceList(options: Self.goals.map { ($0, nil) }, selection: $goal)
+            }
+        case .familiarity:
+            IntroPage(title: "How well do you know the Bible?", subtitle: "There's no wrong answer.",
+                      buttonEnabled: familiarity != nil, action: next) {
+                ChoiceList(options: Self.familiarities.map { ($0, nil) }, selection: $familiarity)
+            }
+        case .minutes:
+            IntroPage(title: "How much time can you give each day?", subtitle: "Small and steady beats big and rare.",
+                      buttonEnabled: minutes != nil, action: next) {
+                ChoiceList(options: [("5 minutes", "A verse and a short study"), ("10 minutes", "A chapter a day"),
+                                     ("15+ minutes", "Read through whole books")],
+                           selection: Binding(get: { minutes.flatMap { Self.minuteChoices.firstIndex(of: $0) } },
+                                              set: { minutes = $0.map { Self.minuteChoices[$0] } }))
+            }
+        case .readingTime:
+            IntroPage(title: "When should we remind you to read?", subtitle: "One gentle nudge a day. Change it anytime in Settings.",
+                      buttonEnabled: readingTime != nil,
+                      action: { Task { await DailyReminder.set(readingTime ?? .off); next() } }) {
+                ChoiceList(options: [DailyReminder.morning, .midday, .evening].map { ($0.title, $0.detail) },
+                           selection: Binding(get: { readingTime.flatMap { [DailyReminder.morning, .midday, .evening].firstIndex(of: $0) } },
+                                              set: { readingTime = $0.map { [DailyReminder.morning, .midday, .evening][$0] } }))
+            }
+        case .commit:
+            CommitPage(plan: recommendedPlan, goal: goal.map { Self.goals[$0] }, minutes: minutes, reminder: readingTime) {
+                if let plan = recommendedPlan, ReadingPlanService.shared.getProgress(for: plan.id) == nil {
+                    ReadingPlanService.shared.startPlan(plan)
+                }
+                next()
             }
         case .reviews:
             IntroPage(title: "Lives are being changed.",
