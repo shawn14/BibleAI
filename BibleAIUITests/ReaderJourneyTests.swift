@@ -157,6 +157,8 @@ final class ReaderJourneyTests: XCTestCase {
     /// Drives the app slowly while scripts/preview-video.sh records the simulator screen.
     /// Not part of the reader proof; run it alone with -only-testing.
     func testPreviewRecording() throws {
+        // Recording only: it completes onboarding, which would break the reader journey that follows.
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["RECORD_PREVIEW"] == "1", "Run by scripts/preview-video.sh")
         let app = XCUIApplication()
         app.launch()
         let next = app.buttons["onboarding.continue"]

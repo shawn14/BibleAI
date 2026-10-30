@@ -23,7 +23,7 @@ common=(-workspace BibleAI.xcworkspace -scheme BibleAIReaderTests -destination "
 xcodebuild build-for-testing "${common[@]}" > "$out/build.log" 2>&1 || { grep -E "error:" "$out/build.log" | head; exit 1; }
 xcrun simctl io "$owned" recordVideo --codec=h264 --force "$out/raw.mp4" >/dev/null 2>&1 & REC=$!
 sleep 2
-xcodebuild test-without-building "${common[@]}" -only-testing:BibleAIUITests/ReaderJourneyTests/testPreviewRecording > "$out/test.log" 2>&1 || { tail -30 "$out/test.log"; }
+TEST_RUNNER_RECORD_PREVIEW=1 xcodebuild test-without-building "${common[@]}" -only-testing:BibleAIUITests/ReaderJourneyTests/testPreviewRecording > "$out/test.log" 2>&1 || { tail -30 "$out/test.log"; }
 sleep 1; kill -INT "$REC"; wait "$REC" 2>/dev/null || true; REC=
 [[ -s "$out/raw.mp4" ]] && echo "PREVIEW RAW OK $(du -h "$out/raw.mp4" | cut -f1)" || { echo "NO VIDEO"; exit 1; }
 grep -E "Test Case .*testPreviewRecording.*(passed|failed)" "$out/test.log" || true
