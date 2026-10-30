@@ -11,5 +11,9 @@ export default async (api) => {
     const inc = (pl.included ?? []).find((x) => x.id === (v ?? i)?.id);
     out.placements.push({ type: p.attributes.placementType, group: p.attributes.placementGroup, item: (v ?? i)?.type, state: inc?.attributes?.state, details: inc?.attributes?.stateDetails });
   }
+  out.shots = [];
+  for (const set of (await api.get(`/v1/appStoreVersionLocalizations/${loc.id}/appScreenshotSets`)).data)
+    for (const s of (await api.get(`/v1/appScreenshotSets/${set.id}/appScreenshots`)).data)
+      if (s.attributes.assetDeliveryState?.state !== "COMPLETE") out.shots.push({ set: set.attributes.screenshotDisplayType, file: s.attributes.fileName, delivery: s.attributes.assetDeliveryState, size: s.attributes.fileSize });
   return out;
 };
