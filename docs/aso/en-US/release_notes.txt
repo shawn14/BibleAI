@@ -6,4 +6,5 @@ BibleAI 2.0 is a complete redesign.
 • Tap any verse for a study: explain it, explain it simply, history, related Scripture and original language
 • Studies run privately on your iPhone with Apple Intelligence
 • Save verses with a heart, add notes and share
+• Your saved verses, notes, plans and streak sync with iCloud, so they follow you to a new iPhone or your iPad. No account needed
 • A fresh new look and icon

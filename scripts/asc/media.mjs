@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 const APP = "6756225286";
-const VERSION = "2.0";
+const VERSION = "2.0.1";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
 async function asset(api, kind, parentRel, parentType, parentId, file, extra = {}) {
   const res = (await api.post(`/v1/${kind}`, { data: { type: kind, attributes: { fileName: path.basename(file), fileSize: fs.statSync(file).size, ...extra },

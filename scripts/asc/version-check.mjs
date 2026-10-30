@@ -3,7 +3,7 @@ const APP = "6756225286";
 export default async (api) => {
   const out = {};
   const versions = (await api.get(`/v1/apps/${APP}/appStoreVersions?filter[platform]=IOS&limit=5`)).data;
-  const v2 = versions.find((v) => v.attributes.versionString === "2.0");
+  const v2 = versions.find((v) => v.attributes.versionString === "2.0.1");
   const live = versions.find((v) => v.attributes.appStoreState === "READY_FOR_SALE");
   out.v2 = v2.attributes; out.liveCopyright = live?.attributes.copyright;
   if (!v2.attributes.copyright) {

@@ -5,7 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 const APP = "6756225286";
-const VERSION = "2.0";
+const VERSION = "2.0.1";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
 const aso = (p) => path.join(root, "docs/aso", p);
 const pngs = (dir) => fs.readdirSync(aso(dir)).filter((f) => f.endsWith(".png")).sort().map((f) => aso(path.join(dir, f)));
