@@ -122,6 +122,11 @@ final class ReaderJourneyTests: XCTestCase {
             let complete = app.buttons["plan.complete.1"]
             reveal(complete, in: app)
             complete.tap()
+            // Day-complete screen with the reading streak.
+            XCTAssertTrue(app.staticTexts["streak.title"].waitForExistence(timeout: 5))
+            XCTAssertEqual(app.staticTexts["streak.count"].label, "1")
+            capture("day-complete-\(title)")
+            app.buttons["streak.continue"].tap()
             XCTAssertTrue(app.staticTexts["Completed"].waitForExistence(timeout: 5))
             app.buttons["Done"].tap()
             let row = app.buttons["plans.open.\(title)"]

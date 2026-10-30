@@ -5,6 +5,7 @@ struct ReadingPlanDetailView: View {
     @Binding var isPresented: ReadingPlan?
     @StateObject private var plans = ReadingPlanService.shared
     @State private var showReset = false
+    @State private var completedDay: DailyReading?
 
     private var progress: UserPlanProgress? { plans.getProgress(for: plan.id) }
 
@@ -41,6 +42,8 @@ struct ReadingPlanDetailView: View {
                             } else {
                                 Button("Mark Complete", systemImage: "checkmark.circle") {
                                     plans.markDayComplete(planId: plan.id, day: day.day)
+                                    StreakStore.shared.recordReading()
+                                    completedDay = day
                                 }
                                 .accessibilityIdentifier("plan.complete.\(day.day)")
                             }
@@ -61,10 +64,25 @@ struct ReadingPlanDetailView: View {
                     }
                 }
             }
+            .sheet(item: $completedDay) { day in
+                DayCompleteView(
+                    reading: readingSummary(day),
+                    hasNextDay: plan.dailyReadings.contains { !plans.isDayComplete(planId: plan.id, day: $0.day) },
+                    onDone: { completedDay = nil; isPresented = nil },
+                    onContinue: { completedDay = nil })
+                .presentationDragIndicator(.visible)
+            }
             .confirmationDialog("Reset this plan's progress?", isPresented: $showReset, titleVisibility: .visible) {
                 Button("Reset Progress", role: .destructive) { plans.deletePlanProgress(plan.id) }
                 Button("Cancel", role: .cancel) { }
             }
         }
+    }
+
+    private func readingSummary(_ day: DailyReading) -> String {
+        day.readings.map { ref in
+            if let end = ref.endChapter, end != ref.startChapter { return "\(ref.book) \(ref.startChapter)–\(end)" }
+            return "\(ref.book) \(ref.startChapter)"
+        }.joined(separator: ", ")
     }
 }

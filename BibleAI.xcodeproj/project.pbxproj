@@ -15,6 +15,7 @@
 		4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */; };
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
 		590A3FCEDA97109F8B204E6C /* ReaderJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C71DD2916BDFBCAB5B2D25 /* ReaderJourneyTests.swift */; };
+		CC1000002 /* DayCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000002 /* DayCompleteView.swift */; };
 		59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */; };
 		8379C02F027317DD3D132998 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000020 /* Config.swift */; };
 		8F7429DA45F3792A6F7F9517 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */; };
@@ -46,6 +47,7 @@
 		BA1000023 /* VerseReferenceText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000024 /* VerseReferenceText.swift */; };
 		BA1000024 /* SimpleVerseText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000025 /* SimpleVerseText.swift */; };
 		BA1000025 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000026 /* Highlight.swift */; };
+		CC1000001 /* StreakStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000001 /* StreakStore.swift */; };
 		BA1000026 /* HighlightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000027 /* HighlightService.swift */; };
 		BA1000027 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000028 /* NoteEditorView.swift */; };
 		BA1000028 /* HighlightsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000029 /* HighlightsListView.swift */; };
@@ -74,6 +76,7 @@
 		614883604BFC9221616F3790 /* Pods-BibleAI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibleAI.debug.xcconfig"; path = "Target Support Files/Pods-BibleAI/Pods-BibleAI.debug.xcconfig"; sourceTree = "<group>"; };
 		6B36EF96152EA9339F60590D /* ScriptureFeedModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScriptureFeedModel.swift; sourceTree = "<group>"; };
 		8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RevenueCatManager.swift; sourceTree = "<group>"; };
+		CC2000002 /* DayCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompleteView.swift; sourceTree = "<group>"; };
 		87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanDetailView.swift; sourceTree = "<group>"; };
 		9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
@@ -104,6 +107,7 @@
 		BA2000024 /* VerseReferenceText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseReferenceText.swift; sourceTree = "<group>"; };
 		BA2000025 /* SimpleVerseText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleVerseText.swift; sourceTree = "<group>"; };
 		BA2000026 /* Highlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
+		CC2000001 /* StreakStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakStore.swift; sourceTree = "<group>"; };
 		BA2000027 /* HighlightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightService.swift; sourceTree = "<group>"; };
 		BA2000028 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
 		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 				BA2000029 /* HighlightsListView.swift */,
 				2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */,
 				87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */,
+				CC2000002 /* DayCompleteView.swift */,
 				BA5000009 /* Components */,
 				9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */,
 				556B1BCC9F210EB8B04A57D5 /* OnboardingView.swift */,
@@ -260,6 +265,7 @@
 				BA2000016 /* EnhancedBibleService.swift */,
 				BA2000022 /* VerseOfTheDayService.swift */,
 				BA2000027 /* HighlightService.swift */,
+				CC2000001 /* StreakStore.swift */,
 				0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */,
 				A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */,
 				8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */,
@@ -460,12 +466,14 @@
 				BA1000024 /* SimpleVerseText.swift in Sources */,
 				BA1000025 /* Highlight.swift in Sources */,
 				BA1000026 /* HighlightService.swift in Sources */,
+				CC1000001 /* StreakStore.swift in Sources */,
 				BA1000027 /* NoteEditorView.swift in Sources */,
 				BA1000028 /* HighlightsListView.swift in Sources */,
 				4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */,
 				4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */,
 				1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */,
 				59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */,
+				CC1000002 /* DayCompleteView.swift in Sources */,
 				9938BAC6075D91310F23E1CC /* SubscriptionManager.swift in Sources */,
 				02C679D6E9376F589D72DDA9 /* PaywallView.swift in Sources */,
 				D7735E710058933A7AA8C2D3 /* RevenueCatManager.swift in Sources */,
@@ -656,7 +664,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = BYRK5RUS4U;
@@ -689,7 +697,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = BYRK5RUS4U;
