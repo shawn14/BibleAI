@@ -154,6 +154,39 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 5))
     }
 
+    /// Drives the app slowly while scripts/preview-video.sh records the simulator screen.
+    /// Not part of the reader proof; run it alone with -only-testing.
+    func testPreviewRecording() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let next = app.buttons["onboarding.continue"]
+        XCTAssertTrue(next.waitForExistence(timeout: 15))
+        sleep(2)
+        for _ in 0..<5 { next.tap(); sleep(2) }
+        while !app.buttons["paywall.close"].exists && next.exists { next.tap(); sleep(1) }
+        sleep(2)
+        app.buttons["paywall.close"].tap()
+        let feed = app.scrollViews["reader.feed"]
+        XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 30))
+        sleep(2)
+        for _ in 0..<3 { feed.swipeUp(velocity: .slow); sleep(2) }
+        app.buttons["reader.save"].tap(); sleep(1)
+        app.buttons["reader.study"].tap(); sleep(3)
+        app.buttons["Done"].tap(); sleep(1)
+        app.buttons["reader.passage"].tap()
+        let search = app.searchFields.firstMatch
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.tap(); search.typeText("John 3:16"); sleep(1)
+        app.buttons["passage.openReference"].tap()
+        XCTAssertTrue(app.buttons["reader.verse.John|3|16"].waitForExistence(timeout: 30))
+        sleep(3)
+        feed.swipeUp(velocity: .slow); sleep(2)
+        app.tabBars.buttons["Plans"].tap(); sleep(2)
+        app.buttons["plans.open.Gospel Tour"].tap(); sleep(3)
+        app.buttons["Done"].tap(); sleep(1)
+        app.tabBars.buttons["Saved"].tap(); sleep(3)
+    }
+
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
         for _ in 0..<5 {
             if element.exists && element.isHittable { return }
