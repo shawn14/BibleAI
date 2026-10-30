@@ -8,8 +8,11 @@ Each verse fills the screen in a clean, quiet layout. Swipe up for the next one 
 EVERY VERSE HAS A STORY
 Tap any verse to open a study. Choose Explain This Verse, Explain It Simply, Historical Context, Related Scripture, or Original Language for key Greek and Hebrew words. Studies run privately on your iPhone with Apple Intelligence.
 
+A PLAN MADE FOR YOU
+Answer a few quick questions about your goal, how well you know the Bible and how much time you have, and BibleAI starts you on a reading plan that fits. Pick a time of day and we'll send one gentle reminder to read.
+
 READ THE WHOLE BIBLE, ONE DAY AT A TIME
-Follow a guided reading plan: a Gospel Tour, Psalms in a Month, the New Testament in 30 Days, or a month of Proverbs. Check off each day and watch your progress grow.
+Follow a guided reading plan: a Gospel Tour, Psalms in a Month, the New Testament in 30 Days, or a month of Proverbs. Finish a day and see your reading streak grow, with a verse to carry with you.
 
 KEEP WHAT SPEAKS TO YOU
 Heart a verse to save it, add a personal note, and share Scripture with friends and family. Your saved verses and notes stay on your device.
@@ -18,7 +21,7 @@ SIMPLE BY DESIGN
 No ads, no feed, no noise. Just Scripture, with a serif reading font, adjustable text size, and light and dark mode.
 
 BIBLEAI PREMIUM
-Reading, saving, notes and reading plans are free. Free users get 5 verse studies a day. Premium unlocks unlimited studies. Choose a monthly or yearly subscription. Payment is charged to your Apple ID and renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings.
+Reading, saving, notes, reading plans and streaks are free. Free users get 5 verse studies a day. Premium unlocks unlimited studies. Choose a monthly or yearly subscription; the yearly plan starts with a 7-day free trial for eligible new subscribers, and we'll remind you before it ends. Payment is charged to your Apple ID and renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings.
 
 Verse study requires Apple Intelligence (iPhone 15 Pro or newer with iOS 26). AI study is a reading aid; read it alongside the chapter.
 

@@ -1,5 +1,7 @@
 No account is needed; all features are available without signing in.
 
-Verse study (tap a verse, then choose a study) uses Apple Intelligence on the device through Apple's Foundation Models framework. It requires an iPhone 15 Pro or newer on iOS 26 with Apple Intelligence turned on. On other devices the study screen explains this, and reading, saving, notes and reading plans all work normally. Free users get 5 studies a day; Premium (monthly or yearly auto-renewing subscription) unlocks unlimited studies. Each study has a "Report a problem with this study" link.
+Verse study (tap a verse, then choose a study) uses Apple Intelligence on the device through Apple's Foundation Models framework. It requires an iPhone 15 Pro or newer on iOS 26 with Apple Intelligence turned on. On other devices the study screen explains this, and reading, saving, notes and reading plans all work normally. Free users get 5 studies a day; Premium (monthly or yearly auto-renewing subscription) unlocks unlimited studies. The yearly plan has a 7-day free-trial introductory offer; the in-app timeline shows the reminder day and the date billing starts, and users choose a 2- or 3-day heads-up notification. Each study has a "Report a problem with this study" link.
 
 Scripture text is the King James Version, loaded per chapter from bible-api.com and cached on the device.
+
+Onboarding asks a few optional questions (goal, familiarity, daily time, reminder time) to pick a starting reading plan and a daily reading reminder. Answers stay on the device; the reminder can be changed or turned off in Settings > Daily Reading.
