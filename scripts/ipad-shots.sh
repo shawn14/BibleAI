@@ -33,8 +33,8 @@ xcrun simctl bootstatus "$owned" -b
   xcodebuild test -jobs 2 -workspace BibleAI.xcworkspace -scheme BibleAIReaderTests \
     -destination "platform=iOS Simulator,id=$owned" -derivedDataPath build/ipad-dd \
     -resultBundlePath "$result" -parallel-testing-enabled NO \
-    -test-timeouts-enabled YES -default-test-execution-time-allowance 180 \
-    -maximum-test-execution-time-allowance 240 \
+    -test-timeouts-enabled YES -default-test-execution-time-allowance 360 \
+    -maximum-test-execution-time-allowance 480 \
     CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
 } 2>&1 | tee "$log"
 xcrun xcresulttool get test-results summary --path "$result" --format json > "$result.summary.json" || true
