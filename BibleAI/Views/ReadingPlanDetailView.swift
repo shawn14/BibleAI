@@ -38,7 +38,9 @@ struct ReadingPlanDetailView: View {
                     }
                 }
             }
-            .sheet(item: $completedDay) { day in dayComplete(day) }
+            // iPad: this view is already a form sheet, and a nested sheet is too short for the day-complete card.
+            .sheet(item: isPad ? .constant(nil) : $completedDay) { day in dayComplete(day) }
+            .fullScreenCover(item: isPad ? $completedDay : .constant(nil)) { day in dayComplete(day) }
             .confirmationDialog("Reset this plan's progress?", isPresented: $showReset, titleVisibility: .visible) {
                 Button("Reset Progress", role: .destructive) { plans.deletePlanProgress(plan.id) }
                 Button("Cancel", role: .cancel) { }
@@ -83,8 +85,9 @@ struct ReadingPlanDetailView: View {
             onContinue: { completedDay = nil })
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
-        .pageSizedSheet()
     }
+
+    private var isPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
 
     private func readingSummary(_ day: DailyReading) -> String {
         day.readings.map { ref in
@@ -94,9 +97,3 @@ struct ReadingPlanDetailView: View {
     }
 }
 
-private extension View {
-    /// iPad form sheets are too short for the day-complete card; use the page size where available.
-    @ViewBuilder func pageSizedSheet() -> some View {
-        if #available(iOS 18.0, *) { presentationSizing(.page) } else { self }
-    }
-}
