@@ -21,7 +21,8 @@ if mode == 'push'
   read = ->(f) { p = File.join(dir, "#{f}.txt"); File.exist?(p) ? File.read(p).strip : nil }
   version = app.get_edit_app_store_version(platform: 'IOS')
   if version.nil?
-    version = Spaceship::ConnectAPI::AppStoreVersion.create(app_id: app.id, attributes: { platform: 'IOS', versionString: version_string })
+    Spaceship::ConnectAPI.post_app_store_version(app_id: app.id, attributes: { platform: 'IOS', versionString: version_string })
+    version = app.get_edit_app_store_version(platform: 'IOS') or abort 'Could not create version'
   elsif version.version_string != version_string
     version.update(attributes: { versionString: version_string })
   end
