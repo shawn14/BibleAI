@@ -31,6 +31,7 @@ canonical_scripts:
   asset_state: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/asset-state.mjs && cat scripts/asc/asset-state.out.json
   fix_stuck_shots: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/fix-stuck-shots.mjs && cat scripts/asc/fix-stuck-shots.out.json
   sync_logic_test: mkdir -p build && xcrun swiftc -O BibleAI/Models/Highlight.swift BibleAI/Models/ReadingPlan.swift BibleAI/Services/CloudSyncMerge.swift scripts/tests/cloudsync/main.swift -o build/cloudsync-merge-test && build/cloudsync-merge-test
+  icloud_capability: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/icloud-capability.mjs && cat scripts/asc/icloud-capability.out.json
   yearly_trial: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/trial.mjs && cat scripts/asc/trial.out.json
   listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
