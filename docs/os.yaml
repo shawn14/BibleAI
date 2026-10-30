@@ -20,8 +20,8 @@ canonical_scripts:
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
   testflight: cd ~/projects/fastlane-configs && fastlane beta app:bibleai
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
-  listing_read: cd ~/projects/fastlane-configs && bundle exec ruby ~/projects/BibleAI/scripts/asc-listing.rb
-  listing_push: cd ~/projects/fastlane-configs && bundle exec ruby ~/projects/BibleAI/scripts/asc-listing.rb push 2.0
+  listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
+  listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0
 mac_runner:
   timeout_minutes: 30
   ask_first: [testflight, listing_push]

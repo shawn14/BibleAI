@@ -1,13 +1,14 @@
 # Read (default) or write the BibleAI App Store listing with the shared App Manager API key.
 #   ruby scripts/asc-listing.rb               -> prints current listing JSON
 #   ruby scripts/asc-listing.rb push 2.0      -> applies docs/aso/en-US/*.txt to version 2.0 (creates it if needed)
-require 'spaceship'
+require 'spaceship' unless defined?(Spaceship)
 require 'json'
 
 Spaceship::ConnectAPI.auth(key_id: '6T6GWQ6BW7', issuer_id: '69a6de83-d381-47e3-e053-5b8c7c11a4d1',
                            filepath: File.expand_path('~/.appstoreconnect/private_keys/AuthKey_6T6GWQ6BW7.p8'))
 app = Spaceship::ConnectAPI::App.find('com.shawncarpenter.bibleai-companion') or abort 'App not found'
-mode, version_string = ARGV
+mode = ENV['LISTING_MODE'].to_s.empty? ? ARGV[0] : ENV['LISTING_MODE']
+version_string = ENV['LISTING_VERSION'].to_s.empty? ? ARGV[1] : ENV['LISTING_VERSION']
 
 def info_loc(app)
   info = app.fetch_edit_app_info || app.fetch_live_app_info
