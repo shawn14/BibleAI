@@ -20,6 +20,7 @@ struct OnboardingView: View {
     @State private var step: IntroStep = .hook
     @State private var trials: [String: Int] = [:]
     @State private var reminderDays = 2
+    @State private var purchasing = false
 
     private var annualTrial: Int? {
         subscriptions.yearlyPackage.flatMap { trials[$0.storeProduct.productIdentifier] }
@@ -120,11 +121,18 @@ struct OnboardingView: View {
                 ReminderPicker(days: $reminderDays)
             }
         case .trialTimeline:
-            IntroPage(title: "How your free trial works",
-                      subtitle: "Cancel anytime in Settings. We'll remind you first.",
-                      brand: true, onClose: finish, noPaymentDue: true, footer: true, action: next) {
+            IntroPage(title: "How your free trial works", subtitle: nil,
+                      brand: true, onClose: finish, noPaymentDue: true, footer: true,
+                      buttonTitle: "Redeem \(annualTrial ?? 7) day trial for \(zeroPrice)",
+                      buttonID: "paywall.redeemTrial",
+                      priceLine: annualPrice.map { "\($0)/year" },
+                      priceDetail: subscriptions.yearlyPackage?.storeProduct.localizedPricePerMonth.map { "(\($0)/mo)" },
+                      secondary: (title: "View all plans", action: next),
+                      action: redeemTrial) {
                 TrialTimeline(days: annualTrial ?? 7, reminderDaysBefore: reminderDays, price: annualPrice)
             }
+            .disabled(purchasing)
+            .overlay { if purchasing { ProgressView().controlSize(.large) } }
         case .choosePlan:
             PlanPickerScreen(trials: trials, reminderDaysBefore: reminderDays,
                              onClose: finish, onPurchased: finish)
@@ -139,6 +147,28 @@ struct OnboardingView: View {
             step = later
         } else {
             finish()
+        }
+    }
+
+    private var zeroPrice: String {
+        let formatter = subscriptions.yearlyPackage?.storeProduct.priceFormatter ?? {
+            let f = NumberFormatter(); f.numberStyle = .currency; return f
+        }()
+        return formatter.string(from: 0) ?? "$0.00"
+    }
+
+    /// Starts the yearly free trial straight from the timeline, then schedules the promised heads-up.
+    private func redeemTrial() {
+        guard let annual = subscriptions.yearlyPackage else { next(); return }
+        purchasing = true
+        Task {
+            do {
+                if try await subscriptions.purchase(package: annual) {
+                    if let days = annualTrial { TrialReminder.schedule(trialDays: days, daysBefore: reminderDays) }
+                    finish()
+                }
+            } catch { }
+            purchasing = false
         }
     }
 
@@ -160,12 +190,23 @@ private struct IntroPage<Visual: View>: View {
     var footer = false
     let action: () -> Void
     let visual: Visual
+    var buttonTitle = "Continue"
+    var buttonID = "onboarding.continue"
+    var priceLine: String? = nil
+    var priceDetail: String? = nil
+    var secondary: (title: String, action: () -> Void)? = nil
 
     init(title: String?, subtitle: String?, brand: Bool = false, onClose: (() -> Void)? = nil,
-         noPaymentDue: Bool = false, footer: Bool = false, action: @escaping () -> Void,
+         noPaymentDue: Bool = false, footer: Bool = false,
+         buttonTitle: String = "Continue", buttonID: String = "onboarding.continue",
+         priceLine: String? = nil, priceDetail: String? = nil,
+         secondary: (title: String, action: () -> Void)? = nil,
+         action: @escaping () -> Void,
          @ViewBuilder visual: () -> Visual) {
         self.title = title; self.subtitle = subtitle; self.brand = brand; self.onClose = onClose
         self.noPaymentDue = noPaymentDue; self.footer = footer; self.action = action; self.visual = visual()
+        self.buttonTitle = buttonTitle; self.buttonID = buttonID
+        self.priceLine = priceLine; self.priceDetail = priceDetail; self.secondary = secondary
     }
 
     var body: some View {
@@ -213,7 +254,20 @@ private struct IntroPage<Visual: View>: View {
                 if noPaymentDue {
                     Label("No payment due now", systemImage: "checkmark").font(.footnote.weight(.semibold))
                 }
-                PrimaryCapsuleButton(title: "Continue", action: action)
+                if let priceLine {
+                    VStack(spacing: 2) {
+                        Text(priceLine).font(.title3.weight(.bold))
+                        if let priceDetail { Text(priceDetail).font(.subheadline).foregroundStyle(ScrollStyle.muted) }
+                    }
+                }
+                PrimaryCapsuleButton(title: buttonTitle, identifier: buttonID, action: action)
+                if let secondary {
+                    Button(action: secondary.action) {
+                        Text(secondary.title).font(.subheadline.weight(.semibold)).underline()
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("onboarding.allPlans")
+                }
                 if footer { PaywallFooter(onRestored: onClose ?? {}) }
             }
             .padding(.horizontal, 24)
@@ -472,13 +526,13 @@ private struct TrialTimeline: View {
 
     private var rows: [(icon: String, title: String, detail: String)] {
         var rows: [(icon: String, title: String, detail: String)] = [
-            ("lock.open", "Today", "Unlock every study tool. No payment due now.")
+            ("lock.open", "Today", "Open the Bible like never before. Full access, everything unlocked.")
         ]
         if days - reminderDaysBefore > 0 {
-            rows.append(("bell", "Day \(days - reminderDaysBefore)", "We'll remind you that your trial is ending soon."))
+            rows.append(("bell", "Day \(days - reminderDaysBefore)", "A reminder with your week in the Word, before your trial ends."))
         }
-        rows.append(("star", "Day \(days)", price.map { "Your subscription starts at \($0)/year. Cancel anytime before." }
-                     ?? "Your subscription starts. Cancel anytime before."))
+        rows.append(("checkmark", "Day \(days)", price.map { "Your plan starts at \($0)/year. Cancel anytime before then." }
+                     ?? "Your plan starts. Cancel anytime before then."))
         return rows
     }
 
