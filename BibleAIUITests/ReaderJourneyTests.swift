@@ -92,7 +92,9 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["passage.openReference"].tap()
         let john = app.buttons["reader.verse.John|3|16"]
         XCTAssertTrue(john.waitForExistence(timeout: 30))
-        XCTAssertTrue(john.isHittable)
+        // The passage sheet is still animating closed when the verse first appears.
+        let hittable = NSPredicate(format: "isHittable == true")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: hittable, evaluatedWith: john)], timeout: 5), .completed)
         XCTAssertTrue(john.label.contains("For God so loved the world"))
         print("INTERACTION_ASSERTED passage.reference")
         capture("reader-john-3-16")
