@@ -1,4 +1,4 @@
-// swiftc BibleAI/Models/Highlight.swift BibleAI/Models/ReadingPlan.swift BibleAI/Services/CloudSyncMerge.swift scripts/tests/cloudsync-merge-test.swift
+// swiftc BibleAI/Models/Highlight.swift BibleAI/Models/ReadingPlan.swift BibleAI/Services/CloudSyncMerge.swift scripts/tests/cloudsync/main.swift
 import Foundation
 var failures = 0
 func check(_ ok: Bool, _ what: String) { print(ok ? "PASS" : "FAIL", what); if !ok { failures += 1 } }
