@@ -22,7 +22,7 @@ canonical_scripts:
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
-  listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0
+  listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
   timeout_minutes: 30
   ask_first: [testflight, listing_push]
