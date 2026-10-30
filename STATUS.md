@@ -1,3 +1,16 @@
+# BibleAI status — 2026-10-30 (late afternoon)
+
+## 2.0.1 (8) on TestFlight — iCloud sync (Shawn: "yes" to iCloud instead of accounts)
+- No accounts. CloudSync (NSUbiquitousKeyValueStore) syncs saved verses + notes, plan progress,
+  streak, reading place and onboarding-done via the user's own iCloud. Union merges; deletions as
+  tombstones (CloudSyncMerge). sync_logic_test: 10/10 pass. test_reader passed with the code
+  (BibleAI-test_reader-20261030-194702-dpti).
+- App ID now has ICLOUD capability (icloud_capability action). Release signing is manual with the
+  App Store profile (fastlane bibleai manual_release_signing), since the team wildcard profile can't
+  carry the kvstore entitlement. IPA verified: entitlement BYRK5RUS4U.com.shawncarpenter.bibleai-companion.
+- Not yet proven on devices: two real iPhones/iPad signed into one iCloud account.
+- Submit 2.0.1 after Apple approves 2.0 (create version 2.0.1, attach build 8, listing_push, submit).
+
 # BibleAI status — 2026-10-30 (afternoon)
 
 ## Submitted for App Review 2026-10-30 14:29 CDT (2.0 build 6)
