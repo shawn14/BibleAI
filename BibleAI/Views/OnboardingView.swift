@@ -464,7 +464,14 @@ private struct SearchMock: View {
 }
 
 private struct HookedVisual: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
     var body: some View {
+        composition
+            .environment(\.horizontalSizeClass, .compact)   // scale the whole picture, not each phone
+            .scaleEffect(sizeClass == .regular ? 1.5 : 1)
+    }
+
+    private var composition: some View {
         ZStack {
             Ellipse().fill(Color.black).frame(width: 250, height: 210).offset(y: 50)
             PhoneMock { ChapterMock() }.scaleEffect(0.78).rotationEffect(.degrees(-6)).offset(x: -46, y: -6)
