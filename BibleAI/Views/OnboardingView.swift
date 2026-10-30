@@ -64,7 +64,7 @@ struct OnboardingView: View {
             IntroPage(title: nil, subtitle: nil, action: next) {
                 VStack(spacing: 14) {
                     Text("The average person will spend **2+ hours today** scrolling social media.")
-                        .font(ScrollStyle.headline(30))
+                        .font(ScrollStyle.headline(UIDevice.current.userInterfaceIdiom == .pad ? 52 : 30))
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                     Text("What if some of that time went to God's Word?")
@@ -151,6 +151,7 @@ struct OnboardingView: View {
 // MARK: - Page template
 
 private struct IntroPage<Visual: View>: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
     let title: String?
     let subtitle: String?
     var brand = false
@@ -189,13 +190,13 @@ private struct IntroPage<Visual: View>: View {
             if let title {
                 VStack(spacing: 10) {
                     Text(title)
-                        .font(ScrollStyle.headline(30))
+                        .font(ScrollStyle.headline(sizeClass == .regular ? 46 : 30))
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                         .accessibilityAddTraits(.isHeader)
                         .accessibilityIdentifier("onboarding.title")
                     if let subtitle {
-                        Text(subtitle).font(.footnote).foregroundStyle(ScrollStyle.muted)
+                        Text(subtitle).font(sizeClass == .regular ? .title3 : .footnote).foregroundStyle(ScrollStyle.muted)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -204,6 +205,7 @@ private struct IntroPage<Visual: View>: View {
             }
 
             visual
+                .scaleEffect(sizeClass == .regular ? 1.55 : 1)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.vertical, 16)
 
@@ -216,7 +218,10 @@ private struct IntroPage<Visual: View>: View {
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 8)
+            .frame(maxWidth: 560)
         }
+        .frame(maxWidth: sizeClass == .regular ? 760 : .infinity)
+        .frame(maxWidth: .infinity)
     }
 }
 

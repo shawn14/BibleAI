@@ -9,6 +9,8 @@ struct ScriptureReaderView: View {
     @State private var sheet: ReaderSheet?
     @State private var showSettings = false
     @State private var pendingRemoval: Highlight?
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    private var padScale: CGFloat { sizeClass == .regular ? 1.6 : 1 }
 
     private enum ReaderSheet: String, Identifiable {
         case passage, study, note, chapter
@@ -94,7 +96,7 @@ struct ScriptureReaderView: View {
                             .foregroundStyle(.secondary)
                         Button { sheet = .study } label: {
                             Text(verse.text)
-                                .font(.system(size: scaledSize * textSize / 28, design: useSerif ? .serif : .default))
+                                .font(.system(size: scaledSize * textSize / 28 * padScale, design: useSerif ? .serif : .default))
                                 .dynamicTypeSize(...DynamicTypeSize.accessibility5)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(7)
@@ -106,6 +108,7 @@ struct ScriptureReaderView: View {
                         .accessibilityLabel("\(verse.reference). \(verse.text)")
                         .accessibilityHint("Opens verse study")
                         .accessibilityIdentifier("reader.verse.\(verse.passageID)")
+                        .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
                         Text("King James Version").font(.caption).foregroundStyle(.tertiary)
                         Spacer(minLength: 20)
                         // Only on the first verse: on later pages it peeked in under the status bar.
@@ -201,7 +204,7 @@ struct ScriptureReaderView: View {
             }
             .accessibilityLabel("Share Verse")
         }
-        .font(.system(size: 22, weight: .regular))
+        .font(.system(size: sizeClass == .regular ? 28 : 22, weight: .regular))
         .foregroundStyle(.primary)
         .frame(width: 44)
         .padding(.trailing, 10)

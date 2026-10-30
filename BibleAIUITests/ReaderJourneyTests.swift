@@ -30,8 +30,10 @@ final class ReaderJourneyTests: XCTestCase {
         let verseTwo = app.buttons["reader.verse.Genesis|1|2"]
         XCTAssertTrue(verseTwo.waitForExistence(timeout: 5))
         XCTAssertTrue(verseTwo.isHittable)
+        sleep(1) // iPad scroll momentum settles more slowly; save acts on the verse that settles on screen
         app.buttons["reader.save"].tap()
-        XCTAssertEqual(app.buttons["reader.save"].label, "Remove Saved Verse")
+        let removeLabel = NSPredicate(format: "label == %@", "Remove Saved Verse")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: removeLabel, evaluatedWith: app.buttons["reader.save"])], timeout: 3), .completed)
         app.tabBars.buttons["Saved"].tap()
         let saved = app.buttons["saved.verse.Genesis|1|2"]
         XCTAssertTrue(saved.waitForExistence(timeout: 5))

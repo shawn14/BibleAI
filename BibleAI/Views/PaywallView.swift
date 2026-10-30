@@ -216,6 +216,8 @@ struct PlanPickerScreen: View {
             .padding(.horizontal, 24).padding(.bottom, 8)
             .disabled(purchasing || subscriptions.isPremium)
         }
+        .frame(maxWidth: 600)
+        .frame(maxWidth: .infinity)
         .background(ScrollStyle.paper.ignoresSafeArea())
         .foregroundStyle(ScrollStyle.ink)
         .overlay { if purchasing { ProgressView().controlSize(.large) } }
