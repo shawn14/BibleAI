@@ -21,6 +21,7 @@ canonical_scripts:
   testflight: cd ~/projects/fastlane-configs && fastlane beta app:bibleai
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
+  testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
   listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
