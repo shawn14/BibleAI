@@ -34,7 +34,7 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["reader.save"].tap()
         let removeLabel = NSPredicate(format: "label == %@", "Remove Saved Verse")
         XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: removeLabel, evaluatedWith: app.buttons["reader.save"])], timeout: 3), .completed)
-        app.tabBars.buttons["Saved"].tap()
+        tab("Saved", in: app).tap()
         let saved = app.buttons["saved.verse.Genesis|1|2"]
         XCTAssertTrue(saved.waitForExistence(timeout: 5))
         saved.tap()
@@ -51,7 +51,7 @@ final class ReaderJourneyTests: XCTestCase {
         app.terminate()
         app.launch()
         XCTAssertTrue(app.buttons["reader.verse.Genesis|1|2"].waitForExistence(timeout: 30))
-        app.tabBars.buttons["Saved"].tap()
+        tab("Saved", in: app).tap()
         assertSavedNote(app, equals: "A quiet moment with Scripture.")
         print("INTERACTION_ASSERTED reader.resume")
         app.buttons["saved.verse.Genesis|1|2"].tap()
@@ -63,12 +63,12 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertFalse(app.buttons["saved.verse.Genesis|1|2"].label.contains("Cancelled change"))
         app.terminate()
         app.launch()
-        app.tabBars.buttons["Saved"].tap()
+        tab("Saved", in: app).tap()
         assertSavedNote(app, equals: "A quiet moment with Scripture.")
         XCTAssertFalse(app.buttons["saved.verse.Genesis|1|2"].label.contains("Cancelled change"))
         print("INTERACTION_ASSERTED note.cancel")
 
-        app.tabBars.buttons["The Bible"].tap()
+        tab("The Bible", in: app).tap()
         app.buttons["reader.passage"].tap()
         let search = app.searchFields.firstMatch
         XCTAssertTrue(search.waitForExistence(timeout: 5))
@@ -111,7 +111,7 @@ final class ReaderJourneyTests: XCTestCase {
     private func exerciseAllPlanPersistence(_ app: XCUIApplication) throws {
         let plans = [("Gospel Tour", 8), ("Psalms in a Month", 30),
                      ("New Testament in 30 Days", 30), ("Proverbs Wisdom", 31)]
-        app.tabBars.buttons["Plans"].tap()
+        tab("Plans", in: app).tap()
         capture("reading-plans")
         for (title, duration) in plans {
             openPlan(title, in: app)
@@ -132,8 +132,8 @@ final class ReaderJourneyTests: XCTestCase {
         // The same real app store must survive process death for every built-in plan.
         app.terminate()
         app.launch()
-        XCTAssertTrue(app.tabBars.buttons["Plans"].waitForExistence(timeout: 10))
-        app.tabBars.buttons["Plans"].tap()
+        XCTAssertTrue(tab("Plans", in: app).waitForExistence(timeout: 10))
+        tab("Plans", in: app).tap()
         for (title, duration) in plans {
             let row = app.buttons["plans.open.\(title)"]
             reveal(row, in: app)
@@ -185,10 +185,16 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(app.buttons["reader.verse.John|3|16"].waitForExistence(timeout: 30))
         sleep(3)
         feed.swipeUp(velocity: .slow); sleep(2)
-        app.tabBars.buttons["Plans"].tap(); sleep(2)
+        tab("Plans", in: app).tap(); sleep(2)
         app.buttons["plans.open.Gospel Tour"].tap(); sleep(3)
         app.buttons["Done"].tap(); sleep(1)
-        app.tabBars.buttons["Saved"].tap(); sleep(3)
+        tab("Saved", in: app).tap(); sleep(3)
+    }
+
+    /// iPhone puts tabs in a tab bar; iPadOS 18+ shows them as a floating bar at the top.
+    private func tab(_ name: String, in app: XCUIApplication) -> XCUIElement {
+        let bar = app.tabBars.buttons[name]
+        return bar.exists ? bar : app.buttons[name].firstMatch
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
