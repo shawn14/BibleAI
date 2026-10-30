@@ -81,6 +81,7 @@ struct ReadingPlanDetailView: View {
             hasNextDay: plan.dailyReadings.contains { !plans.isDayComplete(planId: plan.id, day: $0.day) },
             onDone: { completedDay = nil; isPresented = nil },
             onContinue: { completedDay = nil })
+        .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
 

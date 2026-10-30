@@ -36,13 +36,13 @@ struct DayCompleteView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(spacing: 22) {
+                VStack(spacing: 16) {
                     Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 64))
+                        .font(.system(size: 48))
                         .foregroundStyle(.primary)
                         .scaleEffect(appeared || reduceMotion ? 1 : 0.6)
                         .opacity(appeared || reduceMotion ? 1 : 0)
-                        .padding(.top, 36)
+                        .padding(.top, 20)
                         .accessibilityHidden(true)
                     VStack(spacing: 6) {
                         Text("Well done.").font(.largeTitle.bold()).accessibilityIdentifier("streak.title")
@@ -58,10 +58,10 @@ struct DayCompleteView: View {
                         Text(verse.reference).font(.footnote).foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(20)
+                    .padding(16)
                     .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
 
-                    VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 12) {
                         HStack(spacing: 14) {
                             Image(systemName: "flame.fill")
                                 .font(.title)
@@ -103,9 +103,11 @@ struct DayCompleteView: View {
                     .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 }
                 .padding(.horizontal, 24)
+                .padding(.bottom, 12)
                 .frame(maxWidth: 560)
                 .frame(maxWidth: .infinity)
             }
+            .scrollBounceBehavior(.basedOnSize)
             VStack(spacing: 10) {
                 Button(action: onDone) {
                     Text("Done for today").font(.headline).foregroundStyle(Color(.systemBackground))
@@ -125,8 +127,9 @@ struct DayCompleteView: View {
                     .accessibilityIdentifier("streak.continue")
                 }
             }
-            .padding(.horizontal, 24).padding(.bottom, 12)
+            .padding(.horizontal, 24).padding(.top, 8).padding(.bottom, 12)
             .frame(maxWidth: 560)
+            .background(Color(.systemBackground))
         }
         .onAppear {
             if reduceMotion { appeared = true } else { withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { appeared = true } }
