@@ -83,6 +83,7 @@ struct ReadingPlanDetailView: View {
             onContinue: { completedDay = nil })
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+        .pageSizedSheet()
     }
 
     private func readingSummary(_ day: DailyReading) -> String {
@@ -90,5 +91,12 @@ struct ReadingPlanDetailView: View {
             if let end = ref.endChapter, end != ref.startChapter { return "\(ref.book) \(ref.startChapter)–\(end)" }
             return "\(ref.book) \(ref.startChapter)"
         }.joined(separator: ", ")
+    }
+}
+
+private extension View {
+    /// iPad form sheets are too short for the day-complete card; use the page size where available.
+    @ViewBuilder func pageSizedSheet() -> some View {
+        if #available(iOS 18.0, *) { presentationSizing(.page) } else { self }
     }
 }
