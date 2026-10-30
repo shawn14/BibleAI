@@ -25,13 +25,21 @@ actor ScriptureChapterStore {
             .appendingPathComponent("Scripture/KJV", isDirectory: true)
     }
 
+    /// The provider breaks some verses across lines ("darkness\nwas\nupon"); show each verse as one sentence.
+    static func clean(_ text: String) -> String {
+        text.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
+    }
+
     func chapter(book: String, number: Int) async throws -> [BibleVerse] {
         guard let info = BibleBookInfo.allBooks.first(where: { $0.name == book }),
               (1...info.chapterCount).contains(number) else { throw ScriptureError.invalidPassage }
         let cache = directory.appendingPathComponent("\(info.abbreviation)-\(number).json")
         if let data = try? Data(contentsOf: cache),
            let verses = try? JSONDecoder().decode([BibleVerse].self, from: data),
-           valid(verses, book: book, chapter: number) { return verses }
+           valid(verses, book: book, chapter: number) {
+            return verses.map { BibleVerse(book: $0.book, chapter: $0.chapter, verse: $0.verse,
+                                           text: Self.clean($0.text), translation: $0.translation) }
+        }
 
         var components = URLComponents()
         components.scheme = "https"
@@ -47,7 +55,7 @@ actor ScriptureChapterStore {
         guard result.translation_id == "kjv" else { throw ScriptureError.unavailable }
         let verses = result.verses.map {
             BibleVerse(book: book, chapter: $0.chapter, verse: $0.verse,
-                       text: $0.text.trimmingCharacters(in: .whitespacesAndNewlines), translation: "KJV")
+                       text: Self.clean($0.text), translation: "KJV")
         }
         guard valid(verses, book: book, chapter: number) else { throw ScriptureError.unavailable }
         // A cache is optional; a failed cache write must not prevent reading downloaded Scripture.

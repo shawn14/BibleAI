@@ -108,9 +108,11 @@ struct ScriptureReaderView: View {
                         .accessibilityIdentifier("reader.verse.\(verse.passageID)")
                         Text("King James Version").font(.caption).foregroundStyle(.tertiary)
                         Spacer(minLength: 20)
+                        // Only on the first verse: on later pages it peeked in under the status bar.
                         Label("Swipe to keep reading", systemImage: "chevron.up")
                             .font(.caption).foregroundStyle(.secondary)
                             .padding(.bottom, 12)
+                            .opacity(verse.passageID == model.verses.first?.passageID ? 1 : 0)
                     }
                     .padding(.leading, 28).padding(.trailing, 60)
                     .frame(maxWidth: .infinity)
