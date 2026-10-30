@@ -12,12 +12,25 @@ final class ReaderJourneyTests: XCTestCase {
         // Intro pages, then the paywall sequence; the plan picker's close keeps free reading.
         var page = 1
         while !app.buttons["paywall.close"].exists {
-            XCTAssertLessThanOrEqual(page, 12, "Onboarding never reached the plan picker")
+            XCTAssertLessThanOrEqual(page, 18, "Onboarding never reached the plan picker")
             let allPlans = app.buttons["onboarding.allPlans"]
-            XCTAssertTrue(next.waitForExistence(timeout: 5) || allPlans.exists)
+            XCTAssertTrue(next.waitForExistence(timeout: 5) || allPlans.exists
+                      || app.descendants(matching: .any)["onboarding.commit"].exists)
             capture("onboarding-\(page)")
-            // The trial timeline's main button starts a purchase; take "View all plans" instead.
-            if allPlans.exists { allPlans.tap() } else { next.tap() }
+            // Personal questions: pick the first answer before continuing.
+            let option = app.buttons["onboarding.option.0"]
+            if option.exists { option.tap() }
+            let commit = app.descendants(matching: .any)["onboarding.commit"]
+            if commit.exists {
+                commit.press(forDuration: 1.8)
+                _ = next.waitForExistence(timeout: 3)
+            } else if allPlans.exists {
+                // The trial timeline's main button starts a purchase; take "View all plans" instead.
+                allPlans.tap()
+            } else {
+                next.tap()
+            }
+            allowSystemAlert()
             page += 1
             _ = app.buttons["paywall.close"].waitForExistence(timeout: 1)
         }
@@ -118,9 +131,9 @@ final class ReaderJourneyTests: XCTestCase {
         for (title, duration) in plans {
             openPlan(title, in: app)
             capture("plan-\(title)")
+            // Onboarding's "Your plan is ready" step may already have started the recommended plan.
             let start = app.buttons["plan.start"]
-            XCTAssertTrue(start.waitForExistence(timeout: 5))
-            start.tap()
+            if start.waitForExistence(timeout: 3) { start.tap() }
             let complete = app.buttons["plan.complete.1"]
             reveal(complete, in: app)
             complete.tap()
@@ -174,7 +187,16 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(next.waitForExistence(timeout: 15))
         sleep(2)
         for _ in 0..<5 { next.tap(); sleep(2) }
-        while !app.buttons["paywall.close"].exists && next.exists { next.tap(); sleep(1) }
+        for _ in 0..<16 where !app.buttons["paywall.close"].exists {
+            let option = app.buttons["onboarding.option.0"]
+            if option.exists { option.tap(); sleep(1) }
+            let commit = app.descendants(matching: .any)["onboarding.commit"]
+            if commit.exists { commit.press(forDuration: 1.8); sleep(1) }
+            else if app.buttons["onboarding.allPlans"].exists { app.buttons["onboarding.allPlans"].tap() }
+            else if next.exists { next.tap() }
+            allowSystemAlert()
+            sleep(1)
+        }
         sleep(2)
         app.buttons["paywall.close"].tap()
         let feed = app.scrollViews["reader.feed"]
@@ -196,6 +218,13 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["plans.open.Gospel Tour"].tap(); sleep(3)
         app.buttons["Done"].tap(); sleep(1)
         tab("Saved", in: app).tap(); sleep(3)
+    }
+
+    /// Notification permission (daily reminder, trial heads-up) comes from SpringBoard, outside the app.
+    private func allowSystemAlert() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = springboard.buttons["Allow"]
+        if allow.waitForExistence(timeout: 1.5) { allow.tap() }
     }
 
     /// iPhone puts tabs in a tab bar; iPadOS 18+ shows them as a floating bar at the top.

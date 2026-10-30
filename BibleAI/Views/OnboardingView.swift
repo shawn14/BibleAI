@@ -9,7 +9,8 @@ enum SocialProof {
 }
 
 private enum IntroStep: Int, CaseIterable {
-    case hook, scroll, readingPlans, study, search, reviews, hooked, features, reminder, trialTimeline, choosePlan
+    case hook, scroll, readingPlans, study, search, goal, familiarity, minutes, readingTime, commit,
+         reviews, hooked, features, reminder, trialTimeline, choosePlan
 }
 
 /// Scroll-style introduction: white pages, serif headline, one black Continue button,
@@ -21,6 +22,24 @@ struct OnboardingView: View {
     @State private var trials: [String: Int] = [:]
     @State private var reminderDays = 2
     @State private var purchasing = false
+    @State private var goal: Int?
+    @State private var familiarity: Int?
+    @State private var minutes: Int?
+    @State private var readingTime: DailyReminder?
+
+    private static let goals = ["Grow closer to God", "Understand the Bible better", "Build a daily habit", "Find peace and hope"]
+    private static let familiarities = ["I'm new to the Bible", "I've read some of it", "I know it well"]
+    private static let minuteChoices = [5, 10, 15]
+
+    /// Starting plan picked from the answers.
+    private var recommendedPlan: ReadingPlan? {
+        let titles: String
+        if familiarity == 0 { titles = "Gospel Tour" }
+        else if goal == 3 { titles = "Psalms in a Month" }
+        else if (minutes ?? 0) >= 15 { titles = "New Testament in 30 Days" }
+        else { titles = "Proverbs Wisdom" }
+        return ReadingPlanService.shared.availablePlans.first { $0.title == titles }
+    }
 
     private var annualTrial: Int? {
         subscriptions.yearlyPackage.flatMap { trials[$0.storeProduct.productIdentifier] }
@@ -30,7 +49,40 @@ struct OnboardingView: View {
     private var steps: [IntroStep] {
         IntroStep.allCases.filter { step in
             switch step {
-            case .reviews: return !SocialProof.reviews.isEmpty
+            case .goal:
+            IntroPage(title: "What brings you to the Bible?", subtitle: "We'll shape your reading around it.",
+                      buttonEnabled: goal != nil, action: next) {
+                ChoiceList(options: Self.goals.map { ($0, nil) }, selection: $goal)
+            }
+        case .familiarity:
+            IntroPage(title: "How well do you know the Bible?", subtitle: "There's no wrong answer.",
+                      buttonEnabled: familiarity != nil, action: next) {
+                ChoiceList(options: Self.familiarities.map { ($0, nil) }, selection: $familiarity)
+            }
+        case .minutes:
+            IntroPage(title: "How much time can you give each day?", subtitle: "Small and steady beats big and rare.",
+                      buttonEnabled: minutes != nil, action: next) {
+                ChoiceList(options: [("5 minutes", "A verse and a short study"), ("10 minutes", "A chapter a day"),
+                                     ("15+ minutes", "Read through whole books")],
+                           selection: Binding(get: { minutes.flatMap { Self.minuteChoices.firstIndex(of: $0) } },
+                                              set: { minutes = $0.map { Self.minuteChoices[$0] } }))
+            }
+        case .readingTime:
+            IntroPage(title: "When should we remind you to read?", subtitle: "One gentle nudge a day. Change it anytime in Settings.",
+                      buttonEnabled: readingTime != nil,
+                      action: { Task { await DailyReminder.set(readingTime ?? .off); next() } }) {
+                ChoiceList(options: [DailyReminder.morning, .midday, .evening].map { ($0.title, $0.detail) },
+                           selection: Binding(get: { readingTime.flatMap { [DailyReminder.morning, .midday, .evening].firstIndex(of: $0) } },
+                                              set: { readingTime = $0.map { [DailyReminder.morning, .midday, .evening][$0] } }))
+            }
+        case .commit:
+            CommitPage(plan: recommendedPlan, goal: goal.map { Self.goals[$0] }, minutes: minutes, reminder: readingTime) {
+                if let plan = recommendedPlan, ReadingPlanService.shared.getProgress(for: plan.id) == nil {
+                    ReadingPlanService.shared.startPlan(plan)
+                }
+                next()
+            }
+        case .reviews: return !SocialProof.reviews.isEmpty
             case .reminder, .trialTimeline: return annualTrial != nil && !subscriptions.isPremium
             case .hooked, .features, .choosePlan: return !subscriptions.isPremium
             default: return true
@@ -195,9 +247,10 @@ private struct IntroPage<Visual: View>: View {
     var priceLine: String? = nil
     var priceDetail: String? = nil
     var secondary: (title: String, action: () -> Void)? = nil
+    var buttonEnabled = true
 
     init(title: String?, subtitle: String?, brand: Bool = false, onClose: (() -> Void)? = nil,
-         noPaymentDue: Bool = false, footer: Bool = false,
+         noPaymentDue: Bool = false, footer: Bool = false, buttonEnabled: Bool = true,
          buttonTitle: String = "Continue", buttonID: String = "onboarding.continue",
          priceLine: String? = nil, priceDetail: String? = nil,
          secondary: (title: String, action: () -> Void)? = nil,
@@ -207,6 +260,7 @@ private struct IntroPage<Visual: View>: View {
         self.noPaymentDue = noPaymentDue; self.footer = footer; self.action = action; self.visual = visual()
         self.buttonTitle = buttonTitle; self.buttonID = buttonID
         self.priceLine = priceLine; self.priceDetail = priceDetail; self.secondary = secondary
+        self.buttonEnabled = buttonEnabled
     }
 
     var body: some View {
@@ -261,6 +315,8 @@ private struct IntroPage<Visual: View>: View {
                     }
                 }
                 PrimaryCapsuleButton(title: buttonTitle, identifier: buttonID, action: action)
+                    .disabled(!buttonEnabled)
+                    .opacity(buttonEnabled ? 1 : 0.35)
                 if let secondary {
                     Button(action: secondary.action) {
                         Text(secondary.title).font(.subheadline.weight(.semibold)).underline()
@@ -558,5 +614,124 @@ private struct TrialTimeline: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 32)
+    }
+}
+
+
+// MARK: - Personal questions
+
+private struct ChoiceList: View {
+    let options: [(String, String?)]
+    @Binding var selection: Int?
+
+    var body: some View {
+        VStack(spacing: 12) {
+            ForEach(Array(options.enumerated()), id: \.offset) { index, option in
+                Button {
+                    selection = index
+                    UISelectionFeedbackGenerator().selectionChanged()
+                } label: {
+                    HStack(spacing: 14) {
+                        Image(systemName: selection == index ? "largecircle.fill.circle" : "circle").font(.title3)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(option.0).font(.headline)
+                            if let detail = option.1 { Text(detail).font(.subheadline).foregroundStyle(ScrollStyle.muted) }
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .padding(18)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(white: 0.955), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(selection == index ? ScrollStyle.ink : .clear, lineWidth: 2))
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selection == index ? .isSelected : [])
+                .accessibilityIdentifier("onboarding.option.\(index)")
+            }
+        }
+        .padding(.horizontal, 24)
+        .frame(maxWidth: 560)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.top, 12)
+    }
+}
+
+/// "Your plan is ready": a summary of the answers and a press-and-hold commitment to 7 days.
+private struct CommitPage: View {
+    let plan: ReadingPlan?
+    let goal: String?
+    let minutes: Int?
+    let reminder: DailyReminder?
+    let onCommit: () -> Void
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var progress: CGFloat = 0
+    @State private var holding = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    Image("BrandMark").resizable().scaledToFit().frame(width: 44, height: 44).padding(.top, 20)
+                        .accessibilityHidden(true)
+                    Text("Your plan is ready").font(ScrollStyle.headline(sizeClass == .regular ? 46 : 32))
+                        .multilineTextAlignment(.center)
+                        .accessibilityIdentifier("onboarding.title")
+                    VStack(alignment: .leading, spacing: 16) {
+                        if let plan { row("book", "Start with", "\(plan.title) · \(plan.duration) days") }
+                        if let goal { row("heart", "Your goal", goal) }
+                        if let minutes { row("clock", "Each day", minutes >= 15 ? "15+ minutes" : "\(minutes) minutes") }
+                        if let reminder, reminder != .off { row("bell", "Reminder", reminder.detail) }
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(white: 0.955), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    Text("People who read 7 days in a row are far more likely to keep going. Will you commit to the next 7 days?")
+                        .font(.subheadline).foregroundStyle(ScrollStyle.muted).multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 24)
+            }
+            VStack(spacing: 8) {
+                ZStack(alignment: .leading) {
+                    Capsule().fill(ScrollStyle.ink)
+                    GeometryReader { geo in
+                        Capsule().fill(Color.orange).frame(width: geo.size.width * progress)
+                    }
+                    Text(progress >= 1 ? "Committed" : "Hold to commit to 7 days")
+                        .font(.headline).foregroundStyle(.white).frame(maxWidth: .infinity)
+                }
+                .frame(height: 56)
+                .clipShape(Capsule())
+                .contentShape(Capsule())
+                .onLongPressGesture(minimumDuration: 1.2, maximumDistance: 40) {
+                    progress = 1
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { onCommit() }
+                } onPressingChanged: { pressing in
+                    if pressing { withAnimation(.linear(duration: 1.2)) { progress = 1 } }
+                    else if progress < 1 { withAnimation(.easeOut(duration: 0.2)) { progress = 0 } }
+                }
+                .accessibilityElement()
+                .accessibilityLabel("Commit to 7 days")
+                .accessibilityAddTraits(.isButton)
+                .accessibilityAction { onCommit() }
+                .accessibilityIdentifier("onboarding.commit")
+                Text("Press and hold").font(.caption).foregroundStyle(ScrollStyle.muted)
+            }
+            .padding(.horizontal, 24).padding(.bottom, 8)
+        }
+        .frame(maxWidth: 560)
+        .frame(maxWidth: .infinity)
+    }
+
+    private func row(_ icon: String, _ label: String, _ value: String) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: icon).font(.body.weight(.semibold)).frame(width: 24)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(label).font(.caption.weight(.semibold)).foregroundStyle(ScrollStyle.muted)
+                Text(value).font(.body.weight(.medium))
+            }
+        }
     }
 }

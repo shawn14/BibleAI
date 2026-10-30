@@ -48,6 +48,7 @@
 		BA1000024 /* SimpleVerseText.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000025 /* SimpleVerseText.swift */; };
 		BA1000025 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000026 /* Highlight.swift */; };
 		CC1000001 /* StreakStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000001 /* StreakStore.swift */; };
+		CC1000003 /* DailyReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000003 /* DailyReminder.swift */; };
 		BA1000026 /* HighlightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000027 /* HighlightService.swift */; };
 		BA1000027 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000028 /* NoteEditorView.swift */; };
 		BA1000028 /* HighlightsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000029 /* HighlightsListView.swift */; };
@@ -108,6 +109,7 @@
 		BA2000025 /* SimpleVerseText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleVerseText.swift; sourceTree = "<group>"; };
 		BA2000026 /* Highlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
 		CC2000001 /* StreakStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakStore.swift; sourceTree = "<group>"; };
+		CC2000003 /* DailyReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReminder.swift; sourceTree = "<group>"; };
 		BA2000027 /* HighlightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightService.swift; sourceTree = "<group>"; };
 		BA2000028 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
 		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				BA2000016 /* EnhancedBibleService.swift */,
 				BA2000022 /* VerseOfTheDayService.swift */,
 				BA2000027 /* HighlightService.swift */,
+				CC2000003 /* DailyReminder.swift */,
 				CC2000001 /* StreakStore.swift */,
 				0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */,
 				A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */,
@@ -466,6 +469,7 @@
 				BA1000024 /* SimpleVerseText.swift in Sources */,
 				BA1000025 /* Highlight.swift in Sources */,
 				BA1000026 /* HighlightService.swift in Sources */,
+				CC1000003 /* DailyReminder.swift in Sources */,
 				CC1000001 /* StreakStore.swift in Sources */,
 				BA1000027 /* NoteEditorView.swift in Sources */,
 				BA1000028 /* HighlightsListView.swift in Sources */,

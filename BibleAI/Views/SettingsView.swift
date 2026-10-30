@@ -5,6 +5,7 @@ struct SettingsView: View {
     @EnvironmentObject private var subscriptions: RevenueCatManager
     @AppStorage("reader.useSerif") private var useSerif = true
     @AppStorage("reader.textSize") private var textSize = 28.0
+    @State private var reminderTick = 0
     @State private var showPremium = false
     @State private var showIntroduction = false
 
@@ -25,6 +26,16 @@ struct SettingsView: View {
                         .accessibilityIdentifier("settings.textSize")
                     }
                     LabeledContent("Translation", value: "King James Version")
+                }
+                Section("Daily Reading") {
+                    Picker("Reminder", selection: Binding(
+                        get: { DailyReminder.current },
+                        set: { slot in Task { await DailyReminder.set(slot); reminderTick += 1 } })) {
+                        ForEach(DailyReminder.allCases) { Text($0.title).tag($0) }
+                    }
+                    .id(reminderTick)
+                    .accessibilityIdentifier("settings.dailyReminder")
+                    LabeledContent("Reading Streak", value: "\(StreakStore.shared.currentStreak()) days")
                 }
                 Section {
                     Text("Opened chapters are cached on this iPhone. New chapters need a connection.")
