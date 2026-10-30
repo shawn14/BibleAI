@@ -1,3 +1,18 @@
+# BibleAI status — 2026-10-29 (evening)
+
+## Shipped
+- 2.0 (4) uploaded to TestFlight 21:03 CDT; Shawn added to internal group Beta.
+- App Store version 2.0 (PREPARE_FOR_SUBMISSION): name "BibleAI: Daily Bible Verses", subtitle,
+  description, keywords, What's New, review notes, 6x 6.9" screenshots, 30 s preview (docs/aso/).
+- Full reader journey passed on the Air (job BibleAI-test_reader-20261030-015146-hisx) on this source.
+- Website bibleaicompanion.com redesigned and live (repo shawn14/v0-bible-ai-companion-website).
+- Verse study runs on Apple Intelligence (FoundationModels), 5 free/day, Premium unlimited.
+
+## Next
+- Shawn tries 2.0 (4) on his iPhone, then submit for review (fastlane submit_review / deliver).
+- Optional: 7-day free trial intro offer on the yearly product (trial pages turn on automatically).
+- Real App Store reviews into SocialProof to show the reviews page.
+
 # BibleAI status — 2026-10-29
 
 ## Scroll The Bible parity pass (branch claude/scroll-parity)
