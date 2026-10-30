@@ -300,7 +300,6 @@ private struct IntroPage<Visual: View>: View {
             }
 
             visual
-                .scaleEffect(sizeClass == .regular ? 1.55 : 1)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.vertical, 16)
 
@@ -339,9 +338,15 @@ private struct IntroPage<Visual: View>: View {
 
 private struct PhoneMock<Content: View>: View {
     let content: Content
+    @Environment(\.horizontalSizeClass) private var sizeClass
     init(@ViewBuilder content: () -> Content) { self.content = content() }
 
     var body: some View {
+        mock.scaleEffect(sizeClass == .regular ? 1.55 : 1)
+            .frame(width: sizeClass == .regular ? 310 : 200, height: sizeClass == .regular ? 605 : 390)
+    }
+
+    private var mock: some View {
         content
             .frame(width: 200, height: 390)
             .background(Color.white)
