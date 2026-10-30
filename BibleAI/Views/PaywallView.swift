@@ -14,8 +14,10 @@ enum ScrollStyle {
 
 struct BrandMark: View {
     var body: some View {
-        Image(systemName: "book.closed")
-            .font(.system(size: 26, weight: .light))
+        Image("BrandMark")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 40, height: 40)
             .foregroundStyle(ScrollStyle.ink)
             .accessibilityHidden(true)
     }
