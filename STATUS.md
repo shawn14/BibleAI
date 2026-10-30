@@ -1,6 +1,6 @@
 # BibleAI status — 2026-10-30 (afternoon)
 
-## Ready for App Review (submit queued; runner failure cap until ~19:27 UTC)
+## Submitted for App Review 2026-10-30 14:29 CDT (2.0 build 6)
 - Build 2.0 (6) uploaded 13:15 CDT, VALID, compliance set, attached to version 2.0; TestFlight group Beta.
   Contents: streak + "Well done" day-complete, daily reminder, 7-day trial checkout + reminder,
   personalized onboarding with hold-to-commit, new logo (open Bible + cross), iPad layout fixes.
@@ -14,7 +14,7 @@
   UPLOAD_COMPLETE; re-encode + re-upload clears it).
 
 ## Next
-- submit_review app:bibleai version:2.0 build:6, verify WAITING_FOR_REVIEW, restore ask_first.
+- Watch App Review; ask_first restored to [testflight, listing_push].
 - Merge claude/scroll-parity into main.
 
 # BibleAI status — 2026-10-29 (evening)
