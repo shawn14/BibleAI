@@ -204,11 +204,11 @@ struct PlanPickerScreen: View {
                     Label("No payment due now", systemImage: "checkmark")
                         .font(.footnote.weight(.semibold))
                     PrimaryCapsuleButton(title: "Try for \(zeroPrice(selected!))", identifier: "paywall.purchase") { buy() }
-                    Text("\(days) days free, then \(selected!.localizedPriceString)/\(annualSelected ? "year" : "month"). Renews automatically. Cancel anytime in Settings.")
+                    Text("\(days) days free, then \(selected!.localizedPriceString)/\(annualSelected ? "year" : "month"). Renews automatically unless canceled at least 24 hours before the period ends. Cancel anytime in Settings.")
                         .font(.caption2).foregroundStyle(ScrollStyle.muted).multilineTextAlignment(.center)
                 } else if let selected {
                     PrimaryCapsuleButton(title: "Continue", identifier: "paywall.purchase") { buy() }
-                    Text("\(selected.localizedPriceString)/\(annualSelected ? "year" : "month"). Renews automatically. Cancel anytime in Settings.")
+                    Text("\(selected.localizedPriceString)/\(annualSelected ? "year" : "month"). Renews automatically unless canceled at least 24 hours before the period ends. Cancel anytime in Settings.")
                         .font(.caption2).foregroundStyle(ScrollStyle.muted).multilineTextAlignment(.center)
                 }
                 PaywallFooter(onRestored: onPurchased)

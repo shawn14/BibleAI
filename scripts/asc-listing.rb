@@ -30,6 +30,15 @@ if mode == 'push'
   attrs = { description: read['description'], keywords: read['keywords'], promotionalText: read['promotional_text'],
             whatsNew: read['release_notes'], marketingUrl: read['marketing_url'], supportUrl: read['support_url'] }.compact
   loc.update(attributes: attrs)
+  notes = read['review_notes']
+  if notes
+    detail = version.fetch_app_store_review_detail rescue nil
+    if detail
+      detail.update(attributes: { notes: notes })
+    else
+      Spaceship::ConnectAPI.post_app_store_review_detail(app_store_version_id: version.id, attributes: { notes: notes })
+    end
+  end
   info, iloc = info_loc(app)
   iattrs = { name: read['name'], subtitle: read['subtitle'], privacyPolicyUrl: read['privacy_url'] }.compact
   iloc.update(attributes: iattrs) if iloc && info.app_store_state.to_s !~ /READY_FOR_SALE/

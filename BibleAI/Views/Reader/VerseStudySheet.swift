@@ -123,6 +123,11 @@ struct VerseStudySheet: View {
                             .accessibilityIdentifier("study.answer")
                         Text("Apple Intelligence study · Read alongside the chapter")
                             .font(.caption).foregroundStyle(.secondary)
+                        Link(destination: reportURL(mode: selected, answer: answer)) {
+                            Label("Report a problem with this study", systemImage: "flag")
+                                .font(.footnote)
+                        }
+                        .accessibilityIdentifier("study.report")
                     }
                 }
                 .padding(24)
@@ -134,6 +139,17 @@ struct VerseStudySheet: View {
         .sheet(isPresented: $showPaywall) { PaywallView(isPresented: $showPaywall) }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+    }
+
+    private func reportURL(mode: StudyMode, answer: String) -> URL {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "support@bibleaicompanion.com"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "Study report: \(verse.fullReference)"),
+            URLQueryItem(name: "body", value: "What's wrong with this study?\n\n\n---\n\(mode.rawValue) · \(verse.fullReference)\n\(answer.prefix(1500))")
+        ]
+        return components.url ?? URL(string: "mailto:support@bibleaicompanion.com")!
     }
 
     private func study(_ mode: StudyMode) {
