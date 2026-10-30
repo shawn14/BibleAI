@@ -18,6 +18,10 @@ final class StreakStore: ObservableObject {
 
     init(defaults: UserDefaults = .standard) {
         days = Set(defaults.stringArray(forKey: key) ?? [])
+        NotificationCenter.default.addObserver(forName: CloudSync.didChange, object: nil, queue: .main) { [weak self] _ in
+            guard let self else { return }
+            self.days = Set(UserDefaults.standard.stringArray(forKey: self.key) ?? [])
+        }
     }
 
     static func dayKey(_ date: Date) -> String { formatter.string(from: date) }
@@ -25,6 +29,7 @@ final class StreakStore: ObservableObject {
     func recordReading(on date: Date = Date()) {
         days.insert(Self.dayKey(date))
         UserDefaults.standard.set(Array(days).sorted(), forKey: key)
+        CloudSync.shared.push(.streak)
     }
 
     func didRead(on date: Date) -> Bool { days.contains(Self.dayKey(date)) }

@@ -16,6 +16,9 @@ class HighlightService: ObservableObject {
 
     private init() {
         loadHighlights()
+        NotificationCenter.default.addObserver(forName: CloudSync.didChange, object: nil, queue: .main) { [weak self] _ in
+            self?.loadHighlights()
+        }
     }
 
     // MARK: - Persistence
@@ -31,6 +34,7 @@ class HighlightService: ObservableObject {
         if let encoded = try? JSONEncoder().encode(highlights) {
             UserDefaults.standard.set(encoded, forKey: highlightsKey)
         }
+        CloudSync.shared.push(.highlights)
     }
 
     // MARK: - Highlight Management
@@ -57,6 +61,9 @@ class HighlightService: ObservableObject {
     }
 
     func removeHighlight(id: UUID) {
+        if let removed = highlights.first(where: { $0.id == id }) {
+            CloudSync.shared.recordDeletion(.highlightsDeleted, id: CloudSyncMerge.verseKey(removed))
+        }
         highlights.removeAll { $0.id == id }
         saveHighlights()
     }

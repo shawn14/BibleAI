@@ -19,6 +19,9 @@ class ReadingPlanService: ObservableObject {
     private init() {
         loadAvailablePlans()
         loadUserProgress()
+        NotificationCenter.default.addObserver(forName: CloudSync.didChange, object: nil, queue: .main) { [weak self] _ in
+            self?.loadUserProgress()
+        }
     }
 
     // MARK: - Available Plans
@@ -45,6 +48,7 @@ class ReadingPlanService: ObservableObject {
         if let encoded = try? JSONEncoder().encode(userProgress) {
             UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
         }
+        CloudSync.shared.push(.plans)
     }
 
     func startPlan(_ plan: ReadingPlan) {
@@ -80,6 +84,7 @@ class ReadingPlanService: ObservableObject {
     }
 
     func deletePlanProgress(_ planId: UUID) {
+        CloudSync.shared.recordDeletion(.plansDeleted, id: planId.uuidString)
         userProgress.removeAll(where: { $0.planId == planId })
         saveUserProgress()
     }

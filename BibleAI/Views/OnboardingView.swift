@@ -226,6 +226,7 @@ struct OnboardingView: View {
 
     private func finish() {
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+        CloudSync.shared.push(.onboarded)
         isPresented = false
     }
 }

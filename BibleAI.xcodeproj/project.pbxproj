@@ -49,6 +49,8 @@
 		BA1000025 /* Highlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000026 /* Highlight.swift */; };
 		CC1000001 /* StreakStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000001 /* StreakStore.swift */; };
 		CC1000003 /* DailyReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000003 /* DailyReminder.swift */; };
+		CC1000004 /* CloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000004 /* CloudSync.swift */; };
+		CC1000005 /* CloudSyncMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000005 /* CloudSyncMerge.swift */; };
 		BA1000026 /* HighlightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000027 /* HighlightService.swift */; };
 		BA1000027 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000028 /* NoteEditorView.swift */; };
 		BA1000028 /* HighlightsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000029 /* HighlightsListView.swift */; };
@@ -110,6 +112,9 @@
 		BA2000026 /* Highlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlight.swift; sourceTree = "<group>"; };
 		CC2000001 /* StreakStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakStore.swift; sourceTree = "<group>"; };
 		CC2000003 /* DailyReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReminder.swift; sourceTree = "<group>"; };
+		CC2000004 /* CloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSync.swift; sourceTree = "<group>"; };
+		CC2000005 /* CloudSyncMerge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncMerge.swift; sourceTree = "<group>"; };
+		CC2000006 /* BibleAI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BibleAI.entitlements; sourceTree = "<group>"; };
 		BA2000027 /* HighlightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightService.swift; sourceTree = "<group>"; };
 		BA2000028 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
 		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
@@ -201,6 +206,7 @@
 				BA5000008 /* Utilities */,
 				BA2000003 /* Assets.xcassets */,
 				BA2000004 /* Info.plist */,
+				CC2000006 /* BibleAI.entitlements */,
 				3EC2AF4CED80002389582A6F /* Config.revenuecat.swift */,
 			);
 			path = BibleAI;
@@ -268,6 +274,8 @@
 				BA2000022 /* VerseOfTheDayService.swift */,
 				BA2000027 /* HighlightService.swift */,
 				CC2000003 /* DailyReminder.swift */,
+				CC2000004 /* CloudSync.swift */,
+				CC2000005 /* CloudSyncMerge.swift */,
 				CC2000001 /* StreakStore.swift */,
 				0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */,
 				A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */,
@@ -470,6 +478,8 @@
 				BA1000025 /* Highlight.swift in Sources */,
 				BA1000026 /* HighlightService.swift in Sources */,
 				CC1000003 /* DailyReminder.swift in Sources */,
+				CC1000004 /* CloudSync.swift in Sources */,
+				CC1000005 /* CloudSyncMerge.swift in Sources */,
 				CC1000001 /* StreakStore.swift in Sources */,
 				BA1000027 /* NoteEditorView.swift in Sources */,
 				BA1000028 /* HighlightsListView.swift in Sources */,
@@ -667,6 +677,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BibleAI/BibleAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
@@ -685,7 +696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -700,6 +711,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BibleAI/BibleAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
@@ -718,7 +730,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

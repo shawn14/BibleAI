@@ -183,6 +183,9 @@ final class ScriptureFeedModel: ObservableObject {
     }
 
     private func save(_ verse: BibleVerse) {
-        if let data = try? JSONEncoder().encode(verse.place) { defaults.set(data, forKey: placeKey) }
+        if let data = try? JSONEncoder().encode(verse.place) {
+            defaults.set(data, forKey: placeKey)
+            if defaults === UserDefaults.standard { CloudSync.shared.push(.place) }
+        }
     }
 }
