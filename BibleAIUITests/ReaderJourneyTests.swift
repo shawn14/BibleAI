@@ -89,7 +89,13 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(search.waitForExistence(timeout: 5))
         search.tap()
         search.typeText("John 3:16")
-        app.buttons["passage.openReference"].tap()
+        // The list drops its "Start Here" rows as the query arrives; tapping mid-animation can land on
+        // "The Beginning" (Genesis 1) instead of the parsed reference.
+        let openReference = app.buttons["passage.openReference"]
+        XCTAssertTrue(openReference.waitForExistence(timeout: 5))
+        let settled = NSPredicate(format: "exists == false")
+        _ = XCTWaiter.wait(for: [expectation(for: settled, evaluatedWith: app.staticTexts["The Beginning"])], timeout: 5)
+        openReference.tap()
         let john = app.buttons["reader.verse.John|3|16"]
         XCTAssertTrue(john.waitForExistence(timeout: 30))
         // The passage sheet is still animating closed when the verse first appears.
