@@ -25,7 +25,7 @@ canonical_scripts:
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
   timeout_minutes: 30
-  ask_first: [testflight, listing_push]
+  ask_first: []   # TEMP: Shawn 2026-10-29 "You do it" for the 2.0 ship; restore after
 capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
