@@ -42,6 +42,7 @@ export default async api=>{
   }
   const preview=only(only(loc.previewSets.filter(s=>s.previewType==='IPHONE_67'),'preview set').assets,'preview').attributes;
   assert.equal(preview.sourceFileChecksum,digest(pkg.videos[0].file));assert.equal(preview.assetDeliveryState?.state,'COMPLETE');
+  assert.equal(preview.videoDeliveryState?.state,'COMPLETE');assert.equal(preview.previewFrameImage?.state?.state,'COMPLETE');
   for(const v of pkg.videos.filter(v=>v.placement)){
    const p=only(loc.placements.data.filter(p=>p.attributes.placementType===v.placement&&p.attributes.placementGroup==='DEFAULT_PROFILE'),v.kind+' placement');
    assert.equal(p.attributes.state,'ACTIVE');

@@ -75,3 +75,10 @@ and two ffmpeg encoder threads. No Simulator is started by that action.
 
 The first publish_review_branch Mac password prompt expired without running; do not requeue it
 until Shawn is available to confirm. ASO sources and the app redesign remain local until then.
+
+The ASO runbook is docs/aso/README.md. inspect_aso reads the exact version/build and complete
+asset inventory; apply_aso refuses noneditable or changed Apple state and records prior values;
+verify_aso requires exact copy, ordered screenshot checksums, complete preview/video processing
+and ACTIVE creative placements. Do not call the old store-assets job directly. docs/aso/en-US
+is the BibleAI listing source. Central submit_review uses Fastfile-relative metadata, observed
+empty for BibleAI on November 1; do not stage historical root-level metadata over the new copy.

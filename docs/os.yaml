@@ -34,7 +34,7 @@ canonical_scripts:
   version_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/version-check.mjs && cat scripts/asc/version-check.out.json
   ipad_shots: bash scripts/ipad-shots.sh
   review_media: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/review-media.mjs && cat scripts/asc/review-media.out.json
-  store_assets: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/store-assets.mjs && cat scripts/asc/store-assets.out.json
+  store_assets: node scripts/aso-refresh.mjs apply
   age_rating: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/age-rating.mjs && cat scripts/asc/age-rating.out.json
   asset_state: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/asset-state.mjs && cat scripts/asc/asset-state.out.json
   fix_stuck_shots: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/fix-stuck-shots.mjs && cat scripts/asc/fix-stuck-shots.out.json

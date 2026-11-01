@@ -6,10 +6,12 @@ const APP = "6756225286";
 const VERSION = "2.0.1";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
 const aso = (p) => path.join(root, "docs/aso", p);
+const record = data => fs.appendFileSync(path.join(root, "build/aso-refresh/apply-progress.jsonl"), JSON.stringify({at:new Date().toISOString(),...data}) + "\n");
 const pngs = (dir) => fs.readdirSync(aso(dir)).filter((f) => f.endsWith(".png")).sort().map((f) => aso(path.join(dir, f)));
 async function asset(api, kind, rel, relType, relId, file, extra = {}) {
   const res = (await api.post(`/v1/${kind}`, { data: { type: kind, attributes: { fileName: path.basename(file), fileSize: fs.statSync(file).size, ...extra },
     relationships: { [rel]: { data: { type: relType, id: relId } } } } })).data;
+  record({kind: typeof kind === "string" ? kind : "video", id:res.id, file, state:"reserved"});
   for (const op of res.attributes.uploadOperations) await api.upload(op, file);
   await api.patch(`/v1/${kind}/${res.id}`, { data: { type: kind, id: res.id, attributes: { uploaded: true, sourceFileChecksum: api.md5(file) } } });
   return res.id;
@@ -28,6 +30,7 @@ async function libraryVideo(api, loc, placementType, kind, file) {
   const res = (await api.post(`/v1/appAssetLibraryVideos`, { data: { type: "appAssetLibraryVideos",
     attributes: { category: "CREATIVE_ASSETS", fileName: path.basename(file), fileSize: fs.statSync(file).size, referenceName: `BibleAI-${VERSION}-${kind}-${sha}-${Date.now()}` },
     relationships: { assetLibrary: { data: { type: "appAssetLibraries", id: APP } } } } })).data;
+  record({kind: typeof kind === "string" ? kind : "video", id:res.id, file, state:"reserved"});
   for (const op of res.attributes.uploadOperations) await api.upload(op, file);
   await api.patch(`/v1/appAssetLibraryVideos/${res.id}`, { data: { type: "appAssetLibraryVideos", id: res.id, attributes: { uploaded: true } } });
   let state;
