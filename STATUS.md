@@ -1,3 +1,19 @@
+# Current checkpoint — 2026-11-01
+
+- Resumed from the newer `claude/scroll-parity` source, preserving its2.0.1/build8 history.
+- Existing iPhone journey passed at3571938; current app Swift sources were unchanged afterward.
+  Independent feature review confirmed the rendered core flow; AI/purchases/device-only behavior remains unverified.
+- Removed the observed content cards from onboarding summary and reading completion, including
+  streak badge backgrounds. Scoped cached reader test queued as `BibleAI-test_reader-20261101-114317-ygdf`.
+- Fresh GitHub fetch: only main872beac exists;72previous commits were local-only. Review-branch
+  publication is prepared in docs/os.yaml; main merge/upload is not authorized in this continuation.
+- Apple public lookup on Nov1 returns version1.0 at$6.99; the older submission notes below do not
+  establish current review state. No store/pricing changes made.
+- Replacement rule54 permits local scoped tests without new approval. October28 approval holds
+  and full-gate-before-every-edit language below are historical and superseded.
+
+---
+
 # BibleAI status — 2026-10-30 (late afternoon)
 
 ## 2.0.1 (8) submitted for App Review 15:18 CDT (replaced 2.0 (6) at Shawn's request) — iCloud sync (Shawn: "yes" to iCloud instead of accounts)

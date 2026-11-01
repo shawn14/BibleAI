@@ -23,9 +23,10 @@ Source declarations in old README are historical, not proof of current behavior.
 
 ScriptureFeedModel/ScriptureChapterStore fetch actual KJV chapters from bible-api.com, cache chapters,
 and keep a bounded in-memory window. Never invent Scripture or load a complete monolith at launch.
-Cache only covers opened chapters; do not claim full offline availability. AIService remains the
-existing metered service, requires real configuration and spend authorization for live proof.
-Config.swift is a placeholder, not a real credential. Never commit secrets or manufacture AI answers.
+Cache only covers opened chapters; do not claim full offline availability. The active verse-study
+path is AppleStudy in VerseStudySheet.swift, using on-device FoundationModels on eligible iOS 26
+devices. AIService is legacy code, not that active study path. Device study and two-device iCloud
+sync still need real-device checks. Never commit secrets or manufacture AI answers.
 
 ## Verification and execution
 
@@ -34,17 +35,30 @@ not compile proof. prepare_dependencies installs locked CocoaPods. test_reader i
 XCTest journey via scripts/simulator-reader-proof.sh. Its name deliberately triggers runner heavy
 classification; retain normal load/memory/disk/cooldown and single-Simulator guards.
 
-Shawn approved one20-minute Air test run on2026-10-28, with resource guards. Preserve the exact
-approval scope, count and terminal job evidence in STATUS. No automatic retry after infra failure.
-Do not edit global runner policy permanently, admit other jobs or touch another session's simulator.
-The runtime wrapper cleans its owned simulator. Stop every resource this session starts.
+Local builds and scoped tests need no additional approval under Shawn's replacement rule54
+(2026-10-29). The October28 one-run approval and old blocked status are historical, not today's
+local-test policy. Preserve resource guards and one heavy native job per Mac. Use cached builds;
+stop owned simulators and helpers afterward. Do not change global runner settings.
 
-Before completion/release: run shared interaction QA plus actual required native journeys. Inventory
-source candidates, actual controls, states, persistence outcomes and raw evidence; unrun is not pass.
-Fresh-context runtime/visual refutation follows builder proof. No native/device claim from source.
+Level1: run the touched-screen journey. Level2: touched flows plus critical journeys and one
+feature review. Level3, only before a release: full suite/CI and required device checks. No
+per-control manifests or refuter for each edit. Never claim device behavior from simulator output.
+
+Critical journeys (the current ReaderJourneyTests covers the first five, except sharing/full-chapter):
+1. Complete onboarding, choose a plan, and dismiss Premium into free Scripture reading.
+2. Swipe verses and restore the saved reading place after relaunch.
+3. Find an exact passage and open its full chapter.
+4. Save a verse, edit/cancel a note, restore it after relaunch, and share.
+5. Start/complete each of the four reading plans and restore progress after relaunch.
+6. Generate verse study on an eligible device and enforce free/Premium limits.
+7. Purchase/restore through StoreKit and verify trial-reminder/daily-reminder delivery.
+8. Sync saved content and progress between two devices on the same iCloud account.
+Journeys6–8 and the stated gaps remain unverified; do not turn those into passed claims.
 
 ## Source control and release
 
 Work on claude/scroll-parity (from codex/scroll-bible) until local proof is acceptable. Main starts at872beac; no main push,
-store changes, billing changes, deployment or submission is authorized. Existing fastlane paths need
-current-source/store audit before reuse. See docs/os.yaml; no release alias is offered yet.
+store changes, billing changes, deployment or submission is authorized by this design continuation.
+The newer source includes the previously submitted2.0.1 build8; keep its history intact. Publish the
+review branch via the committed ask-first publish_review_branch action. Main merge/release requires
+Shawn's explicit go. Follow the actual docs/os.yaml actions; do not infer permission from their names.
