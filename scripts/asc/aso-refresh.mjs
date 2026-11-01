@@ -23,8 +23,9 @@ export default async api=>{
  const review=(await api.get(`/v1/appStoreVersions/${current.version.id}/appStoreReviewDetail`)).data;
  const receipt=path.join(work,'apply-before.json');
  fs.mkdirSync(work,{recursive:true});
- if(mode==='verify'){
+ if(['verify','resume-videos'].includes(mode)){
   const before=JSON.parse(fs.readFileSync(receipt,'utf8'));
+  const progress=mode==='resume-videos'?fs.readFileSync(path.join(work,'apply-progress.jsonl'),'utf8').trim().split('\n').map(line=>JSON.parse(line)):[];
   assert.equal(before.inputHash,pkg.inputHash,'Local package changed after application');
   assert.deepEqual(identity(current),identity(before.apple),'App/version/build changed');
   for(const k of ['name','subtitle','privacyPolicyUrl']) assert.equal(il.attributes[k],pkg.copy[k],`${k} differs`);
@@ -37,11 +38,33 @@ export default async api=>{
    assert.equal(set.assets.length,expected.files.length);
    for(let i=0;i<expected.files.length;i++){
     const a=set.assets[i].attributes,file=expected.files[i];
-    assert.equal(a.fileName,path.basename(file));assert.equal(a.sourceFileChecksum,digest(file));assert.equal(a.assetDeliveryState?.state,'COMPLETE');
+    assert.equal(a.fileName,path.basename(file));
+    if(mode==='resume-videos'&&a.assetDeliveryState?.state==='UPLOAD_COMPLETE'){
+     const reserved=only(progress.filter(r=>r.kind==='appScreenshots'&&r.id===set.assets[i].id),'recorded processing screenshot');
+     assert.equal(reserved.file,file);assert.equal(a.fileSize,fs.statSync(file).size);
+     assert(!a.assetDeliveryState.errors?.length,'Screenshot processing reports errors');
+    }else{
+     assert.equal(a.sourceFileChecksum,digest(file));assert.equal(a.assetDeliveryState?.state,'COMPLETE');
+    }
    }
   }
   const preview=only(only(loc.previewSets.filter(s=>s.previewType==='IPHONE_67'),'preview set').assets,'preview').attributes;
   assert.equal(preview.sourceFileChecksum,digest(pkg.videos[0].file));assert.equal(preview.assetDeliveryState?.state,'COMPLETE');
+  if(mode==='resume-videos'){
+   assert(editable.has(current.version.appStoreState)&&editable.has(info(current).appStoreState),'Listing must remain editable');
+   assert.notEqual(preview.videoDeliveryState?.state,'FAILED','Preview processing failed');
+   const creative=r=>target(r).placements.data.filter(p=>['PRODUCT_PAGE_HEADER_ASSET','APP_STORE_SEARCH_RESULTS_ASSET'].includes(p.attributes.placementType));
+   assert.deepEqual(creative(current),creative(before.apple),'Original creative placements changed');
+   const header=only(progress.filter(r=>r.kind==='header'),'reserved header');
+   assert.equal(header.file,pkg.videos.find(v=>v.kind==='header').file);
+   assert.equal(progress.filter(r=>r.kind==='search').length,0,'Search upload already began: inspect instead of repeating');
+   assert(/^[0-9a-f-]+$/i.test(header.id));
+   const resumed=path.join(work,'resume-videos-before.json');
+   assert(!fs.existsSync(resumed),'Video recovery already began: inspect instead of repeating');
+   fs.writeFileSync(resumed,JSON.stringify({inputHash:pkg.inputHash,apple:current,headerId:header.id},null,2)+'\n');
+   const assets=await uploadAssets(api,{guarded:true,videosOnly:true,existingHeaderId:header.id,expectedPlacements:creative(before.apple)});
+   return {resumed:true,assets,inputHash:pkg.inputHash,next:'verify_aso after processing; no metadata, screenshot, preview, build or pricing changes'};
+  }
   assert.equal(preview.videoDeliveryState?.state,'COMPLETE');assert.equal(preview.previewFrameImage?.state?.state,'COMPLETE');
   for(const v of pkg.videos.filter(v=>v.placement)){
    const p=only(loc.placements.data.filter(p=>p.attributes.placementType===v.placement&&p.attributes.placementGroup==='DEFAULT_PROFILE'),v.kind+' placement');
@@ -67,6 +90,6 @@ export default async api=>{
  await api.patch(`/v1/appInfoLocalizations/${il.id}`,{data:{type:'appInfoLocalizations',id:il.id,attributes:Object.fromEntries(['name','subtitle','privacyPolicyUrl'].map(k=>[k,pkg.copy[k]]))}});
  await api.patch(`/v1/appStoreVersionLocalizations/${loc.id}`,{data:{type:'appStoreVersionLocalizations',id:loc.id,attributes:Object.fromEntries(['description','keywords','promotionalText','whatsNew','supportUrl','marketingUrl'].map(k=>[k,pkg.copy[k]]))}});
  await api.patch(`/v1/appStoreReviewDetails/${review.id}`,{data:{type:'appStoreReviewDetails',id:review.id,attributes:{notes:pkg.reviewNotes}}});
- const assets=await uploadAssets(api,{guarded:true});
+ const assets=await uploadAssets(api,{guarded:true,expectedPlacements:loc.placements.data.filter(p=>['PRODUCT_PAGE_HEADER_ASSET','APP_STORE_SEARCH_RESULTS_ASSET'].includes(p.attributes.placementType))});
  return {applied:true,assets,inputHash:pkg.inputHash,next:'verify_aso after Apple processing; no review, binary, pricing or release action performed'};
 };

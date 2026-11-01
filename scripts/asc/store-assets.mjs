@@ -1,6 +1,7 @@
 // Asset upload helper. Call only through the guarded apply_aso action.
 // Existing Apple API path; 18 screenshots, one preview, two creative placements.
 import fs from "node:fs";
+import assert from "node:assert/strict";
 import path from "node:path";
 const APP = "6756225286";
 const VERSION = "2.0.1";
@@ -25,23 +26,38 @@ async function screenshotSet(api, loc, type, files) {
   for (const f of files) await asset(api, "appScreenshots", "appScreenshotSet", "appScreenshotSets", set.id, f);
   return `${files.length} ${type}`;
 }
-async function libraryVideo(api, loc, placementType, kind, file) {
+async function libraryVideo(api, loc, placementType, kind, file, options = {}) {
   const sha = api.md5(file).slice(0, 12);
-  const res = (await api.post(`/v1/appAssetLibraryVideos`, { data: { type: "appAssetLibraryVideos",
+  let res;
+  if (options.existingHeaderId && kind === "header") {
+    res = (await api.get(`/v1/appAssetLibraryVideos/${options.existingHeaderId}`)).data;
+    assert.equal(res.attributes.category, "CREATIVE_ASSETS");
+    assert.equal(res.attributes.fileName, path.basename(file));
+    assert.equal(res.attributes.fileSize, fs.statSync(file).size);
+    assert(res.attributes.referenceName.includes(`BibleAI-${VERSION}-${kind}-${sha}-`));
+  } else {
+  res = (await api.post(`/v1/appAssetLibraryVideos`, { data: { type: "appAssetLibraryVideos",
     attributes: { category: "CREATIVE_ASSETS", fileName: path.basename(file), fileSize: fs.statSync(file).size, referenceName: `BibleAI-${VERSION}-${kind}-${sha}-${Date.now()}` },
     relationships: { assetLibrary: { data: { type: "appAssetLibraries", id: APP } } } } })).data;
   record({kind: typeof kind === "string" ? kind : "video", id:res.id, file, state:"reserved"});
   for (const op of res.attributes.uploadOperations) await api.upload(op, file);
   await api.patch(`/v1/appAssetLibraryVideos/${res.id}`, { data: { type: "appAssetLibraryVideos", id: res.id, attributes: { uploaded: true } } });
-  let state;
+  }
+  let state, previousState;
   for (let i = 0; i < 60; i++) {
     state = (await api.get(`/v1/appAssetLibraryVideos/${res.id}`)).data.attributes;
-    if (!["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING"].includes(state.state)) break;
+    if (state.state !== previousState) record({kind:"video-state", assetKind:kind, id:res.id, state:state.state});
+    previousState = state.state;
+    if (!["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING", "COMPLETE"].includes(state.state)) break;
     await new Promise((r) => setTimeout(r, 10000));
   }
   if (!["PREPARE_FOR_SUBMISSION", "APPROVED"].includes(state.state))
     throw new Error(`${kind} video ${state.state}: ${JSON.stringify(state.stateDetails)}`);
-  const existing = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/placements?filter[placementType]=${placementType}&filter[placementGroup]=DEFAULT_PROFILE`)).data;
+  const existing = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/placements?filter[placementType]=${placementType}&filter[placementGroup]=DEFAULT_PROFILE&include=video`)).data;
+  if (options.expectedPlacements) {
+    const expected = options.expectedPlacements.filter(p => p.attributes.placementType === placementType);
+    assert.deepEqual(existing.map(p => [p.id, p.relationships?.video?.data?.id]), expected.map(p => [p.id, p.relationships?.video?.data?.id]), "Creative placements changed during upload");
+  }
   for (const p of existing) await api.del(`/v1/appAssetLibraryPlacements/${p.id}`);
   const placed = (await api.post(`/v1/appAssetLibraryPlacements`, { data: { type: "appAssetLibraryPlacements",
     attributes: { placementType, placementGroup: "DEFAULT_PROFILE" },
@@ -55,6 +71,7 @@ export default async (api, options = {}) => {
   const v = (await api.get(`/v1/apps/${APP}/appStoreVersions?filter[platform]=IOS&filter[versionString]=${VERSION}`)).data[0];
   if (!v) throw new Error(`no ${VERSION}`);
   const loc = (await api.get(`/v1/appStoreVersions/${v.id}/appStoreVersionLocalizations`)).data.find((l) => l.attributes.locale === "en-US").id;
+  if (!options.videosOnly) {
   log.push(await screenshotSet(api, loc, "APP_IPHONE_67", pngs("screenshots-6.9")));
   log.push(await screenshotSet(api, loc, "APP_IPHONE_61", pngs("screenshots-6.3")));
   log.push(await screenshotSet(api, loc, "APP_IPAD_PRO_3GEN_129", pngs("screenshots-ipad-13")));
@@ -65,7 +82,8 @@ export default async (api, options = {}) => {
     relationships: { appStoreVersionLocalization: { data: { type: "appStoreVersionLocalizations", id: loc } } } } })).data;
   await asset(api, "appPreviews", "appPreviewSet", "appPreviewSets", pset.id, aso("preview/BibleAI-preview-6.9.mp4"), { mimeType: "video/mp4", previewFrameTimeCode: "00:00:05:00" });
   log.push("app preview uploaded");
-  log.push(await libraryVideo(api, loc, "PRODUCT_PAGE_HEADER_ASSET", "header", aso("header-video/product-page-header.mp4")));
-  log.push(await libraryVideo(api, loc, "APP_STORE_SEARCH_RESULTS_ASSET", "search", aso("header-video/search-results.mp4")));
+  }
+  log.push(await libraryVideo(api, loc, "PRODUCT_PAGE_HEADER_ASSET", "header", aso("header-video/product-page-header.mp4"), options));
+  log.push(await libraryVideo(api, loc, "APP_STORE_SEARCH_RESULTS_ASSET", "search", aso("header-video/search-results.mp4"), options));
   return log;
 };
