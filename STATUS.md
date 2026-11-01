@@ -1,5 +1,12 @@
 # Current checkpoint — 2026-11-01
 
+- Latest owner clarification: Shawn is away from the MacBook Air and cannot authenticate now.
+  Publication/resubmission approval remains valid. Do not queue another prompt until he is at
+  the Mac. Job BibleAI-publish_review_branch-20261101-140622-wpee was safely withdrawn before
+  execution at his request: runner terminal DENIED at 14:13:16 CST, approval.allowed=false,
+  no started_at and no command log. This is withdrawn authentication, not revoked task approval.
+  No GitHub push or Apple write occurred; no BibleAI job remains queued/running.
+
 - Shawn approved publishing the reviewed changes and replacing/resubmitting the pending Apple
   listing by voice in the Pose chat (01a17d7a), explicitly: "I approve the Bible one."
   Fresh 20:05Z Apple preflight still shows 2.0.1/build 8 VALID, WAITING_FOR_REVIEW, MANUAL.

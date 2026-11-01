@@ -88,3 +88,9 @@ resubmitting the pending listing by voice in the Pose chat (01a17d7a): "I approv
 This supersedes the pending-approval hold above for GitHub main publication and the prepared ASO
 replacement/resubmission of existing2.0.1/build8 only. Keep Mac authentication, fresh preflight,
 and exact-target guards. No new binary, public manual release, or pricing change was approved.
+
+Later owner clarification: Shawn is away from the MacBook Air. The approved publication and ASO
+resubmission scope remains authorized, but do not queue another authentication prompt until he
+is at the Mac. The14:06publication prompt was withdrawn before execution and the runner recorded
+DENIED/allowed=false at14:13CST; no publishing command ran. Resume the established path without
+asking him to approve the same product scope again. Additional decisions: one at a time.
