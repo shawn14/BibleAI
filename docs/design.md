@@ -1,78 +1,48 @@
-# BibleAI — native reading redesign
+# BibleAI — native reading design
 
-## Goal and evidence
+## Goal and reference
 
-Transform BibleAI around the Scroll the Bible experience referenced by Shawn, then make the
-interface feel natural on iOS (Shawn, 2026-10-28). The outcome is a Bible people open to read,
-return to, and understand; it is not a generic chat app with a Bible tab.
+Make BibleAI a natural iOS reading app: open Scripture, understand a verse, and return to a
+clear next reading. Shawn requested Apple UX on October 28 and closer reference parity on
+October 29. Reference: https://x.com/EndrewBiz/status/2115518969104969800.
+The public 26-second video was inspected frame by frame: white screens, serif headings,
+black primary buttons, feature education, social proof, reminders, and store trial terms.
+The developer site https://scrollthebibleapp.com/ describes verse scrolling, restored place,
+study, search, and plans. Its business claims are not independently verified or our copy.
+AppleCharts research stopped at missing CLI dependencies; no review counts were invented.
 
-Reference: https://x.com/EndrewBiz/status/2115518969104969800
-Retrieved public post and inspected its 26-second video on 2026-10-28. The post is a claim
-about another app's business; its revenue is not independently verified and is not our copy.
-The demo contains white screens, serif headings, black bottom buttons, feature education,
-social proof, premium tools, reminder selection, and trial terms. The recording does not
-exercise the main reader. https://scrollthebibleapp.com/ supplies the developer's description
-of verse scrolling, saved position, study, search and plans. These are reference evidence,
-not proof of our app or of their revenue, downloads or ratings.
+## Current design
 
-AppleCharts roadmap was attempted with its existing CLI for `scroll the bible`, five apps,
-two review pages, six months. It stopped because tsx/node_modules are not installed. No package
-installation, broad crawl, or review numbers were invented. Market evidence remains incomplete.
+- The Bible / Plans / Saved, using native SwiftUI tabs, sheets, search, SF Symbols, and semantic
+  colors. Scripture is the primary reading surface; controls use clear primary/secondary weight.
+- One verse at a time, restored reading place, reference search, save, notes, and sharing.
+  Actual KJV chapters load from bible-api.com on demand into a bounded cache. Previously opened
+  chapters are cached; this is not a complete offline Bible or a multi-translation catalog.
+- Four reading plans with saved progress, day completion, and a reading streak. Typography,
+  spacing, and separators organize content. Containers are reserved for controls and overlays.
+- Onboarding follows the reference funnel, with personal reading preferences and a hold-to-commit
+  step. The superseded three-page first pass is not a product lock. Free reading remains
+  accessible by closing Premium; store trial pages appear only for eligible products.
+- Keep BibleAI branding. Show only real testimonials; the reviews page stays hidden while its
+  source is empty. Prices and trial length come from RevenueCat/store products, never invented copy.
+- Verse study uses AppleStudy in VerseStudySheet.swift and on-device FoundationModels on eligible
+  iOS 26 devices. Legacy AIService is not the current study path. Study is commentary, not a
+  validated original-language interlinear source.
+- iCloud key-value sync preserves the existing local-first storage design; it introduces no account.
 
-## User direction and current design choices
+## Verification and limits
 
-- 2026-10-28: Shawn asked for Apple UX that looks natural. Use NavigationStack, native tabs,
-  toolbars, sheets, searchable, SF Symbols, Dynamic Type, system backgrounds and semantic colors.
-- Read / Plans / Saved. Reading opens to one verse at a time, restores the last position, and
-  continues across chapter boundaries. Real KJV data only, never generated Scripture.
-- The first pass uses three brief native introduction pages. Start Reading and Skip lead to
-  the reader; Premium is a separate explicit choice. This is an implementation choice, not an
-  explicit user lock or proof of full reference-funnel parity. Trial/reminder parity stays open.
-- Keep BibleAI identity. No copied brand/icon, borrowed testimonials, fabricated review counts,
-  unsupported translation options, hardcoded prices or unverified seven-day trial promises.
-- No content cards/chips: hierarchy, spacing, and row separators. Bordered/prominent controls
-  are allowed. Long Scripture and accessibility text must expand instead of clipping/shrinking.
-- Keep existing RevenueCat integration. Match trial messaging to actual offering and eligibility;
-  neither this design change nor the reference authorizes billing changes, paid calls or release.
+Use the committed mac-run test_reader action with cached dependencies and normal resource guards.
+The XCTest journey exercises actual onboarding, free-reader access, live Scripture, swipe/save,
+note save/cancel, process relaunch, John 3:16 search, study/settings presentation, and day-one
+completion/restoration for all four plans. Screenshots are exported from the same xcresult.
+See STATUS.md for the latest observed run, source, and changes still awaiting verification.
 
-## Core three outcomes
+The existing October 30 iPhone journey passed and the iPad capture run passed. Eligible-device
+AI responses, purchase/restore, reminder delivery, and two-device iCloud sync remain unverified.
+Sharing, full-chapter navigation, larger accessibility sizes, and complete offline behavior are
+not established by that journey. Local design work does not authorize billing or store changes.
 
-1. Read Scripture instead of a social feed. Evidence: the reference product's verse-by-verse
-   description. Build: primary reader, actual chapter source, stable position, bounded chapter
-   loading, cache, native passage navigation. Verify: real app swipe/restore/chapter-boundary
-   journeys, valid scripture text and translation, offline reopened chapter.
-2. Understand and keep a meaningful verse. Evidence: reference study/search tools. Build:
-   study sheet, reference search, save, note, share. Verify: correct selected verse in every
-   outcome; note Save survives relaunch; Cancel changes nothing; removal is explicit; real
-   provider responses and original-language sources must be verified before claims.
-3. Return with a clear next reading. Evidence: developer's guided-plan description. Build:
-   native plans, exact chapter navigation, honest progress, resume. Verify: all four plans,
-   every chapter reference, persistent completion after relaunch, reset/cancel isolation.
-
-## Implementation and remaining work
-
-Current first pass implements reader and navigation source. It uses the established
-bible-api.com KJV source through a validated, per-chapter disk cache. A single public John3
-read returned36 ordered verses and exact KJV John3:16. This proves the provider response only.
-Cache is not a bundled offline Bible: only previously opened chapters can reopen offline.
-
-Still required for the complete transformation: native compile/runtime/visual evidence;
-full interaction inventory/enrollment; all reading-plan persistence outcomes; complete offline
-catalog and supported translations if retained in the final parity scope; real study provider
-configuration and cost authorization; store-backed premium/trial/reminder behavior; independent
-runtime refutation. Original-language study currently requests AI commentary, not an interlinear
-source: it must never claim scholarly word-level accuracy without a validated data source.
-
-## First verification loop
-
-1. Build and launch the actual source through a committed mac-run action in an allowed native
-   execution environment. Never weaken the Air lock or use a second simulator.
-2. Exercise onboarding → live verse → swipe → save → note/cancel/save → relaunch → search.
-   Capture all three introduction pages, reader, Saved, study, settings and all four plan
-   detail screens. Start each plan, complete day one and assert all four survive app relaunch.
-   Retain native screenshots, actual XCTest result/log, app artifact identity and cleanup.
-   This script is unrun; dark appearance, Dynamic Type, chapter-boundary/offline, removal,
-   reset and all remaining controls still need actual outcome evidence.
-3. Review the screenshots independently and expand coverage to all controls/states. Shared QA
-   currently refuses (directory unenrolled,137 source candidates before final first-pass edits).
-   No completion or release claim until this and the existing gates pass.
+Follow rule 54: scoped local tests for edits; affected flows and one independent review for a
+feature; full release gates only for an archive/upload/deploy candidate. The older first-pass
+full-interaction gate is superseded. Main merge and release require Shawn's explicit approval.

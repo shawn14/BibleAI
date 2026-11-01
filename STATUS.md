@@ -1,16 +1,23 @@
 # Current checkpoint — 2026-11-01
 
-- Resumed from the newer `claude/scroll-parity` source, preserving its2.0.1/build8 history.
-- Existing iPhone journey passed at3571938; current app Swift sources were unchanged afterward.
-  Independent feature review confirmed the rendered core flow; AI/purchases/device-only behavior remains unverified.
-- Removed the observed content cards from onboarding summary and reading completion, including
-  streak badge backgrounds. Scoped cached reader test queued as `BibleAI-test_reader-20261101-114317-ygdf`.
-- Fresh GitHub fetch: only main872beac exists;72previous commits were local-only. Review-branch
-  publication is prepared in docs/os.yaml; main merge/upload is not authorized in this continuation.
-- Apple public lookup on Nov1 returns version1.0 at$6.99; the older submission notes below do not
-  establish current review state. No store/pricing changes made.
-- Replacement rule54 permits local scoped tests without new approval. October28 approval holds
-  and full-gate-before-every-edit language below are historical and superseded.
+- Native Apple-style redesign is locally verified on iPhone 16: clearer reading hierarchy,
+  system navigation/sheets, and unboxed onboarding summary and reading completion.
+- One approved Air run finished in 664.3 seconds (11m04s), within the 20-minute cap:
+  `BibleAI-test_reader-20261101-114317-ygdf`, exit 0. Reader journey passed in 201.036 seconds,
+  zero failures; the separate recording-only test was intentionally skipped. Owned simulator deleted.
+- Verified onboarding/free reading, actual KJV swipe/search, save/note/cancel/relaunch, and day-one
+  completion/restoration for all four plans. Independent feature review completed. Updated screens:
+  [reader](docs/design-preview/reader.png), [onboarding](docs/design-preview/onboarding-plan.png),
+  [completion](docs/design-preview/reading-complete.png).
+- Source tested: `2841df3`; later changes are documentation and these exported screenshots only.
+  Existing October 30 iPad capture passed before this typography pass; no second native run started.
+- Preserved the newer `claude/scroll-parity` history, including the recorded 2.0.1/build 8 submission.
+  GitHub main remains `872beac405913046496effcf9aeaffdcd76b1184`; branch publication is next through
+  `publish_review_branch`. Main merge/upload is not authorized by this design continuation.
+- Device AI, purchase/restore, reminder delivery, and two-device iCloud remain unverified.
+  Public Apple lookup on November 1 returned version 1.0 at $6.99; no store/pricing changes made.
+- Replacement rule 54 controls test scope; older approval holds and full-gate language below are
+  historical. This session honored Shawn's additional one-run, 20-minute Air limit.
 
 ---
 

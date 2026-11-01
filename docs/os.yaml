@@ -10,7 +10,9 @@ app:
 data_sources:
   - https://bible-api.com/ (KJV, requested one chapter at a time)
   - On-device saved reading position, highlights, notes and reading-plan progress
-  - Existing AIService and RevenueCat integration (provider/store verification outstanding)
+  - On-device FoundationModels verse study on eligible iOS 26 devices (device proof outstanding)
+  - Existing RevenueCat store products and eligibility (purchase/restore proof outstanding)
+  - iCloud key-value sync (two-device proof outstanding)
 canvas: null
 canonical_deploy_script: null
 canonical_scripts:
