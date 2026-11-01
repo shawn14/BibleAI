@@ -1,5 +1,6 @@
 // Read-only inventory for the complete BibleAI listing refresh. No writes or review changes.
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 const APP='6756225286';
 export default async api=>{
  const app=(await api.get(`/v1/apps/${APP}`)).data;
@@ -31,7 +32,16 @@ export default async api=>{
   if(['WAITING_FOR_REVIEW','IN_REVIEW','READY_FOR_REVIEW','UNRESOLVED_ISSUES'].includes(submission.attributes.state))
    reviewSubmissions.push({...submission,items:await api.all(`/v1/reviewSubmissions/${submission.id}/items?include=appStoreVersion`)});
  }
- return {observedAt:new Date().toISOString(),reviewSubmissions,app:{id:APP,...app.attributes},
+ const uploadedVideos=[];
+ const progress='build/aso-refresh/apply-progress.jsonl';
+ if(fs.existsSync(progress)){
+  const rows=fs.readFileSync(progress,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));
+  for(const row of rows.filter(r=>['header','search'].includes(r.kind))){
+   assert(/^[0-9a-f-]+$/i.test(row.id));
+   uploadedVideos.push({kind:row.kind,resource:(await api.get(`/v1/appAssetLibraryVideos/${row.id}`)).data});
+  }
+ }
+ return {observedAt:new Date().toISOString(),uploadedVideos,reviewSubmissions,app:{id:APP,...app.attributes},
   version:{id:version.id,...version.attributes},build,appInfos,localizations,
   customProductPages:await api.all(`/v1/apps/${APP}/appCustomProductPages`)};
 };
