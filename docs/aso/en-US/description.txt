@@ -1,29 +1,28 @@
-What if scrolling actually fed your soul?
+Make room for Scripture, one verse at a time.
 
-BibleAI turns the habit you already have into time in God's Word. Instead of an endless feed, you swipe through the Bible one verse at a time, and the app remembers exactly where you left off.
+BibleAI is a quiet place to read the King James Version, keep meaningful passages, and build a daily reading habit. Open the Bible, swipe to the next verse, and return to your saved place when you come back.
 
-ONE VERSE AT A TIME
-Each verse fills the screen in a clean, quiet layout. Swipe up for the next one and keep going straight into the next chapter. Tap the book and chapter to jump anywhere in all 66 books of the King James Version.
-
-EVERY VERSE HAS A STORY
-Tap any verse to open a study. Choose Explain This Verse, Explain It Simply, Historical Context, Related Scripture, or Original Language for key Greek and Hebrew words. Studies run privately on your iPhone with Apple Intelligence.
-
-A PLAN MADE FOR YOU
-Answer a few quick questions about your goal, how well you know the Bible and how much time you have, and BibleAI starts you on a reading plan that fits. Pick a time of day and we'll send one gentle reminder to read.
-
-READ THE WHOLE BIBLE, ONE DAY AT A TIME
-Follow a guided reading plan: a Gospel Tour, Psalms in a Month, the New Testament in 30 Days, or a month of Proverbs. Finish a day and see your reading streak grow, with a verse to carry with you.
+READ AT YOUR OWN PACE
+Give each verse your attention. Swipe through a chapter or find a passage by reference, such as John 3:16. Adjust the text size and choose serif or system type for a comfortable reading experience.
 
 KEEP WHAT SPEAKS TO YOU
-Heart a verse to save it, add a personal note, and share Scripture with friends and family. Your saved verses and notes stay on your device.
+Save a verse with a tap. Add a personal note, return to it in Saved, and share Scripture with someone you care about.
 
-SIMPLE BY DESIGN
-No ads, no feed, no noise. Just Scripture, with a serif reading font, adjustable text size, and light and dark mode.
+FOLLOW A CLEAR NEXT STEP
+Choose from four guided plans: Gospel Tour, Psalms in a Month, New Testament in 30 Days, and Proverbs Wisdom. Mark a reading complete, see your progress, and keep going when you are ready.
 
-BIBLEAI PREMIUM
-Reading, saving, notes, reading plans and streaks are free. Free users get 5 verse studies a day. Premium unlocks unlimited studies. Choose a monthly or yearly subscription; the yearly plan starts with a 7-day free trial for eligible new subscribers, and we'll remind you before it ends. Payment is charged to your Apple ID and renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings.
+BUILD A DAILY HABIT
+Choose a reading reminder and see your streak as you complete plan readings. Your next session can be a few quiet minutes with Scripture.
 
-Verse study requires Apple Intelligence (iPhone 15 Pro or newer with iOS 26). AI study is a reading aid; read it alongside the chapter.
+EXPLORE A PASSAGE
+Verse-study options include a simple explanation, historical context, related Scripture, and language notes. Study requires a compatible device with iOS 26 or iPadOS 26, Apple Intelligence enabled, and its on-device model available. AI commentary can make mistakes; use it as a reading aid and check it against the passage.
+
+READING AND PREMIUM
+Bible reading, saved verses, notes, reading plans, and streaks do not require a subscription. On supported devices, the free study allowance is five studies per day; Premium offers unlimited studies. Monthly and yearly plans are available. Any introductory trial is shown with its eligibility, duration, renewal price, and terms before purchase.
+
+Payment is charged to your Apple ID. Subscriptions renew automatically unless canceled at least 24 hours before the current period ends. Manage or cancel your subscription in your Apple account settings. Deleting the app does not cancel a subscription.
+
+An internet connection is needed to load chapters you have not opened before. Previously opened chapters are cached on your device.
 
 Terms of Use: https://www.bibleaicompanion.com/terms
 Privacy Policy: https://www.bibleaicompanion.com/privacy

@@ -1,5 +1,14 @@
 # Current checkpoint — 2026-11-01
 
+- Added Shawn's complete ASO refresh request (Milepost workflow). New copy and 12 real-screen
+  screenshot drafts are in docs/aso; video encoder is prepared. Current Apple read confirms
+  2.0.1 WAITING_FOR_REVIEW and live 1.0 READY_FOR_SALE. No store writes made.
+- Branch publication job `BibleAI-publish_review_branch-20261101-115701-lbto` expired at its
+  Mac password prompt; nothing was pushed. Wait for Shawn to be at the Mac before requeuing.
+- AppleCharts research succeeded: 150 sampled recent reviews across three apps, incomplete
+  three-month coverage; retained under docs/aso/research. No modeled revenue claims used.
+
+
 - Native Apple-style redesign is locally verified on iPhone 16: clearer reading hierarchy,
   system navigation/sheets, and unboxed onboarding summary and reading completion.
 - One approved Air run finished in 664.3 seconds (11m04s), within the 20-minute cap:

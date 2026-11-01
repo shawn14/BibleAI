@@ -62,3 +62,16 @@ store changes, billing changes, deployment or submission is authorized by this d
 The newer source includes the previously submitted2.0.1 build8; keep its history intact. Publish the
 review branch via the committed ask-first publish_review_branch action. Main merge/release requires
 Shawn's explicit go. Follow the actual docs/os.yaml actions; do not infer permission from their names.
+
+## November 1 ASO continuation
+
+Shawn requested the complete App Store listing/creative refresh used for Milepost. This authorizes
+preparing and updating listing text, screenshots, preview, and header/search assets when editable.
+Live read on November 1: 2.0.1 is WAITING_FOR_REVIEW; do not cancel or resubmit that review without
+explicit approval after the complete asset package is ready. No new binary or pricing change is
+authorized. The one approved Air test already passed within 20 minutes; reuse retained app captures.
+Render the three video exports with render_store_videos, which uses the normal runner load guard
+and two ffmpeg encoder threads. No Simulator is started by that action.
+
+The first publish_review_branch Mac password prompt expired without running; do not requeue it
+until Shawn is available to confirm. ASO sources and the app redesign remain local until then.

@@ -1,10 +1,9 @@
-BibleAI 2.0 is a complete redesign.
+A fresh way to spend time with Scripture.
 
-• Swipe through Scripture one verse at a time, and pick up right where you left off
-• A reading plan made for you, plus a daily reminder at the time you choose
-• Reading streaks: finish a day and watch your streak grow
-• Tap any verse for a study: explain it, explain it simply, history, related Scripture and original language
-• Studies run privately on your iPhone with Apple Intelligence
-• Save verses with a heart, add notes and share
-• Your saved verses, notes, plans and streak sync with iCloud, so they follow you to a new iPhone or your iPad. No account needed
-• A fresh new look and icon
+• Read the Bible one verse at a time and return to your saved place
+• Find a passage by book, chapter, and verse
+• Save meaningful verses, add notes, and share
+• Follow four reading plans and keep track of completed readings
+• Build a reading streak and choose a daily reminder
+• Open verse-study tools on compatible Apple Intelligence devices
+• A quieter native design for iPhone and iPad

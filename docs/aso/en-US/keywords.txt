@@ -1,1 +1,1 @@
-swipe,kjv,study,devotional,reading,plan,god,jesus,christian,faith,psalms,gospel,proverbs,word,hope
+kjv,study,devotional,reading,plan,christian,faith,jesus,psalms,gospel,proverbs,notes,streak
