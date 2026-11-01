@@ -697,9 +697,9 @@ private struct CommitPage: View {
                         if let minutes { row("clock", "Each day", minutes >= 15 ? "15+ minutes" : "\(minutes) minutes") }
                         if let reminder, reminder != .off { row("bell", "Reminder", reminder.detail) }
                     }
-                    .padding(20)
+                    .padding(.vertical, 8)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(white: 0.955), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    Divider()
                     Text("People who read 7 days in a row are far more likely to keep going. Will you commit to the next 7 days?")
                         .font(.subheadline).foregroundStyle(ScrollStyle.muted).multilineTextAlignment(.center)
                 }

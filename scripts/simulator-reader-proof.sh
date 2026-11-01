@@ -39,4 +39,5 @@ xcrun simctl bootstatus "$owned" -b
 } 2>&1 | tee "$log"
 xcrun xcresulttool get test-results summary --path "$result" --format json > "$result.summary.json"
 echo 'RUN_EXIT 0' | tee -a "$log"
+xcrun xcresulttool export attachments --path "$result" --output-path "$PWD/build/proof/$stamp-attachments"
 echo "Raw native evidence: $result"

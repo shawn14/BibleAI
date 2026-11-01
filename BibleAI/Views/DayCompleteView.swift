@@ -58,16 +58,16 @@ struct DayCompleteView: View {
                         Text(verse.reference).font(.footnote).foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .padding(.vertical, 16)
+
+                    Divider()
 
                     VStack(alignment: .leading, spacing: 12) {
                         HStack(spacing: 14) {
                             Image(systemName: "flame.fill")
                                 .font(.title)
-                                .foregroundStyle(.white)
-                                .frame(width: 56, height: 56)
-                                .background(Circle().fill(LinearGradient(colors: [.orange, .red], startPoint: .top, endPoint: .bottom)))
+                                .foregroundStyle(.orange)
+                                .frame(width: 44, height: 44)
                                 .accessibilityHidden(true)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("\(streak)").font(.largeTitle.bold()).monospacedDigit()
@@ -82,16 +82,15 @@ struct DayCompleteView: View {
                                 VStack(spacing: 8) {
                                     Text(day.date.formatted(.dateTime.weekday(.narrow)))
                                         .font(.caption2).foregroundStyle(.secondary)
-                                    ZStack {
-                                        Circle().fill(day.read ? Color.orange : Color(.tertiarySystemFill))
-                                        if day.read {
-                                            Image(systemName: "flame.fill").font(.caption).foregroundStyle(.white)
+                                    Image(systemName: day.read ? "checkmark" : "minus")
+                                        .font(.body.weight(.semibold))
+                                        .foregroundStyle(day.read ? Color.orange : Color.secondary)
+                                        .frame(width: 30, height: 30)
+                                        .overlay(alignment: .bottom) {
+                                            if Calendar.current.isDateInToday(day.date) {
+                                                Rectangle().fill(Color.primary).frame(height: 2)
+                                            }
                                         }
-                                        if Calendar.current.isDateInToday(day.date) {
-                                            Circle().stroke(Color.primary, lineWidth: 2).padding(-3)
-                                        }
-                                    }
-                                    .frame(width: 30, height: 30)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .accessibilityElement(children: .ignore)
@@ -99,8 +98,7 @@ struct DayCompleteView: View {
                             }
                         }
                     }
-                    .padding(20)
-                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .padding(.vertical, 16)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 12)
