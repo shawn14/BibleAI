@@ -3,15 +3,18 @@
 - Shawn confirmed publication/resubmission approval in this chat and requested Scroll and Bible
   in the name. Prepared title: Scroll Bible: Daily Verses. Source icon/in-app label: Scroll Bible.
   The latter needs a later binary; same-build8 ASO approval does not upload a new binary.
-  Header/search videos are being refreshed for the new brand; the reviewed screenshots and
-  21-second interaction preview have no old brand label and remain unchanged.
+  Header/search videos now show SCROLL BIBLE. Guarded render_store_brand passed at16:48CST
+  in95.9sec, with both encoded posters visually checked. Full ASO format/copy check passed.
+  Reviewed screenshots and21-second interaction preview contain no old brand and are unchanged.
 
-- Latest owner clarification: Shawn is away from the MacBook Air and cannot authenticate now.
+- Earlier availability hold (superseded): Shawn was away from the MacBook Air.
   Publication/resubmission approval remains valid. Do not queue another prompt until he is at
   the Mac. Job BibleAI-publish_review_branch-20261101-140622-wpee was safely withdrawn before
   execution at his request: runner terminal DENIED at 14:13:16 CST, approval.allowed=false,
-  no started_at and no command log. This is withdrawn authentication, not revoked task approval.
-  No GitHub push or Apple write occurred; no BibleAI job remains queued/running.
+  no started_at and no command log. This was withdrawn authentication, not revoked task approval.
+  Shawn subsequently said "I’m at the Air—reopen it" in Milepost chat01a182fa at16:37CST;
+  its upload job then authenticated successfully and passed at16:46CST. The approved BibleAI
+  publication can resume through the existing Mac prompt. No BibleAI push or Apple write yet.
 
 - Shawn approved publishing the reviewed changes and replacing/resubmitting the pending Apple
   listing by voice in the Pose chat (01a17d7a), explicitly: "I approve the Bible one."
@@ -49,11 +52,11 @@
   completion/restoration for all four plans. Independent feature review completed. Updated screens:
   [reader](docs/design-preview/reader.png), [onboarding](docs/design-preview/onboarding-plan.png),
   [completion](docs/design-preview/reading-complete.png).
-- Source tested: `2841df3`; later changes are documentation and these exported screenshots only.
+- Native source tested: `2841df3`; later changes include ASO assets and the uncompiled display-name/text rename.
   Existing October 30 iPad capture passed before this typography pass; no second native run started.
 - Preserved the newer `claude/scroll-parity` history, including the recorded 2.0.1/build 8 submission.
   GitHub main remains `872beac405913046496effcf9aeaffdcd76b1184`; branch publication is next through
-  `publish_review_branch`. Main merge/upload is not authorized by this design continuation.
+  `publish_review_branch`. The later explicit ASO approval above authorizes main publication.
 - Device AI, purchase/restore, reminder delivery, and two-device iCloud remain unverified.
   Public Apple lookup on November 1 returned version 1.0 at $6.99; no store/pricing changes made.
 - Replacement rule 54 controls test scope; older approval holds and full-gate language below are

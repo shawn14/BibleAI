@@ -3,8 +3,8 @@
 November 1 draft for the existing iOS 2.0.1/build 8. App Store title: **Scroll Bible: Daily Verses**. **Not uploaded.** The inspected Apple version
 is WAITING_FOR_REVIEW. The full local package passed format/copy checks and independent
 visual review on November 1. Shawn approved publication and replacement/resubmission of this
-listing by voice later that day. He is away from the Mac, so authentication and all store writes
-remain pending. Do not queue another prompt until he is available. The latest native source also has an unboxed
+listing by voice later that day. He confirmed being back at the Air at16:37CST; publication can resume through the existing
+Mac authentication path. No store writes have occurred yet. The latest native source also has an unboxed
 onboarding/completion pass and the Scroll Bible icon label/in-app name; these source changes
 are not in Apple's pending build 8. The display-label rename requires the next binary.
 

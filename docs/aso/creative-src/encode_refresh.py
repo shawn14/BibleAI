@@ -55,6 +55,6 @@ for key,name in [('header','product-page-header'),('search','search-results')]:
   'encoder':'creative-src/encode_refresh.py'
  },indent=2)+'\n')
  print('Encoded',name,flush=True)
-print('All three videos encoded serially with two encoder threads.',flush=True)
+print('Requested store videos encoded serially with two encoder threads.',flush=True)
 
 subprocess.run(['node','scripts/aso-refresh.mjs','check'],check=True,timeout=60)

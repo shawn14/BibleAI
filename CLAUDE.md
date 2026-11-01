@@ -100,3 +100,7 @@ Scroll Bible: Daily Verses; icon label and in-app display brand: Scroll Bible. T
 bundle ID, product IDs, storage keys, repository and service URLs stay as existing identifiers.
 The prepared listing/media rename can accompany the approved build8 ASO update; icon-label and
 in-app text source changes require a later binary and are not already in uploaded build8.
+
+November 1,16:37CST: owner confirmed being at the Air in Milepost chat01a182fa; its upload
+authentication subsequently succeeded. The availability hold is superseded. Resume the already
+approved BibleAI publication/resubmission through the existing guarded Mac actions.

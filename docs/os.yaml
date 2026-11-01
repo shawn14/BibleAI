@@ -54,4 +54,4 @@ capabilities:
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
 release:
   status: unverified
-  note: Existing fastlane files require source/store audit. No deploy or release action authorized.
+  note: Same-build8 ASO publication and resubmission explicitly approved November1; new binary and manual public release remain outside scope.
