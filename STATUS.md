@@ -3,7 +3,8 @@
 - Renamed source/ASO media merged through PR1 at GitHub main5086fde. Both recorded build8
   sourcec63c68d and tested native source2841df3 are ancestors. Cancellation then stopped before
   any Apple write: the default review-item response omitted appStoreVersion relationships.
-  Added the documented include option; read-only verification is next. Existing review intact.
+  Added the documented include option; read-only inspect_aso passed at23:09:39Z and returned
+  the exact2.0.1 version id for the sole review item. Existing review remains intact.
 
 - Shawn confirmed publication/resubmission approval in this chat and requested Scroll and Bible
   in the name. Prepared title: Scroll Bible: Daily Verses. Source icon/in-app label: Scroll Bible.

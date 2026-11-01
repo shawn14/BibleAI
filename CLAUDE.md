@@ -107,4 +107,4 @@ approved BibleAI publication/resubmission through the existing guarded Mac actio
 
 ASC review-item reads must request `?include=appStoreVersion`. The November1 actual default
 response contained only item id/state, causing the exact-version cancellation guard to refuse
-before any write. Keep the positive version-id match; never fall back to one active submission.
+before any write. The corrected read returned the exact version id at23:09:39Z. Keep the positive version-id match; never fall back to one active submission.
