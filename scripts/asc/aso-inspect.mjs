@@ -26,7 +26,12 @@ export default async api=>{
   const placements=await api.get(`/v1/appStoreVersionLocalizations/${loc.id}/placements?include=image,video`);
   localizations.push({id:loc.id,...loc.attributes,screenshotSets,previewSets,placements});
  }
- return {observedAt:new Date().toISOString(),app:{id:APP,...app.attributes},
+ const reviewSubmissions=[];
+ for(const submission of await api.all(`/v1/reviewSubmissions?filter[app]=${APP}&filter[platform]=IOS`)){
+  if(['WAITING_FOR_REVIEW','IN_REVIEW','READY_FOR_REVIEW','UNRESOLVED_ISSUES'].includes(submission.attributes.state))
+   reviewSubmissions.push({...submission,items:await api.all(`/v1/reviewSubmissions/${submission.id}/items?include=appStoreVersion`)});
+ }
+ return {observedAt:new Date().toISOString(),reviewSubmissions,app:{id:APP,...app.attributes},
   version:{id:version.id,...version.attributes},build,appInfos,localizations,
   customProductPages:await api.all(`/v1/apps/${APP}/appCustomProductPages`)};
 };

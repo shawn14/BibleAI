@@ -16,7 +16,7 @@ export default async api=>{
  const active=(await api.all(`/v1/reviewSubmissions?filter[app]=${APP}&filter[platform]=IOS`)).filter(s=>['WAITING_FOR_REVIEW','IN_REVIEW','READY_FOR_REVIEW','UNRESOLVED_ISSUES'].includes(s.attributes.state));
  assert.equal(active.length,1,'Expected exactly one active BibleAI iOS review');
  const sub=active[0];assert.equal(sub.attributes.state,'WAITING_FOR_REVIEW');
- const items=await api.all(`/v1/reviewSubmissions/${sub.id}/items`);
+ const items=await api.all(`/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion`);
  const ids=items.map(i=>i.relationships?.appStoreVersion?.data?.id).filter(Boolean);
  assert(ids.includes(version.id),'Review does not contain the approved version');
  assert(ids.every(id=>id===version.id),'Review contains another version');
