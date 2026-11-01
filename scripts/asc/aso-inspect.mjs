@@ -29,7 +29,7 @@ export default async api=>{
  const reviewSubmissions=[];
  for(const submission of await api.all(`/v1/reviewSubmissions?filter[app]=${APP}&filter[platform]=IOS`)){
   if(['WAITING_FOR_REVIEW','IN_REVIEW','READY_FOR_REVIEW','UNRESOLVED_ISSUES'].includes(submission.attributes.state))
-   reviewSubmissions.push({...submission,items:await api.all(`/v1/reviewSubmissions/${submission.id}/items`)});
+   reviewSubmissions.push({...submission,items:await api.all(`/v1/reviewSubmissions/${submission.id}/items?include=appStoreVersion`)});
  }
  return {observedAt:new Date().toISOString(),reviewSubmissions,app:{id:APP,...app.attributes},
   version:{id:version.id,...version.attributes},build,appInfos,localizations,
