@@ -1,13 +1,24 @@
 # Current checkpoint — 2026-11-01
 
-- Added Shawn's complete ASO refresh request (Milepost workflow). New copy and 12 real-screen
-  screenshot drafts are in docs/aso; video encoder is prepared. Current Apple read confirms
-  2.0.1 WAITING_FOR_REVIEW and live 1.0 READY_FOR_SALE. No store writes made.
-- Branch publication job `BibleAI-publish_review_branch-20261101-115701-lbto` expired at its
-  Mac password prompt; nothing was pushed. Wait for Shawn to be at the Mac before requeuing.
-- AppleCharts research succeeded: 150 sampled recent reviews across three apps, incomplete
-  three-month coverage; retained under docs/aso/research. No modeled revenue claims used.
-
+- Complete ASO draft is ready and independently reviewed: English title/subtitle/keywords,
+  promotional text/description/release and review notes, 18 actual-screen screenshots (6 large
+  iPhone, 6 medium iPhone, 6 iPad), a 21-second App Preview, and two 10.5-second header/search loops.
+  Open docs/aso/README.md or docs/aso/preview-board.png. No Apple writes made.
+- Actual formats/copy limits passed in guarded render_store_videos (87.1 sec) and the scoped
+  preview-ending correction render_store_preview (13.5 sec). Independent review inspected all
+  screenshots and encoded videos, captions, posters, loop seams and final preview frame.
+- Apple inventory read at 18:32Z: 2.0.1/build 8 VALID, WAITING_FOR_REVIEW, MANUAL release,
+  en-US only. Existing screenshot sets: 6 large iPhone + 6 iPad; the new medium set is prepared.
+  Public 1.0 remains live. inspect_aso/apply_aso/verify_aso reuse the existing ASC path with
+  exact version/build, inspected-state and full processing/readback checks. Upload path is unrun.
+- Publication/resubmission approval requested after the complete package review. Do not cancel
+  review, merge main, submit another build or change pricing without the relevant explicit go.
+- Branch publication job BibleAI-publish_review_branch-20261101-115701-lbto expired at its Mac
+  password prompt; nothing was pushed. Requeue only once Shawn is available to confirm.
+- AppleCharts research: 150 sampled reviews across three apps, incomplete three-month coverage;
+  retained under docs/aso/research. Support/marketing/privacy/terms URLs all returned HTTP 200.
+- Removed this session's research dependency install and temporary frame/caption inputs. Captures,
+  source recording and final assets are retained in docs/aso so they can be reproduced cheaply.
 
 - Native Apple-style redesign is locally verified on iPhone 16: clearer reading hierarchy,
   system navigation/sheets, and unboxed onboarding summary and reading completion.

@@ -1,7 +1,8 @@
 # BibleAI App Store refresh
 
 November 1 draft for the existing iOS 2.0.1/build 8. **Not uploaded.** The inspected Apple version
-is WAITING_FOR_REVIEW. The new copy and screenshots replace the October 30 set only after
+is WAITING_FOR_REVIEW. The full local package passed format/copy checks and independent
+visual review on November 1. The new copy and screenshots replace the October 30 set only after
 Shawn approves interrupting that review. The latest native source also has an unboxed
 onboarding/completion pass; that source change is not in Apple's pending build 8.
 
