@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Encode a captioned real-UI preview and two quiet, seamless store loops, serially."""
 from pathlib import Path
-import json, shutil, subprocess
+import json, shutil, subprocess, sys
 HERE=Path(__file__).resolve().parent
 ASO=HERE.parent
 WORK=HERE.parents[2]/'build/aso-refresh'
@@ -17,7 +17,7 @@ def output(path,seconds):
          '-profile:v','high','-pix_fmt','yuv420p','-c:a','aac','-b:a','96k','-movflags','+faststart',str(path)]
 
 # Preserve the app interaction recording, skipping its introductory marketing screen.
-args=['-ss','8','-t','21.5','-i',inputs['previewSource']]
+args=['-ss','8','-t','21','-i',inputs['previewSource']]
 for c in inputs['previewCaptions']: args += ['-loop','1','-framerate','30','-i',c['file']]
 filters=['[0:v]scale=732:1586,pad=886:1920:77:260:white,setsar=1[base]']
 last='base'
@@ -26,8 +26,11 @@ for i,c in enumerate(inputs['previewCaptions'],1):
  filters.append(f"[{last}][{i}:v]overlay=0:0:enable='gte(t,{c['start']})*lt(t,{c['end']})'[{label}]")
  last=label
 preview=ASO/'preview/BibleAI-preview-6.9.mp4'
-run(args+['-filter_complex',';'.join(filters),'-map',f'[{last}]','-map','0:a?']+output(preview,21.5))
+run(args+['-filter_complex',';'.join(filters),'-map',f'[{last}]','-map','0:a?']+output(preview,21))
 print('Encoded real-UI app preview',flush=True)
+if '--preview-only' in sys.argv:
+ subprocess.run(['node','scripts/aso-refresh.mjs','check'],check=True,timeout=60)
+ sys.exit(0)
 
 for key,name in [('header','product-page-header'),('search','search-results')]:
  scenes=inputs['scenes'][key]

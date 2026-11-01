@@ -24,6 +24,7 @@ canonical_scripts:
   apply_aso: node scripts/aso-refresh.mjs apply
   verify_aso: node scripts/aso-refresh.mjs verify
   render_store_videos: bash scripts/encode-simulator-store-media.sh
+  render_store_preview: bash scripts/encode-simulator-store-media.sh --preview-only
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
   testflight: cd ~/projects/fastlane-configs && fastlane beta app:bibleai

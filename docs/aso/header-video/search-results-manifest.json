@@ -4,29 +4,16 @@
     2560
   ],
   "fps": 30,
-  "seconds": 10.0,
+  "seconds": 10.5,
   "loop": true,
   "audio": "silent stereo AAC 48 kHz",
+  "posterSecond": 5,
+  "source": "Retained real October 30 BibleAI Simulator captures; see creative-src/captures/README.md",
   "scenes": [
-    [
-      "08",
-      "Swipe through the Bible, one verse at a time."
-    ],
-    [
-      "13",
-      "Guided plans for every day."
-    ],
-    [
-      "10",
-      "Every verse gets the whole screen."
-    ],
-    [
-      "11",
-      "Tap any verse for a deep study."
-    ]
+    "Genesis reader",
+    "John 3:16 reader",
+    "Reading plans",
+    "Genesis reader"
   ],
-  "hold_s": 2.0,
-  "crossfade_s": 0.5,
-  "captures": "BibleAI 2.0 simulator captures 2026-10-30 (release suite run 20261030T140422Z)",
-  "poster": "Apple selects the 5 s frame; scene at 5 s is John 3:16"
+  "encoder": "creative-src/encode_refresh.py"
 }
