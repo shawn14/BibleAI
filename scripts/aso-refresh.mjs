@@ -6,10 +6,11 @@ if(mode==='check'){
  const p=localPackage(true);
  console.log(JSON.stringify({localPackage:'passed',screenshots:p.sets.reduce((n,s)=>n+s.files.length,0),videos:p.videos.map(v=>({kind:v.kind,width:v.width,height:v.height,seconds:v.seconds})),copyLengths:Object.fromEntries(Object.entries(p.copy).map(([k,v])=>[k,[...v].length]))},null,2));
 }else{
- if(!['apply','verify'].includes(mode)) throw new Error('Choose check, apply, or verify');
+ if(!['apply','verify','cancel'].includes(mode)) throw new Error('Choose check, apply, verify, or cancel');
  if(!process.env.MAC_RUNNER_JOB_ID) throw new Error('Use the committed mac-run action');
- execFileSync(process.execPath,['scripts/asc/asc.mjs','scripts/asc/aso-refresh.mjs'],{stdio:'inherit',env:{...process.env,BIBLEAI_ASO_MODE:mode}});
- const r=JSON.parse(fs.readFileSync('scripts/asc/aso-refresh.out.json','utf8'));
+ const job=mode==='cancel'?'scripts/asc/swap-to-201.mjs':'scripts/asc/aso-refresh.mjs';
+ execFileSync(process.execPath,['scripts/asc/asc.mjs',job],{stdio:'inherit',env:{...process.env,BIBLEAI_ASO_MODE:mode}});
+ const r=JSON.parse(fs.readFileSync(job.replace(/\.mjs$/,'.out.json'),'utf8'));
  if(!r.ok) throw new Error(r.error);
  fs.mkdirSync('build/aso-refresh',{recursive:true});fs.writeFileSync(`build/aso-refresh/${mode}-result.json`,JSON.stringify(r,null,2)+'\n');
  console.log(JSON.stringify(r.result,null,2));

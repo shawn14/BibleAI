@@ -1,5 +1,12 @@
 # Current checkpoint — 2026-11-01
 
+- Shawn approved publishing the reviewed changes and replacing/resubmitting the pending Apple
+  listing by voice in the Pose chat (01a17d7a), explicitly: "I approve the Bible one."
+  Fresh 20:05Z Apple preflight still shows 2.0.1/build 8 VALID, WAITING_FOR_REVIEW, MANUAL.
+  Scope: GitHub publication and ASO replacement/resubmission of the same build; no new binary
+  or pricing change. Additional decisions must be presented one at a time.
+
+
 - Complete ASO draft is ready and independently reviewed: English title/subtitle/keywords,
   promotional text/description/release and review notes, 18 actual-screen screenshots (6 large
   iPhone, 6 medium iPhone, 6 iPad), a 21-second App Preview, and two 10.5-second header/search loops.

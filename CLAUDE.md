@@ -82,3 +82,9 @@ verify_aso requires exact copy, ordered screenshot checksums, complete preview/v
 and ACTIVE creative placements. Do not call the old store-assets job directly. docs/aso/en-US
 is the BibleAI listing source. Central submit_review uses Fastfile-relative metadata, observed
 empty for BibleAI on November 1; do not stage historical root-level metadata over the new copy.
+
+November 1, later: Shawn explicitly approved publishing the reviewed changes and replacing/
+resubmitting the pending listing by voice in the Pose chat (01a17d7a): "I approve the Bible one."
+This supersedes the pending-approval hold above for GitHub main publication and the prepared ASO
+replacement/resubmission of existing2.0.1/build8 only. Keep Mac authentication, fresh preflight,
+and exact-target guards. No new binary, public manual release, or pricing change was approved.
