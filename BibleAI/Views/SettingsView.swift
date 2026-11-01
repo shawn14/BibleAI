@@ -41,7 +41,7 @@ struct SettingsView: View {
                     Text("Opened chapters are cached on this iPhone. New chapters need a connection.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
-                Section("BibleAI") {
+                Section("Scroll Bible") {
                     Button(subscriptions.isPremium ? "Your Subscription" : "Explore Premium") { showPremium = true }
                     Button("Show Introduction") { showIntroduction = true }
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")

@@ -115,7 +115,7 @@ enum TrialReminder {
               let fire = Calendar.current.date(byAdding: .day, value: offset, to: .now) else { return }
         let content = UNMutableNotificationContent()
         content.title = "Your free trial ends in \(daysBefore) days"
-        content.body = "Keep going deeper with BibleAI Premium, or cancel in Settings before it renews. No pressure either way."
+        content.body = "Keep going deeper with Scroll Bible Premium, or cancel in Settings before it renews. No pressure either way."
         content.sound = .default
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fire)
         let request = UNNotificationRequest(identifier: "bibleai.trial-reminder", content: content,
@@ -163,8 +163,8 @@ struct PlanPickerScreen: View {
 
             ScrollView {
                 VStack(spacing: 14) {
-                    Text(trial(subscriptions.yearlyPackage).map { "Try BibleAI Premium free for \($0) days" }
-                         ?? "Go deeper with BibleAI Premium")
+                    Text(trial(subscriptions.yearlyPackage).map { "Try Scroll Bible Premium free for \($0) days" }
+                         ?? "Go deeper with Scroll Bible Premium")
                         .font(ScrollStyle.headline(30))
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)

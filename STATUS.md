@@ -1,5 +1,11 @@
 # Current checkpoint — 2026-11-01
 
+- Shawn confirmed publication/resubmission approval in this chat and requested Scroll and Bible
+  in the name. Prepared title: Scroll Bible: Daily Verses. Source icon/in-app label: Scroll Bible.
+  The latter needs a later binary; same-build8 ASO approval does not upload a new binary.
+  Header/search videos are being refreshed for the new brand; the reviewed screenshots and
+  21-second interaction preview have no old brand label and remain unchanged.
+
 - Latest owner clarification: Shawn is away from the MacBook Air and cannot authenticate now.
   Publication/resubmission approval remains valid. Do not queue another prompt until he is at
   the Mac. Job BibleAI-publish_review_branch-20261101-140622-wpee was safely withdrawn before

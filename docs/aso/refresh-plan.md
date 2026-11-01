@@ -12,8 +12,8 @@ classified as subscription complaints; the retained examples include trial/cance
 Theme classification is heuristic: inspect the quotes, not just the labels. Source and coverage:
 [bounded research](research/bible-study-2026-11-01.json).
 
-Lead with the verified reading experience, saved notes, and guided progress. Preserve BibleAI's
-identity and the searchable Daily Bible Verses descriptor. Replace the vague subtitle with the
+Lead with the verified reading experience, saved notes, and guided progress. Shawn subsequently requested both Scroll and Bible in the name: use Scroll Bible: Daily Verses
+on the store and Scroll Bible as the short app name. Replace the vague subtitle with the
 three concrete outcomes: read, save, build a habit. Put eligible-trial terms in the purchase
 disclosure rather than promising every visitor seven free days.
 

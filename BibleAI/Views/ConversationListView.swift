@@ -112,7 +112,7 @@ struct EmptyConversationsView: View {
                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
                 VStack(spacing: 8) {
-                    Text("Welcome to Bible AI")
+                    Text("Welcome to Scroll Bible")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)

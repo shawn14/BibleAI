@@ -94,3 +94,9 @@ resubmission scope remains authorized, but do not queue another authentication p
 is at the Mac. The14:06publication prompt was withdrawn before execution and the runner recorded
 DENIED/allowed=false at14:13CST; no publishing command ran. Resume the established path without
 asking him to approve the same product scope again. Additional decisions: one at a time.
+
+November 1 naming update: Shawn requires both Scroll and Bible in the app name. Store title:
+Scroll Bible: Daily Verses; icon label and in-app display brand: Scroll Bible. Technical project,
+bundle ID, product IDs, storage keys, repository and service URLs stay as existing identifiers.
+The prepared listing/media rename can accompany the approved build8 ASO update; icon-label and
+in-app text source changes require a later binary and are not already in uploaded build8.
