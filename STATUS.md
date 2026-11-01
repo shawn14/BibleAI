@@ -1,5 +1,13 @@
 # Current checkpoint — 2026-11-01
 
+- Apple now holds Scroll Bible: Daily Verses in pending2.0.1/build8; original review canceled
+  successfully at17:12CST. Copy,18screenshots and preview uploaded. Apply stopped on the header
+  intermediate COMPLETE state before replacing either old creative placement. Readback23:24Z
+  confirms header PREPARE_FOR_SUBMISSION and pending title; preview still processing.
+  At23:24Z,16of18screenshots COMPLETE; the final large-iPhone and iPad images remain
+  UPLOAD_COMPLETE. New resume_aso_videos finishes only recorded header/search placements after
+  verifying completed copy/assets; never rerun apply_aso. Current new helper is not yet executed.
+
 - Renamed source/ASO media merged through PR1 at GitHub main5086fde. Both recorded build8
   sourcec63c68d and tested native source2841df3 are ancestors. Cancellation then stopped before
   any Apple write: the default review-item response omitted appStoreVersion relationships.

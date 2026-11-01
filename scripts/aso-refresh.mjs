@@ -6,7 +6,7 @@ if(mode==='check'){
  const p=localPackage(true);
  console.log(JSON.stringify({localPackage:'passed',screenshots:p.sets.reduce((n,s)=>n+s.files.length,0),videos:p.videos.map(v=>({kind:v.kind,width:v.width,height:v.height,seconds:v.seconds})),copyLengths:Object.fromEntries(Object.entries(p.copy).map(([k,v])=>[k,[...v].length]))},null,2));
 }else{
- if(!['apply','verify','cancel'].includes(mode)) throw new Error('Choose check, apply, verify, or cancel');
+ if(!['apply','verify','cancel','resume-videos'].includes(mode)) throw new Error('Choose check, apply, verify, cancel, or resume-videos');
  if(!process.env.MAC_RUNNER_JOB_ID) throw new Error('Use the committed mac-run action');
  const job=mode==='cancel'?'scripts/asc/swap-to-201.mjs':'scripts/asc/aso-refresh.mjs';
  execFileSync(process.execPath,['scripts/asc/asc.mjs',job],{stdio:'inherit',env:{...process.env,BIBLEAI_ASO_MODE:mode}});
