@@ -106,7 +106,7 @@ class VerseParser {
         let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Pattern: BookName Chapter:Verse or BookName Chapter:Verse-EndVerse
-        let pattern = #"([1-3]?\s?[A-Za-z]+)\s+(\d+)(?::(\d+)(?:-(\d+))?)?"#
+        let pattern = #"^([1-3]?\s?[A-Za-z]+(?:\s+of\s+[A-Za-z]+)?)\s+(\d+)(?::(\d+)(?:-(\d+))?)?$"#
 
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
               let match = regex.firstMatch(in: cleaned, options: [], range: NSRange(cleaned.startIndex..., in: cleaned)) else {
@@ -123,7 +123,9 @@ class VerseParser {
             return nil
         }
 
-        guard let chapter = Int(cleaned[chapterRange]) else {
+        guard let chapter = Int(cleaned[chapterRange]),
+              let metadata = BibleBookInfo.allBooks.first(where: { $0.name == book }),
+              (1...metadata.chapterCount).contains(chapter) else {
             return nil
         }
 
@@ -140,6 +142,8 @@ class VerseParser {
             endVerse = Int(cleaned[endVerseRange])
         }
 
+        guard verse.map({ $0 > 0 }) ?? true,
+              endVerse.map({ $0 >= (verse ?? 1) }) ?? true else { return nil }
         return ParsedVerseReference(book: book, chapter: chapter, verse: verse, endVerse: endVerse)
     }
 

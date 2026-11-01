@@ -9,13 +9,18 @@
 /* Begin PBXBuildFile section */
 		02C679D6E9376F589D72DDA9 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */; };
 		1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */; };
+		1B188558DEEE24CB5155735C /* ScriptureReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A594FCAAD1416944D1380 /* ScriptureReaderView.swift */; };
 		1FD9B7FF36210DC7843B5724 /* Config.revenuecat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC2AF4CED80002389582A6F /* Config.revenuecat.swift */; };
+		25EC7B4611A670710013DA9F /* PassagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D61BB71A9AE93065665082 /* PassagePickerView.swift */; };
 		4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */; };
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
+		590A3FCEDA97109F8B204E6C /* ReaderJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C71DD2916BDFBCAB5B2D25 /* ReaderJourneyTests.swift */; };
 		59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */; };
-		639D08FE7BDA04DBADEF3C43 /* Config.private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D05DC55C4854F9222C84474 /* Config.private.swift */; };
+		8379C02F027317DD3D132998 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000020 /* Config.swift */; };
+		8F7429DA45F3792A6F7F9517 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */; };
 		9563560394DA4ADADE99E668 /* Pods_BibleAI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBE7FD9604F6787F4A333B39 /* Pods_BibleAI.framework */; };
 		9938BAC6075D91310F23E1CC /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */; };
+		9A6E1FE1A461FBEB3DE6C92C /* VerseStudySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E7F85FDB3F161F44CE316D /* VerseStudySheet.swift */; };
 		9E4DFD83E019458394B69C89 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556B1BCC9F210EB8B04A57D5 /* OnboardingView.swift */; };
 		BA1000001 /* BibleAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000001 /* BibleAIApp.swift */; };
 		BA1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000002 /* ContentView.swift */; };
@@ -44,16 +49,35 @@
 		BA1000026 /* HighlightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000027 /* HighlightService.swift */; };
 		BA1000027 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000028 /* NoteEditorView.swift */; };
 		BA1000028 /* HighlightsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000029 /* HighlightsListView.swift */; };
+		CC1000001 /* StreakStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000001 /* StreakStore.swift */; };
+		CC1000002 /* DayCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000002 /* DayCompleteView.swift */; };
+		CC1000003 /* DailyReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000003 /* DailyReminder.swift */; };
+		CC1000004 /* CloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000004 /* CloudSync.swift */; };
+		CC1000005 /* CloudSyncMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2000005 /* CloudSyncMerge.swift */; };
 		D7735E710058933A7AA8C2D3 /* RevenueCatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */; };
+		D786AD1AF80CB298F3A0116B /* ScriptureFeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B36EF96152EA9339F60590D /* ScriptureFeedModel.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A8AD13831D8A14D076BFD484 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA0000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA6000001;
+			remoteInfo = BibleAI;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanService.swift; sourceTree = "<group>"; };
+		284A594FCAAD1416944D1380 /* ScriptureReaderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScriptureReaderView.swift; sourceTree = "<group>"; };
 		2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlansListView.swift; sourceTree = "<group>"; };
+		35C71DD2916BDFBCAB5B2D25 /* ReaderJourneyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReaderJourneyTests.swift; sourceTree = "<group>"; };
 		3EC2AF4CED80002389582A6F /* Config.revenuecat.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Config.revenuecat.swift; sourceTree = "<group>"; };
 		556B1BCC9F210EB8B04A57D5 /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		5CA661B25F8F65026F93BACC /* BibleAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BibleAIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		614883604BFC9221616F3790 /* Pods-BibleAI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibleAI.debug.xcconfig"; path = "Target Support Files/Pods-BibleAI/Pods-BibleAI.debug.xcconfig"; sourceTree = "<group>"; };
-		6D05DC55C4854F9222C84474 /* Config.private.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Config.private.swift; sourceTree = "<group>"; };
+		6B36EF96152EA9339F60590D /* ScriptureFeedModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ScriptureFeedModel.swift; sourceTree = "<group>"; };
 		8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RevenueCatManager.swift; sourceTree = "<group>"; };
 		87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanDetailView.swift; sourceTree = "<group>"; };
 		9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
@@ -89,8 +113,17 @@
 		BA2000028 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
 		BA2000029 /* HighlightsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightsListView.swift; sourceTree = "<group>"; };
 		BA3000001 /* BibleAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BibleAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2D61BB71A9AE93065665082 /* PassagePickerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PassagePickerView.swift; sourceTree = "<group>"; };
 		C9458E5AFDF3F76B1696C271 /* Pods-BibleAI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibleAI.release.xcconfig"; path = "Target Support Files/Pods-BibleAI/Pods-BibleAI.release.xcconfig"; sourceTree = "<group>"; };
+		CC2000001 /* StreakStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakStore.swift; sourceTree = "<group>"; };
+		CC2000002 /* DayCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCompleteView.swift; sourceTree = "<group>"; };
+		CC2000003 /* DailyReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyReminder.swift; sourceTree = "<group>"; };
+		CC2000004 /* CloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSync.swift; sourceTree = "<group>"; };
+		CC2000005 /* CloudSyncMerge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncMerge.swift; sourceTree = "<group>"; };
+		CC2000006 /* BibleAI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BibleAI.entitlements; sourceTree = "<group>"; };
+		DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		DBE7FD9604F6787F4A333B39 /* Pods_BibleAI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BibleAI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0E7F85FDB3F161F44CE316D /* VerseStudySheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerseStudySheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +135,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E58C20E8AE7C2D5DFF7E7CB7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F7429DA45F3792A6F7F9517 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -109,8 +150,26 @@
 			isa = PBXGroup;
 			children = (
 				DBE7FD9604F6787F4A333B39 /* Pods_BibleAI.framework */,
+				48AFE113CDCF057FAB62318B /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		48AFE113CDCF057FAB62318B /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		5C3A15C76E5D5C389DFD9645 /* BibleAIUITests */ = {
+			isa = PBXGroup;
+			children = (
+				35C71DD2916BDFBCAB5B2D25 /* ReaderJourneyTests.swift */,
+			);
+			name = BibleAIUITests;
+			path = BibleAIUITests;
 			sourceTree = "<group>";
 		};
 		939E7C538050F8BA0098C81D /* Pods */ = {
@@ -130,6 +189,7 @@
 				BA5000003 /* Products */,
 				939E7C538050F8BA0098C81D /* Pods */,
 				3518A04D4E93E7F77CABBC46 /* Frameworks */,
+				5C3A15C76E5D5C389DFD9645 /* BibleAIUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -146,7 +206,7 @@
 				BA5000008 /* Utilities */,
 				BA2000003 /* Assets.xcassets */,
 				BA2000004 /* Info.plist */,
-				6D05DC55C4854F9222C84474 /* Config.private.swift */,
+				CC2000006 /* BibleAI.entitlements */,
 				3EC2AF4CED80002389582A6F /* Config.revenuecat.swift */,
 			);
 			path = BibleAI;
@@ -156,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				BA3000001 /* BibleAI.app */,
+				5CA661B25F8F65026F93BACC /* BibleAIUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,9 +247,11 @@
 				BA2000029 /* HighlightsListView.swift */,
 				2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */,
 				87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */,
+				CC2000002 /* DayCompleteView.swift */,
 				BA5000009 /* Components */,
 				9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */,
 				556B1BCC9F210EB8B04A57D5 /* OnboardingView.swift */,
+				F558F99AB6C266311DF19417 /* Reader */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -210,9 +273,14 @@
 				BA2000016 /* EnhancedBibleService.swift */,
 				BA2000022 /* VerseOfTheDayService.swift */,
 				BA2000027 /* HighlightService.swift */,
+				CC2000003 /* DailyReminder.swift */,
+				CC2000004 /* CloudSync.swift */,
+				CC2000005 /* CloudSyncMerge.swift */,
+				CC2000001 /* StreakStore.swift */,
 				0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */,
 				A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */,
 				8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */,
+				6B36EF96152EA9339F60590D /* ScriptureFeedModel.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -235,9 +303,38 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		F558F99AB6C266311DF19417 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				284A594FCAAD1416944D1380 /* ScriptureReaderView.swift */,
+				C2D61BB71A9AE93065665082 /* PassagePickerView.swift */,
+				E0E7F85FDB3F161F44CE316D /* VerseStudySheet.swift */,
+			);
+			name = Reader;
+			path = Reader;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B7B5DF9DD251E92C63785F78 /* BibleAIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C10911423F0BD430791B4B4 /* Build configuration list for PBXNativeTarget "BibleAIUITests" */;
+			buildPhases = (
+				C537072C8905223A9F32F181 /* Sources */,
+				E58C20E8AE7C2D5DFF7E7CB7 /* Frameworks */,
+				CB207F617F8E0F9EFADB1181 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3856F402EE08A1F55B54E198 /* PBXTargetDependency */,
+			);
+			name = BibleAIUITests;
+			productName = BibleAIUITests;
+			productReference = 5CA661B25F8F65026F93BACC /* BibleAIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		BA6000001 /* BibleAI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA7000001 /* Build configuration list for PBXNativeTarget "BibleAI" */;
@@ -286,6 +383,7 @@
 			projectRoot = "";
 			targets = (
 				BA6000001 /* BibleAI */,
+				B7B5DF9DD251E92C63785F78 /* BibleAIUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -296,6 +394,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA1000003 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB207F617F8E0F9EFADB1181 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,24 +477,81 @@
 				BA1000024 /* SimpleVerseText.swift in Sources */,
 				BA1000025 /* Highlight.swift in Sources */,
 				BA1000026 /* HighlightService.swift in Sources */,
+				CC1000003 /* DailyReminder.swift in Sources */,
+				CC1000004 /* CloudSync.swift in Sources */,
+				CC1000005 /* CloudSyncMerge.swift in Sources */,
+				CC1000001 /* StreakStore.swift in Sources */,
 				BA1000027 /* NoteEditorView.swift in Sources */,
 				BA1000028 /* HighlightsListView.swift in Sources */,
 				4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */,
 				4A335749420F46DD9A186DEC /* ReadingPlanService.swift in Sources */,
 				1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */,
 				59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */,
-				639D08FE7BDA04DBADEF3C43 /* Config.private.swift in Sources */,
+				CC1000002 /* DayCompleteView.swift in Sources */,
 				9938BAC6075D91310F23E1CC /* SubscriptionManager.swift in Sources */,
 				02C679D6E9376F589D72DDA9 /* PaywallView.swift in Sources */,
 				D7735E710058933A7AA8C2D3 /* RevenueCatManager.swift in Sources */,
 				1FD9B7FF36210DC7843B5724 /* Config.revenuecat.swift in Sources */,
 				9E4DFD83E019458394B69C89 /* OnboardingView.swift in Sources */,
+				D786AD1AF80CB298F3A0116B /* ScriptureFeedModel.swift in Sources */,
+				1B188558DEEE24CB5155735C /* ScriptureReaderView.swift in Sources */,
+				25EC7B4611A670710013DA9F /* PassagePickerView.swift in Sources */,
+				9A6E1FE1A461FBEB3DE6C92C /* VerseStudySheet.swift in Sources */,
+				8379C02F027317DD3D132998 /* Config.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C537072C8905223A9F32F181 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				590A3FCEDA97109F8B204E6C /* ReaderJourneyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		3856F402EE08A1F55B54E198 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = BibleAI;
+			target = BA6000001 /* BibleAI */;
+			targetProxy = A8AD13831D8A14D076BFD484 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		4F497CE227CAA39E46729C74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BibleAI;
+			};
+			name = Debug;
+		};
+		7952D4B3F2E26252B459FA5E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BibleAI;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		BA7000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -515,8 +677,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BibleAI/BibleAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = BYRK5RUS4U;
@@ -533,7 +696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -548,8 +711,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = BibleAI/BibleAI.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = BYRK5RUS4U;
@@ -566,9 +731,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.shawncarpenter.bibleai-companion";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "com.shawncarpenter.bibleai-companion AppStore 1793390095";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -578,6 +744,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8C10911423F0BD430791B4B4 /* Build configuration list for PBXNativeTarget "BibleAIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7952D4B3F2E26252B459FA5E /* Release */,
+				4F497CE227CAA39E46729C74 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BA7000001 /* Build configuration list for PBXNativeTarget "BibleAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

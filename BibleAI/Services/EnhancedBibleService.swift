@@ -28,32 +28,8 @@ class EnhancedBibleService: ObservableObject {
 
     // Get a specific chapter
     func getChapter(book: String, chapter: Int) async -> [BibleVerse]? {
-        // Using Bible API (https://bible-api.com - free, no key required)
-        let bookName = book.replacingOccurrences(of: " ", with: "%20")
-        let urlString = "https://bible-api.com/\(bookName)+\(chapter)?translation=kjv"
-
-        guard let url = URL(string: urlString) else {
-            return nil
-        }
-
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let response = try JSONDecoder().decode(BibleAPIResponse.self, from: data)
-
-            // Convert to our verse format
-            return response.verses.enumerated().map { index, apiVerse in
-                BibleVerse(
-                    book: apiVerse.book_name,
-                    chapter: apiVerse.chapter,
-                    verse: apiVerse.verse,
-                    text: apiVerse.text,
-                    translation: "KJV"
-                )
-            }
-        } catch {
-            print("Error fetching chapter: \(error)")
-            return nil
-        }
+        let canonical = book == "Psalm" ? "Psalms" : book
+        return try? await ScriptureChapterStore.shared.chapter(book: canonical, number: chapter)
     }
 
     // Get a specific verse

@@ -86,6 +86,11 @@ struct AIResponse: Codable {
 class AIService {
     static let shared = AIService()
 
+    var isConfigured: Bool {
+        guard let key = UserDefaults.standard.string(forKey: "openai_api_key") else { return false }
+        return !key.isEmpty && key != "YOUR_API_KEY_HERE"
+    }
+
     // Cost controls
     private let maxRequestsPerMinute = 10
     private let maxRequestsPerDay = 50
@@ -169,7 +174,7 @@ class AIService {
 
         // Get API key from UserDefaults
         guard let apiKey = UserDefaults.standard.string(forKey: "openai_api_key"),
-              !apiKey.isEmpty else {
+              !apiKey.isEmpty, apiKey != "YOUR_API_KEY_HERE" else {
             throw AIServiceError.apiKeyMissing
         }
 

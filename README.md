@@ -1,3 +1,5 @@
+> **Redesign in progress (2026-10-28).** See [STATUS.md](STATUS.md) and [native design](docs/design.md). The historical feature descriptions below are not verification of the current branch.
+
 # BibleAI
 
 An AI-powered Bible companion app for iOS, designed to enhance Bible study and spiritual growth through intelligent insights and modern technology.

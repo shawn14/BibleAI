@@ -1,0 +1,93 @@
+== 2026-10-28T17:05:35-05:00 BibleAI test_reader: bash scripts/simulator-reader-proof.sh
+== priority: taskpolicy -b nice -n 15 /bin/zsh -lc <command>
+Monitoring boot status for BibleAI reader proof 20261028T220542Z (F1DF7111-32A4-4453-A2F5-4882ADC8ED27).
+Device already booted, nothing to do.
+
+SOURCE 64bb1cf9672f1f4c9844fa4df44d4c6d6f56a2a6
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -jobs 2 -workspace BibleAI.xcworkspace -scheme BibleAIReaderTests -destination "platform=iOS Simulator,id=F1DF7111-32A4-4453-A2F5-4882ADC8ED27" -derivedDataPath build/reader -resultBundlePath /Users/shawncarpenter/projects/BibleAI/build/proof/20261028T220542Z.xcresult -parallel-testing-enabled NO -test-timeouts-enabled YES -default-test-execution-time-allowance 180 -maximum-test-execution-time-allowance 240 CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
+
+Build settings from command line:
+    CODE_SIGN_IDENTITY = -
+    CODE_SIGNING_ALLOWED = YES
+    CODE_SIGNING_REQUIRED = YES
+
+Writing result bundle at path:
+	/Users/shawncarpenter/projects/BibleAI/build/proof/20261028T220542Z.xcresult
+
+Build Preparation
+Build task concurrency set to 2 via user default IDEBuildOperationMaxNumberOfConcurrentCompileTasks
+
+note: Using codesigning identity override: -
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (7 targets)
+    Target 'BibleAIUITests' in project 'BibleAI'
+        ➜ Explicit dependency on target 'BibleAI' in project 'BibleAI'
+    Target 'BibleAI' in project 'BibleAI'
+        ➜ Implicit dependency on target 'Pods-BibleAI' in project 'Pods' via file 'Pods_BibleAI.framework' in build phase 'Link Binary'
+        ➜ Implicit dependency on target 'RevenueCat' in project 'Pods' via options '-framework RevenueCat' in build setting 'OTHER_LDFLAGS'
+        ➜ Implicit dependency on target 'RevenueCatUI' in project 'Pods' via options '-framework RevenueCatUI' in build setting 'OTHER_LDFLAGS'
+    Target 'Pods-BibleAI' in project 'Pods'
+        ➜ Explicit dependency on target 'RevenueCat' in project 'Pods'
+        ➜ Explicit dependency on target 'RevenueCatUI' in project 'Pods'
+    Target 'RevenueCatUI' in project 'Pods'
+        ➜ Explicit dependency on target 'RevenueCat' in project 'Pods'
+        ➜ Explicit dependency on target 'RevenueCatUI-RevenueCat_RevenueCatUI' in project 'Pods'
+    Target 'RevenueCatUI-RevenueCat_RevenueCatUI' in project 'Pods'
+        ➜ Implicit dependency on target 'RevenueCat' in project 'Pods' via options '-framework RevenueCat' in build setting 'OTHER_LDFLAGS'
+    Target 'RevenueCat' in project 'Pods'
+        ➜ Explicit dependency on target 'RevenueCat-RevenueCat' in project 'Pods'
+    Target 'RevenueCat-RevenueCat' in project 'Pods' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shawncarpenter/projects/BibleAI/BibleAI/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.2.sdk -x objective-c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -V
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 7e07e974b46a979d93b82af7bc403ca4
+Build description path: /Users/shawncarpenter/projects/BibleAI/build/reader/Build/Intermediates.noindex/XCBuildData/7e07e974b46a979d93b82af7bc403ca4.xcbuilddata
+error: Multiple commands produce '/Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest'
+    note: Target 'BibleAIUITests' (project 'BibleAI') has create directory command with output '/Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest'
+    note: Target 'BibleAIUITests' (project 'BibleAI') has link command with output '/Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest'
+warning: duplicate output file '/Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest' on task: Ld /Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest normal (in target 'BibleAIUITests' from project 'BibleAI')
+
+Test session results, code coverage, and logs:
+	/Users/shawncarpenter/projects/BibleAI/build/proof/20261028T220542Z.xcresult
+
+Testing failed:
+	Multiple commands produce '/Users/shawncarpenter/projects/BibleAI/build/reader/Build/Products/Debug-iphonesimulator/-Runner.app/PlugIns/.xctest'
+	Testing cancelled because the build failed.
+
+** TEST FAILED **
+
+
+The following build commands failed:
+	Testing workspace BibleAI with scheme BibleAIReaderTests
+(1 failure)
+INTERACTION CLEANUP PASSED F1DF7111-32A4-4453-A2F5-4882ADC8ED27

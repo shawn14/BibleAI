@@ -1,0 +1,57 @@
+name: BibleAI
+summary: Native iOS verse scrolling, Bible study, reading plans and saved notes
+profile: ios-native
+spec: docs/design.md
+app:
+  bundle_id: com.shawncarpenter.bibleai-companion
+  minimum_ios: '17.0'
+  project: BibleAI.xcodeproj
+  workspace: BibleAI.xcworkspace
+data_sources:
+  - https://bible-api.com/ (KJV, requested one chapter at a time)
+  - On-device saved reading position, highlights, notes and reading-plan progress
+  - On-device FoundationModels verse study on eligible iOS 26 devices (device proof outstanding)
+  - Existing RevenueCat store products and eligibility (purchase/restore proof outstanding)
+  - iCloud key-value sync (two-device proof outstanding)
+canvas: null
+canonical_deploy_script: null
+canonical_scripts:
+  check_source: python3 scripts/check-source.py
+  prepare_dependencies: pod install --deployment --no-repo-update
+  test_reader: bash scripts/simulator-reader-proof.sh
+  inspect_aso: node scripts/aso-inspect.mjs
+  check_aso: node scripts/aso-refresh.mjs check
+  apply_aso: node scripts/aso-refresh.mjs apply
+  verify_aso: node scripts/aso-refresh.mjs verify
+  render_store_videos: bash scripts/encode-simulator-store-media.sh
+  render_store_preview: bash scripts/encode-simulator-store-media.sh --preview-only
+  render_store_brand: bash scripts/encode-simulator-store-media.sh --brand-only
+  publish_review_branch: git push --set-upstream origin claude/scroll-parity
+  verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
+  testflight: cd ~/projects/fastlane-configs && fastlane beta app:bibleai
+  add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
+  preview_video: bash scripts/preview-video.sh
+  testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
+  submit_review: cd ~/projects/fastlane-configs && fastlane submit_review app:bibleai version:2.0.1 build:8
+  version_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/version-check.mjs && cat scripts/asc/version-check.out.json
+  ipad_shots: bash scripts/ipad-shots.sh
+  review_media: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/review-media.mjs && cat scripts/asc/review-media.out.json
+  store_assets: node scripts/aso-refresh.mjs apply
+  age_rating: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/age-rating.mjs && cat scripts/asc/age-rating.out.json
+  asset_state: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/asset-state.mjs && cat scripts/asc/asset-state.out.json
+  fix_stuck_shots: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/fix-stuck-shots.mjs && cat scripts/asc/fix-stuck-shots.out.json
+  sync_logic_test: mkdir -p build && xcrun swiftc -O BibleAI/Models/Highlight.swift BibleAI/Models/ReadingPlan.swift BibleAI/Services/CloudSyncMerge.swift scripts/tests/cloudsync/main.swift -o build/cloudsync-merge-test && build/cloudsync-merge-test
+  icloud_capability: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/icloud-capability.mjs && cat scripts/asc/icloud-capability.out.json
+  swap_to_201: node scripts/aso-refresh.mjs cancel
+  yearly_trial: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/trial.mjs && cat scripts/asc/trial.out.json
+  listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
+  listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0.1 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
+mac_runner:
+  timeout_minutes: 30
+  ask_first: [testflight, listing_push, publish_review_branch, apply_aso, submit_review, store_assets, swap_to_201]
+capabilities:
+  - ~/projects/CAPABILITIES.md (mac-run native execution)
+  - ~/projects/my-ai-brain/playbooks/interaction-verification.md
+release:
+  status: unverified
+  note: Same-build8 ASO publication and resubmission explicitly approved November1; new binary and manual public release remain outside scope.

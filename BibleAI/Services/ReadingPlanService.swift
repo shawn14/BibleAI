@@ -19,6 +19,9 @@ class ReadingPlanService: ObservableObject {
     private init() {
         loadAvailablePlans()
         loadUserProgress()
+        NotificationCenter.default.addObserver(forName: CloudSync.didChange, object: nil, queue: .main) { [weak self] _ in
+            self?.loadUserProgress()
+        }
     }
 
     // MARK: - Available Plans
@@ -45,6 +48,7 @@ class ReadingPlanService: ObservableObject {
         if let encoded = try? JSONEncoder().encode(userProgress) {
             UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
         }
+        CloudSync.shared.push(.plans)
     }
 
     func startPlan(_ plan: ReadingPlan) {
@@ -80,6 +84,7 @@ class ReadingPlanService: ObservableObject {
     }
 
     func deletePlanProgress(_ planId: UUID) {
+        CloudSync.shared.recordDeletion(.plansDeleted, id: planId.uuidString)
         userProgress.removeAll(where: { $0.planId == planId })
         saveUserProgress()
     }
@@ -122,6 +127,7 @@ class ReadingPlanService: ObservableObject {
         ]
 
         return ReadingPlan(
+            id: UUID(uuidString: "6F1C2A10-0001-4B1A-9E1E-0000000000A1")!, // stable so saved progress survives relaunch
             title: "Gospel Tour",
             description: "Experience the life of Jesus through key moments in the four Gospels",
             duration: 8,
@@ -147,6 +153,7 @@ class ReadingPlanService: ObservableObject {
         }
 
         return ReadingPlan(
+            id: UUID(uuidString: "6F1C2A10-0002-4B1A-9E1E-0000000000A2")!, // stable so saved progress survives relaunch
             title: "Psalms in a Month",
             description: "Read through all 150 Psalms in 30 days of worship and reflection",
             duration: 30,
@@ -220,6 +227,7 @@ class ReadingPlanService: ObservableObject {
         ]
 
         return ReadingPlan(
+            id: UUID(uuidString: "6F1C2A10-0003-4B1A-9E1E-0000000000A3")!, // stable so saved progress survives relaunch
             title: "New Testament in 30 Days",
             description: "Read the entire New Testament in one month",
             duration: 30,
@@ -242,6 +250,7 @@ class ReadingPlanService: ObservableObject {
         }
 
         return ReadingPlan(
+            id: UUID(uuidString: "6F1C2A10-0004-4B1A-9E1E-0000000000A4")!, // stable so saved progress survives relaunch
             title: "Proverbs Wisdom",
             description: "One chapter of Proverbs each day for a month of wisdom",
             duration: 31,

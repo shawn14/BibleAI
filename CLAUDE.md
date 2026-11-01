@@ -1,105 +1,106 @@
-# CLAUDE.md
+# BibleAI project instructions
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Read STATUS.md and docs/design.md first. AGENTS.md and CLAUDE.md carry identical instructions.
 
-## Project Overview
+## Product direction
 
-BibleAI is a native iOS application built with SwiftUI, designed as an AI-powered Bible companion for the App Store. The app targets iPhone devices running iOS 17.0 or later.
+Native SwiftUI iOS17+ Bible reader. Shawn's2026-10-28 request: transform around Scroll the Bible,
+then make the experience natural Apple UX. Use system navigation, tabs, sheets, search, semantic
+colors, Dynamic Type and plain lists. Read / Plans / Saved; one verse at a time is the primary job.
+2026-10-29: Shawn asked to match the reference app as closely as possible. Onboarding now mirrors
+its funnel: hook stat, four feature pages with phone mockups, reviews (only real ones, from
+SocialProof; skipped while empty), then paywall pages (hooked, features, trial reminder, trial
+timeline, plan picker). Trial length/price come only from the store product and RevenueCat
+eligibility. No copied branding, fake testimonials or invented trial terms. Every paywall page has
+a close button; free Scripture reading stays accessible.
 
-## Technology Stack
+## Source and services
 
-- **Language**: Swift 5.0+
-- **UI Framework**: SwiftUI
-- **Minimum Deployment**: iOS 17.0
-- **IDE**: Xcode 15.0+
-- **Bundle Identifier**: com.bibleai.app
+Actual bundle ID from the project: com.shawncarpenter.bibleai-companion.
+Project BibleAI.xcodeproj; CocoaPods workspace BibleAI.xcworkspace; existing Podfile.lock is canonical.
+Use existing RevenueCat integration/config identifiers; never guess product ids, credentials or prices.
+Source declarations in old README are historical, not proof of current behavior.
 
-## Development Commands
+ScriptureFeedModel/ScriptureChapterStore fetch actual KJV chapters from bible-api.com, cache chapters,
+and keep a bounded in-memory window. Never invent Scripture or load a complete monolith at launch.
+Cache only covers opened chapters; do not claim full offline availability. The active verse-study
+path is AppleStudy in VerseStudySheet.swift, using on-device FoundationModels on eligible iOS 26
+devices. AIService is legacy code, not that active study path. Device study and two-device iCloud
+sync still need real-device checks. Never commit secrets or manufacture AI answers.
 
-### Opening the Project
-```bash
-open BibleAI.xcodeproj
-```
+## Verification and execution
 
-### Building and Running
-- **Run in Simulator/Device**: `Cmd + R` in Xcode
-- **Build Only**: `Cmd + B` in Xcode
-- **Clean Build Folder**: `Cmd + Shift + K` in Xcode
+All Mac-native work uses mac-run and committed docs/os.yaml. check_source is a cheap source check,
+not compile proof. prepare_dependencies installs locked CocoaPods. test_reader is the real native
+XCTest journey via scripts/simulator-reader-proof.sh. Its name deliberately triggers runner heavy
+classification; retain normal load/memory/disk/cooldown and single-Simulator guards.
 
-### Command Line Build
-```bash
-# Build for simulator
-xcodebuild -project BibleAI.xcodeproj -scheme BibleAI -sdk iphonesimulator -configuration Debug build
+Local builds and scoped tests need no additional approval under Shawn's replacement rule54
+(2026-10-29). The October28 one-run approval and old blocked status are historical, not today's
+local-test policy. Preserve resource guards and one heavy native job per Mac. Use cached builds;
+stop owned simulators and helpers afterward. Do not change global runner settings.
 
-# Build for device
-xcodebuild -project BibleAI.xcodeproj -scheme BibleAI -sdk iphoneos -configuration Release build
+Level1: run the touched-screen journey. Level2: touched flows plus critical journeys and one
+feature review. Level3, only before a release: full suite/CI and required device checks. No
+per-control manifests or refuter for each edit. Never claim device behavior from simulator output.
 
-# Run tests
-xcodebuild test -project BibleAI.xcodeproj -scheme BibleAI -destination 'platform=iOS Simulator,name=iPhone 15'
-```
+Critical journeys (the current ReaderJourneyTests covers the first five, except sharing/full-chapter):
+1. Complete onboarding, choose a plan, and dismiss Premium into free Scripture reading.
+2. Swipe verses and restore the saved reading place after relaunch.
+3. Find an exact passage and open its full chapter.
+4. Save a verse, edit/cancel a note, restore it after relaunch, and share.
+5. Start/complete each of the four reading plans and restore progress after relaunch.
+6. Generate verse study on an eligible device and enforce free/Premium limits.
+7. Purchase/restore through StoreKit and verify trial-reminder/daily-reminder delivery.
+8. Sync saved content and progress between two devices on the same iCloud account.
+Journeys6–8 and the stated gaps remain unverified; do not turn those into passed claims.
 
-## Project Structure
+## Source control and release
 
-```
-BibleAI/
-├── BibleAI/                    # Main application target
-│   ├── BibleAIApp.swift       # @main app entry point
-│   ├── ContentView.swift      # Root SwiftUI view
-│   ├── Assets.xcassets/       # Images, colors, and app icon
-│   └── Info.plist             # App configuration and permissions
-├── BibleAITests/              # Unit tests (to be implemented)
-├── BibleAIUITests/            # UI tests (to be implemented)
-└── BibleAI.xcodeproj/         # Xcode project configuration
-```
+Work on claude/scroll-parity (from codex/scroll-bible) until local proof is acceptable. Main starts at872beac; no main push,
+store changes, billing changes, deployment or submission is authorized by this design continuation.
+The newer source includes the previously submitted2.0.1 build8; keep its history intact. Publish the
+review branch via the committed ask-first publish_review_branch action. Main merge/release requires
+Shawn's explicit go. Follow the actual docs/os.yaml actions; do not infer permission from their names.
 
-## Architecture Guidelines
+## November 1 ASO continuation
 
-### SwiftUI Best Practices
-- Use SwiftUI's declarative syntax for all UI components
-- Leverage `@State`, `@Binding`, `@StateObject`, and `@ObservedObject` appropriately
-- Create reusable view components in separate files
-- Use `#Preview` macros for SwiftUI previews during development
+Shawn requested the complete App Store listing/creative refresh used for Milepost. This authorizes
+preparing and updating listing text, screenshots, preview, and header/search assets when editable.
+Live read on November 1: 2.0.1 is WAITING_FOR_REVIEW; do not cancel or resubmit that review without
+explicit approval after the complete asset package is ready. No new binary or pricing change is
+authorized. The one approved Air test already passed within 20 minutes; reuse retained app captures.
+Render the three video exports with render_store_videos, which uses the normal runner load guard
+and two ffmpeg encoder threads. No Simulator is started by that action.
 
-### Code Organization
-- Keep view files focused and under 200 lines when possible
-- Separate business logic into ViewModels (MVVM pattern recommended)
-- Use extensions to organize code by functionality
-- Group related views in folders (e.g., Views/, ViewModels/, Models/, Services/)
+The first publish_review_branch Mac password prompt expired without running; do not requeue it
+until Shawn is available to confirm. ASO sources and the app redesign remain local until then.
 
-### Naming Conventions
-- Views: Descriptive names ending in `View` (e.g., `BibleVerseView`)
-- ViewModels: Name + `ViewModel` (e.g., `BibleVerseViewModel`)
-- Models: Clear, singular nouns (e.g., `Verse`, `Chapter`, `Book`)
-- Files: Match the primary type they contain
+The ASO runbook is docs/aso/README.md. inspect_aso reads the exact version/build and complete
+asset inventory; apply_aso refuses noneditable or changed Apple state and records prior values;
+verify_aso requires exact copy, ordered screenshot checksums, complete preview/video processing
+and ACTIVE creative placements. Do not call the old store-assets job directly. docs/aso/en-US
+is the BibleAI listing source. Central submit_review uses Fastfile-relative metadata, observed
+empty for BibleAI on November 1; do not stage historical root-level metadata over the new copy.
 
-## App Store Preparation
+November 1, later: Shawn explicitly approved publishing the reviewed changes and replacing/
+resubmitting the pending listing by voice in the Pose chat (01a17d7a): "I approve the Bible one."
+This supersedes the pending-approval hold above for GitHub main publication and the prepared ASO
+replacement/resubmission of existing2.0.1/build8 only. Keep Mac authentication, fresh preflight,
+and exact-target guards. No new binary, public manual release, or pricing change was approved.
 
-### Required Assets
-- App Icon: 1024x1024px (already configured in Assets.xcassets)
-- Launch Screen: Configured via SwiftUI (automatic)
-- Screenshots: Prepare for various iPhone sizes
+Later owner clarification: Shawn is away from the MacBook Air. The approved publication and ASO
+resubmission scope remains authorized, but do not queue another authentication prompt until he
+is at the Mac. The14:06publication prompt was withdrawn before execution and the runner recorded
+DENIED/allowed=false at14:13CST; no publishing command ran. Resume the established path without
+asking him to approve the same product scope again. Additional decisions: one at a time.
 
-### Before Submission
-1. Update version and build numbers in project settings
-2. Configure code signing with Apple Developer account
-3. Set proper app permissions in Info.plist (if accessing camera, location, etc.)
-4. Test on physical devices, not just simulators
-5. Archive build: `Product > Archive` in Xcode
-6. Submit via App Store Connect
+November 1 naming update: Shawn requires both Scroll and Bible in the app name. Store title:
+Scroll Bible: Daily Verses; icon label and in-app display brand: Scroll Bible. Technical project,
+bundle ID, product IDs, storage keys, repository and service URLs stay as existing identifiers.
+The prepared listing/media rename can accompany the approved build8 ASO update; icon-label and
+in-app text source changes require a later binary and are not already in uploaded build8.
 
-## Important Notes
-
-- Always test on real devices before submitting to App Store
-- SwiftUI previews require macOS and may not work in all environments
-- Bundle identifier `com.bibleai.app` must be unique in App Store
-- iOS 17.0+ requirement means latest SwiftUI features are available
-- Keep Info.plist updated with required permissions and configurations
-
-## Future Enhancements
-
-When extending this project, consider:
-- Adding unit tests in BibleAITests/
-- Implementing UI tests in BibleAIUITests/
-- Integrating Swift Package Manager for dependencies
-- Setting up CI/CD with Xcode Cloud or GitHub Actions
-- Adding localization for multiple languages
+November 1,16:37CST: owner confirmed being at the Air in Milepost chat01a182fa; its upload
+authentication subsequently succeeded. The availability hold is superseded. Resume the already
+approved BibleAI publication/resubmission through the existing guarded Mac actions.

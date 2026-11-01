@@ -1,0 +1,11 @@
+No app account or sign-in is required. Reading, saved verses, notes and plans do not require a subscription. Close the subscription screen to continue reading. Premium is optional.
+
+To test the core flow, finish onboarding, open The Bible, swipe between verses, tap the heart to save, and use the note control to add a reflection. Saved contains the verse and note. Use search for John 3:16. Plans contains four guided selections; mark a reading complete to update progress and streak.
+
+Verse study uses Apple's Foundation Models framework. It requires compatible iPhone or iPad hardware, iOS 26 or iPadOS 26, Apple Intelligence enabled, and the on-device model available. Unsupported devices show an availability message; reading, saving, notes and plans remain accessible. AI commentary may be inaccurate, and every study has a report-problem action.
+
+The study allowance is five per day. Monthly or yearly Premium unlocks unlimited study on compatible devices. StoreKit/RevenueCat determines introductory eligibility and the app displays the actual duration, renewal price and terms before purchase. Restore is available on the subscription screen. No universal trial eligibility is promised.
+
+The King James Version is requested one chapter at a time from bible-api.com. Previously opened chapters are cached; first-time chapter downloads require internet. No account credentials are needed for review.
+
+Onboarding offers goal, familiarity, reading-time and reminder choices. Daily reminders can be changed or disabled in Settings > Daily Reading. iCloud key-value sync uses the user's existing Apple account; no separate Scroll Bible account is created.

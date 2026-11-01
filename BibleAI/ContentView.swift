@@ -8,68 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var conversationService = ConversationService.shared
-    @EnvironmentObject var revenueCatManager: RevenueCatManager
-    @State private var selectedTab = 0
-    @State private var currentConversation: Conversation?
     @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Home - New conversation with suggestions
-            ChatContainerView(currentConversation: $currentConversation)
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                .tag(0)
-
-            // Bible Reader
-            BibleReaderView()
-                .tabItem {
-                    Label("Read", systemImage: "book.fill")
-                }
-                .tag(1)
-
-            // Reading Plans
+        TabView {
+            ScriptureReaderView()
+                .tabItem { Label("The Bible", systemImage: "book") }
             ReadingPlansListView()
-                .tabItem {
-                    Label("Plans", systemImage: "list.bullet.clipboard.fill")
-                }
-                .tag(2)
-
-            // Highlights
+                .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }
             HighlightsListView()
-                .tabItem {
-                    Label("Highlights", systemImage: "highlighter")
-                }
-                .tag(3)
-
-            // Settings
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-                .tag(4)
+                .tabItem { Label("Saved", systemImage: "heart") }
         }
-        .accentColor(Color(red: 0.6, green: 0.4, blue: 0.2))
-        .onChange(of: selectedTab) { oldValue, newTab in
-            // When user switches to Home tab, always show fresh home screen
-            if newTab == 0 {
-                // Create a fresh temporary conversation (not saved until first message)
-                currentConversation = Conversation()
-            }
-        }
-        .onAppear {
-            // Start with an empty conversation on launch
-            currentConversation = Conversation()
-        }
+        .tint(.accentColor)
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
-                .environmentObject(revenueCatManager)
-                .onDisappear {
-                    // Mark onboarding as completed
-                    UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
-                }
         }
     }
 }
@@ -117,7 +69,7 @@ struct EmptyChatView: View {
                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
                 VStack(spacing: 8) {
-                    Text("Bible AI")
+                    Text("Scroll Bible")
                         .font(.title)
                         .fontWeight(.semibold)
 
