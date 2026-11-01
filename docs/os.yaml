@@ -19,6 +19,7 @@ canonical_scripts:
   check_source: python3 scripts/check-source.py
   prepare_dependencies: pod install --deployment --no-repo-update
   test_reader: bash scripts/simulator-reader-proof.sh
+  inspect_aso: node scripts/aso-inspect.mjs
   render_store_videos: bash scripts/encode-simulator-store-media.sh
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .

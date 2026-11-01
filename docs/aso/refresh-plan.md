@@ -27,8 +27,8 @@ disclosure rather than promising every visitor seven free days.
 6. Explore the passage — actual study options, with Apple Intelligence compatibility disclosure;
    no fabricated response or claim of verified on-device generation.
 
-Produce matching six-image iPhone and iPad sets. Refresh the existing 30-second preview and
-10-second header/search loops from real captured UI; no AI-generated app screens. Retain distinct
+Produce six-image iPhone sets at 1206x2622 and 1320x2868, plus a six-image iPad set at 2064x2752. Apple now requires the medium Dynamic Island iPhone size. The iPad story uses its actual reader, plans, Saved, completion, onboarding, and study captures. Refresh the existing 30-second preview and
+10.5-second header/search loops from real captured UI; no AI-generated app screens. Retain distinct
 3840x1646 header and 3840x2560 search exports, plus PNG posters. Apple specifications:
 https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications/
 

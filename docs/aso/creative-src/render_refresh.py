@@ -43,15 +43,17 @@ def device(canvas,source,width,x,y,pad,radius):
 def screenshot(kind,index,row):
  name,head,sub=row
  if kind=='iphone': W,H,hs,ss,width,pad,radius,top=(1320,2868,108,42,1000,24,126,110)
+ elif kind=='medium': W,H,hs,ss,width,pad,radius,top=(1206,2622,99,38,914,22,115,100)
  else: W,H,hs,ss,width,pad,radius,top=(2064,2752,144,50,1480,26,64,85)
  c=Image.new('RGB',(W,H),'white')
  y=text_lines(c,head,(0,top),hs,True,center=True)
  if name=='study': sub='Requires supported Apple Intelligence hardware.'
  text_lines(c,sub,(0,y+30),ss,color=MUTED,center=True)
- screen_top=550 if kind=='iphone' else 675
- device(c,CAP/kind/(name+'.png'),width,(W-width-2*pad)//2,screen_top,pad,radius)
- folder=ASO/('screenshots-6.9' if kind=='iphone' else 'screenshots-ipad-13'); folder.mkdir(exist_ok=True)
- p=folder/(f'BibleAI-6.9-{index}.png' if kind=='iphone' else f'BibleAI-ipad13-{index}.png')
+ screen_top={'iphone':550,'medium':503,'ipad':675}[kind]
+ device(c,CAP/('ipad' if kind=='ipad' else 'iphone')/(name+'.png'),width,(W-width-2*pad)//2,screen_top,pad,radius)
+ folder=ASO/{'iphone':'screenshots-6.9','medium':'screenshots-6.3','ipad':'screenshots-ipad-13'}[kind]; folder.mkdir(exist_ok=True)
+ prefix={'iphone':'BibleAI-6.9','medium':'BibleAI-6.3','ipad':'BibleAI-ipad13'}[kind]
+ p=folder/f'{prefix}-{index}.png'
  c.save(p)
  return p
 
@@ -86,17 +88,20 @@ def preview_captions():
 def main():
  SCRATCH.mkdir(parents=True,exist_ok=True)
  shots=[]
- for kind in ['iphone','ipad']:
-  rows=STORY if kind=='iphone' else [STORY[0],STORY[2],STORY[3],
+ if '--medium-only' in sys.argv:
+  for i,row in enumerate(STORY,1): screenshot('medium',i,row)
+  print('Rendered six required 1206x2622 iPhone screenshots.'); return
+ for kind in ['iphone','medium','ipad']:
+  rows=STORY if kind!='ipad' else [STORY[0],STORY[2],STORY[3],
    ('completion','Build a habit.\nOne day at a time.','Celebrate a completed reading.'),
    ('onboarding','Your plan.\nYour pace.','Choose a goal and a daily reading time.'),STORY[5]]
   for i,row in enumerate(rows,1): shots.append(screenshot(kind,i,row))
  scenes={'header':header(False),'search':header(True)}
  manifest={'screenshots':[str(p.relative_to(ASO)) for p in shots],'scenes':scenes,'previewCaptions':preview_captions(),'realUI':str(CAP),'previewSource':str(HERE/'source-preview.mp4')}
  (SCRATCH/'render-inputs.json').write_text(json.dumps(manifest,indent=2)+'\n')
- board=Image.new('RGB',(1320,1030),'#F5F5F7')
+ board=Image.new('RGB',(1320,1545),'#F5F5F7')
  for i,p in enumerate(shots):
   im=Image.open(p); im.thumbnail((206,490)); board.paste(im,((i%6)*220+7,(i//6)*515+12))
  board.save(ASO/'preview-board.png')
- print('Rendered 12 screenshots, header/search scene art, and preview captions.')
+ print('Rendered 18 screenshots, header/search scene art, and preview captions.')
 if __name__=='__main__': main()
