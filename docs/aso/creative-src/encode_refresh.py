@@ -52,3 +52,5 @@ for key,name in [('header','product-page-header'),('search','search-results')]:
  },indent=2)+'\n')
  print('Encoded',name,flush=True)
 print('All three videos encoded serially with two encoder threads.',flush=True)
+
+subprocess.run(['node','scripts/aso-refresh.mjs','check'],check=True,timeout=60)

@@ -1,7 +1,5 @@
-// Push the full BibleAI 2.0 App Store creative set from docs/aso/ onto the editable 2.0 version (en-US):
-//   iPhone 6.9" screenshots, iPad 13" screenshots, iPhone 6.9" app preview,
-//   iOS 27 product-page header + search-results videos (Asset Library, placed DEFAULT_PROFILE),
-//   copyright year; removes the stale 6.5" iPhone set so 6.9" scales down. Safe to re-run.
+// Asset upload helper. Call only through the guarded apply_aso action.
+// Existing Apple API path; 18 screenshots, one preview, two creative placements.
 import fs from "node:fs";
 import path from "node:path";
 const APP = "6756225286";
@@ -38,7 +36,7 @@ async function libraryVideo(api, loc, placementType, kind, file) {
     if (!["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING"].includes(state.state)) break;
     await new Promise((r) => setTimeout(r, 10000));
   }
-  if (state.state === "FAILED" || ["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING"].includes(state.state))
+  if (!["PREPARE_FOR_SUBMISSION", "APPROVED"].includes(state.state))
     throw new Error(`${kind} video ${state.state}: ${JSON.stringify(state.stateDetails)}`);
   const existing = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/placements?filter[placementType]=${placementType}&filter[placementGroup]=DEFAULT_PROFILE`)).data;
   for (const p of existing) await api.del(`/v1/appAssetLibraryPlacements/${p.id}`);
@@ -48,18 +46,14 @@ async function libraryVideo(api, loc, placementType, kind, file) {
       appStoreVersionLocalization: { data: { type: "appStoreVersionLocalizations", id: loc } } } } })).data;
   return `${kind} video ${state.state}, placed ${placed.id}`;
 }
-export default async (api) => {
+export default async (api, options = {}) => {
+  if (!options.guarded) throw new Error("Use apply_aso: direct unguarded store uploads are disabled");
   const log = [];
   const v = (await api.get(`/v1/apps/${APP}/appStoreVersions?filter[platform]=IOS&filter[versionString]=${VERSION}`)).data[0];
   if (!v) throw new Error(`no ${VERSION}`);
-  if (!/\d{4}/.test(v.attributes.copyright || "")) {
-    await api.patch(`/v1/appStoreVersions/${v.id}`, { data: { type: "appStoreVersions", id: v.id, attributes: { copyright: "2026 Center Mark Capital, LLC" } } });
-    log.push("copyright set");
-  }
   const loc = (await api.get(`/v1/appStoreVersions/${v.id}/appStoreVersionLocalizations`)).data.find((l) => l.attributes.locale === "en-US").id;
-  const old65 = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/appScreenshotSets`)).data.find((s) => s.attributes.screenshotDisplayType === "APP_IPHONE_65");
-  if (old65) { await api.del(`/v1/appScreenshotSets/${old65.id}`); log.push("removed stale 6.5in set"); }
   log.push(await screenshotSet(api, loc, "APP_IPHONE_67", pngs("screenshots-6.9")));
+  log.push(await screenshotSet(api, loc, "APP_IPHONE_61", pngs("screenshots-6.3")));
   log.push(await screenshotSet(api, loc, "APP_IPAD_PRO_3GEN_129", pngs("screenshots-ipad-13")));
   const psets = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/appPreviewSets`)).data;
   let pset = psets.find((s) => s.attributes.previewType === "IPHONE_67");

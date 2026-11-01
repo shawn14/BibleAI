@@ -20,6 +20,9 @@ canonical_scripts:
   prepare_dependencies: pod install --deployment --no-repo-update
   test_reader: bash scripts/simulator-reader-proof.sh
   inspect_aso: node scripts/aso-inspect.mjs
+  check_aso: node scripts/aso-refresh.mjs check
+  apply_aso: node scripts/aso-refresh.mjs apply
+  verify_aso: node scripts/aso-refresh.mjs verify
   render_store_videos: bash scripts/encode-simulator-store-media.sh
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
@@ -43,7 +46,7 @@ canonical_scripts:
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0.1 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
   timeout_minutes: 30
-  ask_first: [testflight, listing_push, publish_review_branch]
+  ask_first: [testflight, listing_push, publish_review_branch, apply_aso, submit_review, store_assets, swap_to_201]
 capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
