@@ -79,7 +79,7 @@ def header(search=False):
  return files
 
 def preview_captions():
- rows=[('Read one verse\nat a time.',0,7),('Explore the\npassage.',7,10),('Find a familiar\npassage.',10,15),('Follow a\nreading plan.',15,20),('Keep meaningful\nverses.',20,25.5)]
+ rows=[('Read one verse\nat a time.',0,7),('Explore the\npassage.',7,10),('Find a familiar\npassage.',10,14),('Follow a\nreading plan.',14,18),('Keep meaningful\nverses.',18,21.5)]
  for i,(caption,start,end) in enumerate(rows):
   c=Image.new('RGB',(886,235),'white'); text_lines(c,caption,(0,30),66,True,center=True,gap=1.12)
   c.save(SCRATCH/f'preview-caption-{i}.png')

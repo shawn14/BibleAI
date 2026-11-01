@@ -19,7 +19,7 @@ export function localPackage(probe=false){
   return {type,files};
  });
  const videos=[
-  {kind:'preview',file:path.join(aso,'preview/BibleAI-preview-6.9.mp4'),width:886,height:1920,seconds:25.5},
+  {kind:'preview',file:path.join(aso,'preview/BibleAI-preview-6.9.mp4'),width:886,height:1920,seconds:21.5},
   {kind:'header',placement:'PRODUCT_PAGE_HEADER_ASSET',file:path.join(aso,'header-video/product-page-header.mp4'),width:3840,height:1646,seconds:10.5},
   {kind:'search',placement:'APP_STORE_SEARCH_RESULTS_ASSET',file:path.join(aso,'header-video/search-results.mp4'),width:3840,height:2560,seconds:10.5}
  ];

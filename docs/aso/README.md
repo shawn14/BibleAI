@@ -11,7 +11,7 @@ onboarding/completion pass; that source change is not in Apple's pending build 8
 | Six large iPhone screenshots | `screenshots-6.9/` | 1320×2868, RGB |
 | Six medium iPhone screenshots | `screenshots-6.3/` | 1206×2622, RGB |
 | Six iPad screenshots | `screenshots-ipad-13/` | 2064×2752, RGB |
-| App Preview | `preview/BibleAI-preview-6.9.mp4` | 886×1920, 30 fps, 25.5 seconds |
+| App Preview | `preview/BibleAI-preview-6.9.mp4` | 886×1920, 30 fps, 21.5 seconds |
 | Product-page header | `header-video/product-page-header.mp4` | 3840×1646, 30 fps, 10.5-second loop |
 | Search-results creative | `header-video/search-results.mp4` | 3840×2560, 30 fps, 10.5-second loop |
 | Encoded 5-second posters | `header-video/*-poster.png` | RGB PNG, same canvas size |
