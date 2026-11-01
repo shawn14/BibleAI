@@ -112,5 +112,6 @@ before any write. The corrected read returned the exact version id at23:09:39Z. 
 November1 upload recovery: library video `state` briefly returned COMPLETE, then advanced to
 PREPARE_FOR_SUBMISSION. Poll through COMPLETE; keep PREPARE/APPROVED as the placement gate.
 `resume_aso_videos` is a guarded, one-time recovery of the recorded header and absent search
-upload: it verifies exact copy/18 screenshots/preview checksum, source hash and unchanged old
+upload: it verifies exact copy, completed screenshot checksums, recorded ids/file sizes for
+UPLOAD_COMPLETE screenshots, preview checksum, source hash and unchanged old
 placements, reuses the uploaded header, and never repeats metadata/screenshots/preview writes.

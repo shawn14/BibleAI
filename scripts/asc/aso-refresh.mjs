@@ -25,6 +25,7 @@ export default async api=>{
  fs.mkdirSync(work,{recursive:true});
  if(['verify','resume-videos'].includes(mode)){
   const before=JSON.parse(fs.readFileSync(receipt,'utf8'));
+  const progress=mode==='resume-videos'?fs.readFileSync(path.join(work,'apply-progress.jsonl'),'utf8').trim().split('\n').map(line=>JSON.parse(line)):[];
   assert.equal(before.inputHash,pkg.inputHash,'Local package changed after application');
   assert.deepEqual(identity(current),identity(before.apple),'App/version/build changed');
   for(const k of ['name','subtitle','privacyPolicyUrl']) assert.equal(il.attributes[k],pkg.copy[k],`${k} differs`);
@@ -37,7 +38,14 @@ export default async api=>{
    assert.equal(set.assets.length,expected.files.length);
    for(let i=0;i<expected.files.length;i++){
     const a=set.assets[i].attributes,file=expected.files[i];
-    assert.equal(a.fileName,path.basename(file));assert.equal(a.sourceFileChecksum,digest(file));assert.equal(a.assetDeliveryState?.state,'COMPLETE');
+    assert.equal(a.fileName,path.basename(file));
+    if(mode==='resume-videos'&&a.assetDeliveryState?.state==='UPLOAD_COMPLETE'){
+     const reserved=only(progress.filter(r=>r.kind==='appScreenshots'&&r.id===set.assets[i].id),'recorded processing screenshot');
+     assert.equal(reserved.file,file);assert.equal(a.fileSize,fs.statSync(file).size);
+     assert(!a.assetDeliveryState.errors?.length,'Screenshot processing reports errors');
+    }else{
+     assert.equal(a.sourceFileChecksum,digest(file));assert.equal(a.assetDeliveryState?.state,'COMPLETE');
+    }
    }
   }
   const preview=only(only(loc.previewSets.filter(s=>s.previewType==='IPHONE_67'),'preview set').assets,'preview').attributes;
@@ -47,7 +55,6 @@ export default async api=>{
    assert.notEqual(preview.videoDeliveryState?.state,'FAILED','Preview processing failed');
    const creative=r=>target(r).placements.data.filter(p=>['PRODUCT_PAGE_HEADER_ASSET','APP_STORE_SEARCH_RESULTS_ASSET'].includes(p.attributes.placementType));
    assert.deepEqual(creative(current),creative(before.apple),'Original creative placements changed');
-   const progress=fs.readFileSync(path.join(work,'apply-progress.jsonl'),'utf8').trim().split('\n').map(line=>JSON.parse(line));
    const header=only(progress.filter(r=>r.kind==='header'),'reserved header');
    assert.equal(header.file,pkg.videos.find(v=>v.kind==='header').file);
    assert.equal(progress.filter(r=>r.kind==='search').length,0,'Search upload already began: inspect instead of repeating');

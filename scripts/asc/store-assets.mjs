@@ -43,9 +43,11 @@ async function libraryVideo(api, loc, placementType, kind, file, options = {}) {
   for (const op of res.attributes.uploadOperations) await api.upload(op, file);
   await api.patch(`/v1/appAssetLibraryVideos/${res.id}`, { data: { type: "appAssetLibraryVideos", id: res.id, attributes: { uploaded: true } } });
   }
-  let state;
+  let state, previousState;
   for (let i = 0; i < 60; i++) {
     state = (await api.get(`/v1/appAssetLibraryVideos/${res.id}`)).data.attributes;
+    if (state.state !== previousState) record({kind:"video-state", assetKind:kind, id:res.id, state:state.state});
+    previousState = state.state;
     if (!["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING", "COMPLETE"].includes(state.state)) break;
     await new Promise((r) => setTimeout(r, 10000));
   }

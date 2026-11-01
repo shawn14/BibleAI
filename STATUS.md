@@ -6,7 +6,8 @@
   confirms header PREPARE_FOR_SUBMISSION and pending title; preview still processing.
   At23:24Z,16of18screenshots COMPLETE; the final large-iPhone and iPad images remain
   UPLOAD_COMPLETE. New resume_aso_videos finishes only recorded header/search placements after
-  verifying completed copy/assets; never rerun apply_aso. Current new helper is not yet executed.
+  verifying copy/completed assets and preserving recorded screenshots still processing. Final
+  verify_aso still requires all18 COMPLETE with exact checksums. Never rerun apply_aso.
 
 - Renamed source/ASO media merged through PR1 at GitHub main5086fde. Both recorded build8
   sourcec63c68d and tested native source2841df3 are ancestors. Cancellation then stopped before
