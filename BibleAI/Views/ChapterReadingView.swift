@@ -10,6 +10,7 @@ import SwiftUI
 struct ChapterReadingView: View {
     let book: BibleBookInfo
     let chapter: Int
+    var invitationPlanID: UUID? = nil
 
     @StateObject private var bibleService = EnhancedBibleService.shared
     @StateObject private var highlightService = HighlightService.shared
@@ -75,6 +76,14 @@ struct ChapterReadingView: View {
         isLoading = true
         verses = await bibleService.getChapter(book: book.name, chapter: chapter) ?? []
         isLoading = false
+        if !verses.isEmpty { GrowthStore.shared.recordReaderActivation() }
+        if !verses.isEmpty, let planID = invitationPlanID,
+           let invitation = GrowthStore.shared.acceptedInvitation, invitation.planID == planID,
+           let plan = ReadingPlanService.shared.availablePlans.first(where: { $0.id == planID }),
+           let first = plan.dailyReadings.first?.readings.first,
+           first.book == book.name, first.startChapter == chapter {
+            GrowthStore.shared.recordFirstReading(for: invitation)
+        }
     }
 }
 

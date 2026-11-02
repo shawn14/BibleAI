@@ -19,6 +19,7 @@ struct OnboardingView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject private var subscriptions: RevenueCatManager
     @State private var step: IntroStep = .hook
+    @State private var showInvitation = false
     @State private var trials: [String: Int] = [:]
     @State private var reminderDays = 2
     @State private var purchasing = false
@@ -68,6 +69,17 @@ struct OnboardingView: View {
         .foregroundStyle(ScrollStyle.ink)
         .animation(.easeInOut(duration: 0.3), value: step)
         .preferredColorScheme(.light)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if step == .hook {
+                HStack {
+                    Spacer()
+                    Button("Open Invitation") { showInvitation = true }
+                        .font(.subheadline)
+                        .accessibilityIdentifier("onboarding.openInvitation")
+                }.padding(.horizontal, 24).padding(.vertical, 8)
+            }
+        }
+        .sheet(isPresented: $showInvitation) { ImportInvitationView() }
         .interactiveDismissDisabled()
         .task(id: subscriptions.offerings?.current?.identifier) {
             let packages = [subscriptions.yearlyPackage, subscriptions.monthlyPackage].compactMap { $0 }

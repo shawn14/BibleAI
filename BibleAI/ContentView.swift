@@ -9,20 +9,47 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+    @StateObject private var growth = GrowthStore.shared
+    @State private var requestedPlace: ReadingPlace?
+    @State private var requestedPlan: ReadingPlan?
+    @State private var selectedTab = 0
+    @State private var invalidInvitation = false
 
     var body: some View {
-        TabView {
-            ScriptureReaderView()
-                .tabItem { Label("The Bible", systemImage: "book") }
-            ReadingPlansListView()
-                .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }
-            HighlightsListView()
-                .tabItem { Label("Saved", systemImage: "heart") }
+        Group {
+            if let invitation = growth.pendingInvitation {
+                InvitationLandingView(invitation: invitation) {
+                    showOnboarding = false
+                    UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+                    growth.completeInvitation()
+                    if let place = invitation.readingPlace {
+                        requestedPlace = place
+                        selectedTab = 0
+                    } else if let plan = ReadingPlanService.shared.availablePlans.first(where: { $0.id == invitation.planID }) {
+                        ReadingPlanService.shared.startPlan(plan)
+                        requestedPlan = plan
+                        selectedTab = 1
+                    }
+                }
+            } else {
+                TabView(selection: $selectedTab) {
+                    ScriptureReaderView(requestedPlace: $requestedPlace, isActive: selectedTab == 0 && !showOnboarding)
+                        .tabItem { Label("The Bible", systemImage: "book") }.tag(0)
+                    ReadingPlansListView(requestedPlan: $requestedPlan)
+                        .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }.tag(1)
+                    HighlightsListView()
+                        .tabItem { Label("Saved", systemImage: "heart") }.tag(2)
+                }
+                .fullScreenCover(isPresented: $showOnboarding) {
+                    OnboardingView(isPresented: $showOnboarding)
+                }
+            }
         }
         .tint(.accentColor)
-        .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingView(isPresented: $showOnboarding)
-        }
+        .onOpenURL { url in if !growth.receive(url: url) { invalidInvitation = true } }
+        .alert("Couldn't open this invitation", isPresented: $invalidInvitation) {
+            Button("OK", role: .cancel) { }
+        } message: { Text("Ask the sender for a new Bright Scroll link. Your reading progress is unchanged.") }
     }
 }
 

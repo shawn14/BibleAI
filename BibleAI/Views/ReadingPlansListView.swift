@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ReadingPlansListView: View {
+    @Binding var requestedPlan: ReadingPlan?
+    @State private var showImport = false
     @StateObject private var plans = ReadingPlanService.shared
     @State private var selected: ReadingPlan?
 
@@ -25,8 +27,19 @@ struct ReadingPlansListView: View {
             }
             .listStyle(.plain)
             .navigationTitle("Plans")
+            .toolbar { ToolbarItem(placement: .topBarTrailing) {
+                Button("Open Invitation", systemImage: "link") { showImport = true }
+                    .accessibilityIdentifier("plans.openInvitation")
+            } }
+            .sheet(isPresented: $showImport) { ImportInvitationView() }
+            .onChange(of: requestedPlan?.id) { _, _ in openRequestedPlan() }
+            .onAppear { openRequestedPlan() }
             .sheet(item: $selected) { plan in ReadingPlanDetailView(plan: plan, isPresented: $selected) }
         }
+    }
+
+    private func openRequestedPlan() {
+        if let plan = requestedPlan { selected = plan; requestedPlan = nil }
     }
 
     private func planRow(_ plan: ReadingPlan) -> some View {

@@ -1,3 +1,24 @@
+# Growth implementation checkpoint — 2026-11-02
+
+- Shawn approved the pending local composer copy; it is now in the app target. Source registration
+  and whitespace checks pass. Native UI integration is complete in source but awaits test_reader.
+- Branch `codex/bright-scroll-growth`; committed core67bb671 passed363checks/0failures via
+  BibleAI-growth_core_test-20261102-021956-cthz. Cohort reportf368e2f passed14arithmetic tests.
+  Those checks do not prove the complete app, delivered invitations or a live K-factor.
+- Candidate: Paper/Night verse artwork and system share sheet; contextual plan invitations;
+  strict custom-scheme/manual links; actual content before onboarding; explicit acceptance;
+  local activation/attribution diagnostics; real UI journey for invalid/verse/plan links and sharing.
+- Next: run committed canonical test_reader, inspect actual screens and one independent feature
+  review. Website exact-base83b5ae5patch remains a draft; Next16 runtime, successful live KJV
+  fetch, deployed recipient page and cross-install collection are still outstanding.
+- Native links must not ship until their destination is live/proven. No publication, new binary,
+  pricing change or live collection is authorized by this local-copy approval. GitHub main last
+  verifiedc72aaa61; sourcec63c68d(build8) and2841df3(native design) remain ancestors.
+- Research and release order: docs/growth/GROWTH.md. Durable website patch/composer/notes in
+  ~/.codex/visualizations/2026/10/28/01a18470-63ee-72f3-8e43-81d61043a030/bright-scroll-growth/.
+
+---
+
 # Current checkpoint — Bright Scroll, 2026-11-01
 
 - **Bright Scroll: Bible AI** is saved and strictly verified in App Store Connect for existing

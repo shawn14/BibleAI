@@ -1,15 +1,6 @@
 import Foundation
 import Combine
 
-struct ReadingPlace: Codable, Equatable {
-    let book: String
-    let chapter: Int
-    let verse: Int
-
-    var id: String { "\(book)|\(chapter)|\(verse)" }
-    static let beginning = ReadingPlace(book: "Genesis", chapter: 1, verse: 1)
-}
-
 extension BibleVerse {
     var place: ReadingPlace { ReadingPlace(book: book, chapter: chapter, verse: verse) }
     var passageID: String { place.id }
