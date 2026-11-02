@@ -20,6 +20,7 @@ canonical_scripts:
   check_source: python3 scripts/check-source.py
   prepare_dependencies: pod install --deployment --no-repo-update
   test_reader: bash scripts/simulator-reader-proof.sh
+  inspect_reader: bash scripts/inspect-reader-proof.sh
   inspect_aso: node scripts/aso-inspect.mjs
   check_aso: node scripts/aso-refresh.mjs check
   apply_aso: node scripts/aso-refresh.mjs apply
