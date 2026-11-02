@@ -57,59 +57,42 @@ Journeys6–8 and the stated gaps remain unverified; do not turn those into pass
 
 ## Source control and release
 
-GitHub main includes the original main, recorded 2.0.1/build-8 source c63c68d, tested native
-source 2841df3 and November 1 ASO/rename changes (PRs 1–3, main4de94c2). Preserve this ancestry.
-Publish deliberate review-branch commits via the committed ask-first publish_review_branch
-then merge the reviewed PR into main; keep main fast-forward current. Follow docs/os.yaml.
+Main contains recorded2.0.1/build8 sourcec63c68d, tested native source2841df3 and Bright Scroll
+source/assets (PR5,112eb65). Preserve that ancestry. Publish reviewed changes with the committed
+ask-first publish_review_branch action and deliberate PR merge; keep main clean/current.
+Use docs/os.yaml and Mac authentication. No new binary, pricing change or public manual release
+was authorized by the November1 ASO/rebrand task. Additional decisions: one at a time.
 
-## November 1 ASO continuation
+## November 1 completed ASO and rebrand
 
-Shawn explicitly approved GitHub main publication and replacement/resubmission of existing
-2.0.1/build 8. That approval persists. No new binary, public manual release, or pricing change.
-Additional decisions: one at a time. Use mac-run authentication; never bypass it.
+Selected App Store title: Bright Scroll: Bible AI. Short icon/in-app brand: Bright Scroll.
+The store title/copy and two branded creative videos are saved and verified. The short native
+label and later UX refinements require a later binary; they are not in uploaded build8.
+Bundle/product IDs, storage keys, repo and service URLs remain unchanged.
 
-Shawn selected the more distinct Bright Scroll: Bible AI after raising competitor-name overlap.
-Short icon/in-app display name: Bright Scroll. The earlier Scroll Bible title is superseded locally. Bundle/product IDs, storage keys, repo and service
-URLs stay unchanged. The original Scroll Bible listing/media remain verified in Apple; Bright Scroll is prepared
-locally. The short native display name requires a later binary and is not in uploaded build 8.
+Shawn explicitly approved publication and replacement/resubmission. apply_rebrand200450-bfxv
+passed97.1s; actual20:17read confirmed all processing complete. Strict verify_rebrand201746-jhcq
+passed5.5s including review notes, all copy, asset identity/checksums and video processing.
+Final submit_review201830-yibo passed45.1s at20:24:52CST. Independent actual Apple read20:25:04CST
+confirmed WAITING_FOR_REVIEW, exact2.0.1/build8 VALID/MANUAL, nine public fields,18preserved
+screenshots, preserved AppPreview and both newvideo placements unchanged. No public release.
 
-The complete ASO package is uploaded and verified: nine public fields, review notes,
-18 screenshots and three videos; all processing complete, creative placements ACTIVE.
-Strict verify_aso passed at18:09CST. Independent actual read at18:29:47CST confirmed unchanged
-assets, copy and build8 VALID/MANUAL. Original review was canceled with approval.
+The first strict check stopped while Apple reported PROCESSING; current readback is COMPLETE.
+Its generic original error cannot establish which field was pending. Never describe it as a
+failed asset or repeat an upload merely because processing is pending.
 
-Authenticated retry BibleAI-submit_review-20261101-191639-vjky passed at19:17:50CST in46.6s.
-Independent inspect_aso read at19:22:32CST confirmed WAITING_FOR_REVIEW, exact2.0.1/build8
-VALID/MANUAL, unchanged nine public fields and assets; library videos WAITING_FOR_REVIEW,
-placements ACTIVE. The prior expired prompt never ran. Do not repeat this completed submission.
+Do not rerun the completed apply_rebrand, apply_aso, resume_aso_videos or submit_review jobs.
+Retain one-time receipts in build/aso-rebrand and build/aso-refresh. The narrow rebrand path
+is specific to this completed rename; prepare any future update from current Apple state rather
+than deleting receipts to bypass it. Runbook: docs/aso/README.md.
 
-Owner then raised overlap with Scroll The Bible and BibleScroll: Christian Focus. He selected
-Bright Scroll: Bible AI. Matching copy/native labels and two branded videos are prepared locally;
-render_store_brand193223-pdgv passed84s. No further Apple rename/cancellation/resubmission yet.
+Canonical listing copy is docs/aso/en-US. Central submit_review resolves Fastfile-relative
+fastlane/apps/bibleai/metadata, observed empty November1. Historical root-level
+apps/bibleai/metadata is not its input; never stage stale copy over the verified listing.
 
-Use plan_rebrand (read-only actual Apple preflight), then reviewed/approved apply_rebrand,
-verify_rebrand and existing submit_review. This narrow path preserves18screenshots, preview,
-other metadata, build8, manual release, live app info and pricing. The plan pins exact review and
-package; one-time apply receipt prevents blind retry. Never rerun completed apply_aso or
-resume_aso_videos for this rebrand. Complete prepared-package review before requesting the final
-approval to replace the newly submitted review. Shawn subsequently gave that explicit approval
-in this chat; proceed through existing guarded actions without asking for repeat product approval.
-Keep Mac authentication and source publication.
+ASC review items require ?include=appStoreVersion for a positive exact-version match. Library
+video state can pass through COMPLETE before PREPARE_FOR_SUBMISSION; poll through it and allow
+placement only in PREPARE_FOR_SUBMISSION/APPROVED. Final verification requires complete posters.
 
-Runbook: docs/aso/README.md. inspect_aso reads exact version/build/assets; verify_aso requires
-exact copy, ordered screenshot checksums, complete preview/video processing and ACTIVE
-creative placements. docs/aso/en-US is canonical listing copy. Central submit_review uses
-Fastfile-relative fastlane/apps/bibleai/metadata, observed empty November1. Historical
-root-level apps/bibleai/metadata is not its input; never stage it over the new copy.
-
-ASC review-item reads require ?include=appStoreVersion. The actual default response omitted
-version relationships; the exact-version cancellation guard correctly refused before writes.
-Keep the positive version-id match; never fall back to one active submission.
-
-Library video state can transition COMPLETE → PREPARE_FOR_SUBMISSION. Poll through COMPLETE;
-only PREPARE_FOR_SUBMISSION/APPROVED permit placement. The scoped November1 recovery reused
-recorded assets, verified package hash/copy/checksums/placements, and completed without repeating
-metadata/screenshots/preview writes. A processing state is not a failed asset or reason to reupload.
-
-The approved Air test already passed within20minutes. Reuse retained real-screen captures for
-ASO work. Render actions use normal load/disk/memory guards and two FFmpeg threads, no Simulator.
+The approved Air native test already passed within20minutes. Reuse retained real-screen captures
+for ASO changes. Render actions use normal resource guards and two FFmpeg threads, no Simulator.
