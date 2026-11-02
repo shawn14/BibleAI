@@ -16,10 +16,16 @@
   iPad/accessibility/device handoff, cross-install collection and measuredK remain unverified.
 - Both local branches remain unpushed. GitHub BibleAI main freshly readc72aaa61; existing
   build8sourcec63c68d and tested native2841df3 ancestry preserved. No ASC/pricing changes.
-- Next: finish remaining sharing coverage and real device/web handoff; prepare production
-  website build and guarded publication path before asking to publish. Existing publish action
-  targets oldclaude/scroll-parity and must not publish this branch. First-party cohort collection
-  and actual growth experiments still needed; completed UIKit activity is not delivered referral.
+- Website production build passed76.1s at73a9b03; production-mode smoke passed8real routes
+  and the390px recipient screen in12.2s. Owned server/browser stopped. No deployment yet.
+- Guarded source publication is ready: check_growth_publication passed against GitHub main
+  c72aaa61 and exact reviewed native inputs bcc4893. publish_growth pushes the growth branch,
+  merges the exact PR head and reconciles clean main; it requires explicit publication approval
+  and Mac authentication. It does not archive/upload/submit or change pricing.
+- Next: publish reviewed native source and recipient website when approved, then finish remaining
+  native coverage/device handoff. First-party cross-install collection has no existing backend
+  in the website project and needs a dedicated provisioned store before real cohorts can be
+  collected. No collector or live telemetry was enabled; completed activity is not delivery/K.
 - All owned native jobs finished; owned Simulators deleted, website server/browser closed.
   Failed raw bundles removed only after exported screens/AX/logs/summaries were retained.
   Latest observed free space21GiB. Completed ASO receipts remain untouched.

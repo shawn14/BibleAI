@@ -113,5 +113,7 @@ Recipient website is `~/projects/v0-bible-ai-companion-website`; /share query co
 plan IDs must stay aligned. Its local Next16 browser proof passed; source is not deployed. Never
 ship invitation links before the destination and compatible binary are verified. Native device
 handoff, post-install return, exported pixels and cross-install metrics remain outstanding.
-Growth publication needs its own guarded action: the existing publish_review_branch points to
-the completed ASO branch, not codex/bright-scroll-growth. Do not push the wrong source.
+Growth source publication uses check_growth_publication then the ask-first publish_growth action.
+It binds native inputs to reviewed bcc4893, preserves shipped/tested ancestry, merges the exact PR
+head and finishes on clean pushed main. No native upload or App Store write is included. The older
+publish_review_branch targets the completed ASO branch; do not use it for growth changes.
