@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const mode=process.argv[2];
+if(!['plan','apply','verify'].includes(mode)) throw new Error('Choose plan, apply, or verify');
+if(!process.env.MAC_RUNNER_JOB_ID) throw new Error('Use the committed mac-run rebrand action');
+const job='scripts/asc/aso-rebrand.mjs';
+execFileSync(process.execPath,['scripts/asc/asc.mjs',job],{stdio:'inherit',env:{...process.env,BIBLEAI_REBRAND_MODE:mode}});
+const result=JSON.parse(fs.readFileSync(job.replace(/\.mjs$/,'.out.json'),'utf8'));
+if(!result.ok) throw new Error(result.error);
+fs.mkdirSync('build/aso-rebrand',{recursive:true});
+fs.writeFileSync(`build/aso-rebrand/${mode}-result.json`,JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result.result,null,2));

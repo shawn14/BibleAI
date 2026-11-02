@@ -2,9 +2,10 @@
 // Retains the established reviewSubmissions cancellation path; never renames or selects a build.
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
+import path from 'node:path';
 const APP='6756225286';
 const EDITABLE=new Set(['PREPARE_FOR_SUBMISSION','DEVELOPER_REJECTED','REJECTED','METADATA_REJECTED']);
-export default async api=>{
+export default async (api, options={})=>{
  const app=(await api.get(`/v1/apps/${APP}`)).data;
  assert.equal(app.attributes.bundleId,'com.shawncarpenter.bibleai-companion');
  const versions=(await api.all(`/v1/apps/${APP}/appStoreVersions?filter[platform]=IOS`)).filter(v=>v.attributes.versionString==='2.0.1');
@@ -16,12 +17,14 @@ export default async api=>{
  const active=(await api.all(`/v1/reviewSubmissions?filter[app]=${APP}&filter[platform]=IOS`)).filter(s=>['WAITING_FOR_REVIEW','IN_REVIEW','READY_FOR_REVIEW','UNRESOLVED_ISSUES'].includes(s.attributes.state));
  assert.equal(active.length,1,'Expected exactly one active BibleAI iOS review');
  const sub=active[0];assert.equal(sub.attributes.state,'WAITING_FOR_REVIEW');
+ if(options.expectedSubmission) assert.equal(sub.id,options.expectedSubmission,'Active review changed since plan');
  const items=await api.all(`/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion`);
  const ids=items.map(i=>i.relationships?.appStoreVersion?.data?.id).filter(Boolean);
  assert(ids.includes(version.id),'Review does not contain the approved version');
  assert(ids.every(id=>id===version.id),'Review contains another version');
- fs.mkdirSync('build/aso-refresh',{recursive:true});
- fs.writeFileSync('build/aso-refresh/cancel-review-before.json',JSON.stringify({observedAt:new Date().toISOString(),version,build,submission:sub,items},null,2)+'\n');
+ const receiptDir=options.receiptDir||'build/aso-refresh';
+ fs.mkdirSync(receiptDir,{recursive:true});
+ fs.writeFileSync(path.join(receiptDir,'cancel-review-before.json'),JSON.stringify({observedAt:new Date().toISOString(),version,build,submission:sub,items},null,2)+'\n');
  await api.patch(`/v1/reviewSubmissions/${sub.id}`,{data:{type:'reviewSubmissions',id:sub.id,attributes:{canceled:true}}});
  for(let i=0;i<30;i++){
   const current=(await api.get(`/v1/appStoreVersions/${version.id}`)).data;

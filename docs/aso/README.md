@@ -1,25 +1,29 @@
-# Scroll Bible App Store refresh
+# Bright Scroll App Store rebrand
 
-November 1 package for existing iOS **2.0.1/build 8** is uploaded and verified in App Store
-Connect. Title: **Scroll Bible: Daily Verses**. All nine public metadata fields, review notes,
-18 screenshots, App Preview, and header/search videos match the approved package. All processing
-is complete and creative placements are ACTIVE. Strict verification passed at 18:09 CST;
-independent readback at 18:29:47 CST preserved the same assets and build 8 VALID/MANUAL.
+Prepared title: **Bright Scroll: Bible AI** (23 characters). Short native label: **Bright Scroll**.
+Shawn selected this name after noting overlap with existing Scroll The Bible/BibleScroll apps.
+The description/review-note brand mentions and two encoded header/search videos now match.
+Guarded render_store_brand passed in84.0seconds; both encoded posters were visually checked.
+The18screenshots and21-second App Preview are unchanged. No new native binary was built.
 
-**Submitted and WAITING_FOR_REVIEW.** The authenticated November 1 retry completed at
-19:17:50 CST in 46.6 seconds. Independent Apple readback at 19:22:32 CST confirmed submission,
-exact build 8 VALID/MANUAL, all nine public metadata fields, screenshot/preview checksums and
-both creative placements unchanged. Library videos moved to WAITING_FOR_REVIEW; their
-placements remain ACTIVE. No public manual release was performed.
+**Apple still has Scroll Bible: Daily Verses**,2.0.1/build8, WAITING_FOR_REVIEW with manual release.
+Independent readback confirmed the original submission at19:22:32CST. This new rebrand is prepared
+locally, not uploaded. The icon/in-app label requires the next binary. No pricing/public release.
 
-Shawn subsequently raised naming overlap with Scroll The Bible and proposed “Bible Scroll AI.”
-An existing BibleScroll: Christian Focus listing also exists. Final replacement-name selection is
-pending; the submitted name remains Scroll Bible: Daily Verses. Do not cancel or rename again
-until the selected replacement and matching media are prepared and reviewed.
+## Apply the prepared rebrand
 
-The short icon/in-app label **Scroll Bible**, plus later native onboarding/completion changes,
-are saved in source and require the next binary. This package keeps existing build 8 and manual
-release; the public version 1.0 remains unchanged. No new binary or pricing change was made.
+1. `mac-run BibleAI plan_rebrand` reads actual Apple state and validates the exact pending review,
+   build8/MANUAL, retained18screenshots/preview and unchanged metadata. It pins the package hash
+   and old state in ignored `build/aso-rebrand/plan.json`. It performs no Apple write.
+2. Review the prepared assets and obtain approval to replace the current submitted listing.
+   Publish reviewed source through the existing guarded branch/PR path before store writes.
+3. `apply_rebrand` requires the same exact plan and WAITING_FOR_REVIEW state; cancels only that
+   review; updates title, description brand and review-note brand; replaces only header/search
+   creatives. It preserves all18screenshot ids/checksums/order and the App Preview. The one-time
+   receipt prevents blind repetition; inspect progress if any step stops.
+4. `verify_rebrand` checks all metadata, retained assets and new video hashes/processing/placements.
+5. Only after that passes, run the approved existing `submit_review` for2.0.1/build8 and independently
+   inspect actual review state. Manual public release and a new binary are separate actions.
 
 | Deliverable | Location | Specification |
 |---|---|---|
@@ -49,7 +53,7 @@ Apple specifications: [screenshots](https://developer.apple.com/help/app-store-c
 [creative assets](https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications/),
 [product page](https://developer.apple.com/app-store/product-page/).
 
-## Canonical workflow and recovery
+## Original full refresh workflow (completed)
 
 Use committed `docs/os.yaml` actions through mac-run. These actions reuse the BibleAI ASC client
 and the inspect/apply/verify pattern already used for Milepost.
