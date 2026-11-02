@@ -16,8 +16,8 @@
 - Actual read-only plan `BibleAI-plan_rebrand-20261101-193632-nvcb` passed12.5s at19:43:58CST,
   pinning review684b6508-7b6f-410f-9721-80e04cbdc2cd and package
   `96425a30d3c5fe80766fbb6f1eb6a47eac37eb39843899507135b2187533c717`. Local/source/format checks
-  and independent visual/source review passed. Final approval to publish this rebrand and replace
-  the newly submitted review was requested; no rebrand Apple writes have occurred.
+  and independent visual/source review passed. Shawn explicitly approved rebrand publication and
+  replacement/resubmission in this chat. Execute existing guarded actions; no rebrand writes yet.
 - Published GitHub main before this preparation: `d805ba17cba9bb7304d13702876418d25feb8dbf`
   (PR4), including recorded build8 sourcec63c68d and tested native source2841df3.
 

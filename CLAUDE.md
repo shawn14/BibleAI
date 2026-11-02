@@ -92,7 +92,9 @@ verify_rebrand and existing submit_review. This narrow path preserves18screensho
 other metadata, build8, manual release, live app info and pricing. The plan pins exact review and
 package; one-time apply receipt prevents blind retry. Never rerun completed apply_aso or
 resume_aso_videos for this rebrand. Complete prepared-package review before requesting the final
-approval to replace the newly submitted review. Keep Mac authentication and source publication.
+approval to replace the newly submitted review. Shawn subsequently gave that explicit approval
+in this chat; proceed through existing guarded actions without asking for repeat product approval.
+Keep Mac authentication and source publication.
 
 Runbook: docs/aso/README.md. inspect_aso reads exact version/build/assets; verify_aso requires
 exact copy, ordered screenshot checksums, complete preview/video processing and ACTIVE

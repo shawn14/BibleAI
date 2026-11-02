@@ -7,7 +7,7 @@ Guarded render_store_brand passed in84.0seconds; both encoded posters were visua
 The18screenshots and21-second App Preview are unchanged. No new native binary was built.
 Independent local review passed. Actual read-only plan193632-nvcb passed in12.5seconds at
 19:43:58CST, confirming the exact current review and narrow metadata/media difference.
-Final publication/replacement approval has been requested; no rebrand writes have run.
+Shawn approved publication and replacement/resubmission in this chat; no rebrand writes have run yet.
 
 **Apple still has Scroll Bible: Daily Verses**,2.0.1/build8, WAITING_FOR_REVIEW with manual release.
 Independent readback confirmed the original submission at19:22:32CST. This new rebrand is prepared
