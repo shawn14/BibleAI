@@ -278,6 +278,14 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertEqual(completed.label, "Share activity completed.")
         XCTAssertTrue(app.buttons["share.close"].waitForExistence(timeout: 5))
         app.buttons["share.close"].tap()
+        // The system Close path must remain usable and must not count as a completed activity.
+        app.buttons["reader.share"].tap()
+        app.buttons["share.send"].tap()
+        let closeActivity = app.buttons["header.closeButton"]
+        XCTAssertTrue(closeActivity.waitForExistence(timeout: 5))
+        closeActivity.tap()
+        XCTAssertTrue(app.buttons["share.close"].waitForExistence(timeout: 5))
+        app.buttons["share.close"].tap()
         app.terminate()
         app.launchArguments = []
         app.launch()

@@ -28,21 +28,26 @@ struct ScriptureShareView: View {
                     }.pickerStyle(.segmented).accessibilityIdentifier("share.theme")
                     Text("Includes this verse, its reference, and a link to read it in Bright Scroll. Your notes stay private.")
                         .font(.footnote).foregroundStyle(.secondary)
-                    if let message { Text(message).font(.footnote).foregroundStyle(.secondary).accessibilityIdentifier("share.status") }
                 }.padding(24)
             }
             .safeAreaInset(edge: .bottom) {
-                Button(action: share) {
-                    Label("Share Verse", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity).padding(.vertical, 7)
-                }.buttonStyle(.borderedProminent).accessibilityIdentifier("share.send")
-                    .padding().background(Color(.systemBackground))
+                VStack(spacing: 8) {
+                    if let message {
+                        Text(message).font(.footnote).foregroundStyle(.secondary)
+                            .accessibilityIdentifier("share.status")
+                    }
+                    Button(action: share) {
+                        Label("Share Verse", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity).padding(.vertical, 7)
+                    }.buttonStyle(.borderedProminent).accessibilityIdentifier("share.send")
+                }.padding().background(Color(.systemBackground))
             }
             .navigationTitle("Share a Verse").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() }.accessibilityIdentifier("share.close") }
             }
-            .sheet(item: $activity, onDismiss: cancelledIfNeeded) { item in
+            .sheet(item: $activity) { item in
                 ActivityShareView(items: item.items) { outcome in finish(outcome, id: item.id) }
+                    .interactiveDismissDisabled()
             }
         }
     }
@@ -73,11 +78,7 @@ struct ScriptureShareView: View {
         activity = nil
     }
 
-    private func cancelledIfNeeded() {
-        guard handledActivity == nil else { return }
-        handledActivity = UUID()
-        if let link { GrowthStore.shared.record(.shareCancelled, for: link) }
-    }
+
 }
 
 struct PlanInvitationShareView: View {
@@ -109,24 +110,24 @@ struct PlanInvitationShareView: View {
                     }
                     Text("Send the plan to someone you’d like to read with. Each person keeps their own progress; notes and activity are not shared.")
                         .font(.footnote).foregroundStyle(.secondary)
-                    if let message { Text(message).font(.footnote).foregroundStyle(.secondary) }
                 }.padding(24)
             }
             .safeAreaInset(edge: .bottom) {
-                Button(action: share) {
-                    Label("Invite Someone", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity).padding(.vertical, 7)
-                }.buttonStyle(.borderedProminent).accessibilityIdentifier("share.send")
-                    .padding().background(Color(.systemBackground))
+                VStack(spacing: 8) {
+                    if let message {
+                        Text(message).font(.footnote).foregroundStyle(.secondary)
+                            .accessibilityIdentifier("share.status")
+                    }
+                    Button(action: share) {
+                        Label("Invite Someone", systemImage: "square.and.arrow.up").frame(maxWidth: .infinity).padding(.vertical, 7)
+                    }.buttonStyle(.borderedProminent).accessibilityIdentifier("share.send")
+                }.padding().background(Color(.systemBackground))
             }
             .navigationTitle("Share a Plan").navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() }.accessibilityIdentifier("share.close") }
             }
-            .sheet(item: $activity, onDismiss: {
-                guard handledActivity == nil else { return }
-                handledActivity = UUID()
-                if let link { GrowthStore.shared.record(.shareCancelled, for: link) }
-            }) { item in
+            .sheet(item: $activity) { item in
                 ActivityShareView(items: item.items) { outcome in
                     guard handledActivity == nil else { return }
                     handledActivity = item.id
@@ -134,6 +135,7 @@ struct PlanInvitationShareView: View {
                     message = outcome.message
                     activity = nil
                 }
+                .interactiveDismissDisabled()
             }
         }
     }
@@ -192,6 +194,9 @@ enum ShareActivityOutcome {
     }
 }
 
+/// UIKit supplies the outcome after dismissal. SwiftUI onDismiss must not preempt it with
+/// a cancellation; its sheet teardown can occur before the MainActor callback is delivered.
+/// Interactive outer-sheet dismissal is disabled; the system share sheet's Close remains available.
 struct ActivityShareView: UIViewControllerRepresentable {
     let items: [Any]
     let completion: @MainActor (ShareActivityOutcome) -> Void

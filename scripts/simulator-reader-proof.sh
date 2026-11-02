@@ -42,7 +42,7 @@ set +e
     -resultBundlePath "$result" -parallel-testing-enabled NO \
     -test-timeouts-enabled YES -default-test-execution-time-allowance 360 \
     -maximum-test-execution-time-allowance 480 \
-    "${filters[@]}" CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
+    ${filters[@]+"${filters[@]}"} CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
 } 2>&1 | tee "$log"
 run_exit=${PIPESTATUS[0]}
 set -e
@@ -50,4 +50,9 @@ xcrun xcresulttool get test-results summary --path "$result" --format json > "$r
 echo "RUN_EXIT $run_exit" | tee -a "$log"
 xcrun xcresulttool export attachments --path "$result" --output-path "$PWD/build/proof/$stamp-attachments"
 echo "Raw native evidence: $result"
+if [[ "${1:-}" == --growth ]]; then
+  bundle=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' build/reader/Build/Products/Debug-iphonesimulator/BibleAI.app/Info.plist)
+  data_dir=$(xcrun simctl get_app_container "$owned" "$bundle" data)
+  python3 scripts/tests/growth/ui-state.py "$data_dir/Library/Preferences/$bundle.plist" "$run_exit"
+fi
 exit "$run_exit"
