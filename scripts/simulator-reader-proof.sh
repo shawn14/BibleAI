@@ -15,6 +15,12 @@ d=next((d for d in j["devicetypes"] if d["name"]=="iPhone 16"), None)
 if not r or not d: sys.exit("No iPhone16/iOS runtime; stop")
 print(d["identifier"],r["identifier"])')
 [[ -n "$device" && -n "$runtime" ]]
+filters=()
+case "${1:-}" in
+  "") ;;
+  --growth) filters=(-only-testing:BibleAIUITests/ReaderJourneyTests/testZShareAndInvitationJourney) ;;
+  *) echo 'Unsupported proof scope'; exit 1 ;;
+esac
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 mkdir -p build/proof
 log="$PWD/build/proof/$stamp.log"
@@ -28,6 +34,7 @@ cleanup() {
 trap cleanup EXIT
 xcrun simctl boot "$owned"
 xcrun simctl bootstatus "$owned" -b
+set +e
 {
   echo "SOURCE $(git rev-parse HEAD)"
   xcodebuild test -jobs 2 -workspace BibleAI.xcworkspace -scheme BibleAIReaderTests \
@@ -35,9 +42,12 @@ xcrun simctl bootstatus "$owned" -b
     -resultBundlePath "$result" -parallel-testing-enabled NO \
     -test-timeouts-enabled YES -default-test-execution-time-allowance 360 \
     -maximum-test-execution-time-allowance 480 \
-    CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
+    "${filters[@]}" CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
 } 2>&1 | tee "$log"
+run_exit=${PIPESTATUS[0]}
+set -e
 xcrun xcresulttool get test-results summary --path "$result" --format json > "$result.summary.json"
-echo 'RUN_EXIT 0' | tee -a "$log"
+echo "RUN_EXIT $run_exit" | tee -a "$log"
 xcrun xcresulttool export attachments --path "$result" --output-path "$PWD/build/proof/$stamp-attachments"
 echo "Raw native evidence: $result"
+exit "$run_exit"

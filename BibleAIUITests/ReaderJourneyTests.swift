@@ -265,10 +265,17 @@ final class ReaderJourneyTests: XCTestCase {
         night.tap()
         capture("growth-share-night")
         app.buttons["share.send"].tap()
-        let copy = app.buttons["Copy"].firstMatch
+        // iOS26 exposes system share actions as collection cells (observed in the failing run).
+        let copy = app.cells["Copy"].firstMatch
         XCTAssertTrue(copy.waitForExistence(timeout: 10), "Real iOS share sheet must offer Copy")
+        let caption = app.otherElements["LP.CaptionBar.BottomCaption"]
+        XCTAssertTrue(caption.label.contains("For God so loved the world"))
+        XCTAssertTrue(caption.label.contains("https://www.bibleaicompanion.com/share?kind=verse&book=John&chapter=3&verse=16&invite="))
         capture("growth-system-share")
         copy.tap()
+        let completed = app.staticTexts["share.status"]
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        XCTAssertEqual(completed.label, "Share activity completed.")
         XCTAssertTrue(app.buttons["share.close"].waitForExistence(timeout: 5))
         app.buttons["share.close"].tap()
         app.terminate()
