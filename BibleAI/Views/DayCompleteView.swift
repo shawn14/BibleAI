@@ -3,6 +3,8 @@ import SwiftUI
 /// Shown after marking a plan day complete: the reading, an encouraging verse and the reading streak.
 struct DayCompleteView: View {
     let reading: String
+    let plan: ReadingPlan
+    @State private var showInvite = false
     let hasNextDay: Bool
     let onDone: () -> Void
     let onContinue: () -> Void
@@ -60,6 +62,9 @@ struct DayCompleteView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 16)
 
+                    Button("Invite Someone to Read This Plan", systemImage: "person.badge.plus") { showInvite = true }
+                        .accessibilityIdentifier("streak.invite")
+                        .padding(.bottom, 4)
                     Divider()
 
                     VStack(alignment: .leading, spacing: 12) {
@@ -129,6 +134,7 @@ struct DayCompleteView: View {
             .frame(maxWidth: 560)
             .background(Color(.systemBackground))
         }
+        .sheet(isPresented: $showInvite) { PlanInvitationShareView(plan: plan) }
         .onAppear {
             if reduceMotion { appeared = true } else { withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { appeared = true } }
             UINotificationFeedbackGenerator().notificationOccurred(.success)

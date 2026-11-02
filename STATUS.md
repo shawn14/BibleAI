@@ -1,3 +1,37 @@
+# Growth checkpoint — November 2, 2026
+
+- Approved local composer copy applied. Native sharing/invitation candidate `bcc4893` passed
+  `BibleAI-test_growth-20261102-083816-fpuh` (352.4s total; UI80.029s,0failures).
+  Actual verse/plan Copy, native Close cancellation, invalid link, content before onboarding,
+  warm plan URL, Matthew1 and relaunch passed. Persisted3presented/2completed/1cancelled,
+  2accepted invitations and1new-reader activation. Independent native-scope review passed.
+- Existing reader/save/note/search/all4plan persistence journey passed203.014s in hyuj at5ed8627.
+  Core363checks and report14tests remain passed; no unchanged full-suite replay needed.
+- First failures were the iOS26 Copy cell selector, then missing completion feedback. UIKit
+  now owns final outcomes; SwiftUI onDismiss no longer preempts completion. Feedback stays
+  beside Share. Real failed/passed UI checks and saved-state counts verify the local fix.
+- Native screens: docs/growth/preview. Website clean local branchcodex/bright-scroll-sharing at
+  c496508 passed20actual Next16 browser cases plus parser/tsc; docs/SHARING.md in its repo.
+  No website deployment or new native binary. Exported image pixels, saved-note share entry,
+  iPad/accessibility/device handoff, cross-install collection and measuredK remain unverified.
+- Both local branches remain unpushed. GitHub BibleAI main freshly readc72aaa61; existing
+  build8sourcec63c68d and tested native2841df3 ancestry preserved. No ASC/pricing changes.
+- Website production build passed76.1s at73a9b03; production-mode smoke passed8real routes
+  and the390px recipient screen in12.2s. Owned server/browser stopped. No deployment yet.
+- Guarded source publication is ready: check_growth_publication passed against GitHub main
+  c72aaa61 and exact reviewed native inputs bcc4893. publish_growth pushes the growth branch,
+  merges the exact PR head and reconciles clean main; it requires explicit publication approval
+  and Mac authentication. It does not archive/upload/submit or change pricing.
+- Next: publish reviewed native source and recipient website when approved, then finish remaining
+  native coverage/device handoff. First-party cross-install collection has no existing backend
+  in the website project and needs a dedicated provisioned store before real cohorts can be
+  collected. No collector or live telemetry was enabled; completed activity is not delivery/K.
+- All owned native jobs finished; owned Simulators deleted, website server/browser closed.
+  Failed raw bundles removed only after exported screens/AX/logs/summaries were retained.
+  Latest observed free space21GiB. Completed ASO receipts remain untouched.
+
+---
+
 # Current checkpoint — Bright Scroll, 2026-11-01
 
 - **Bright Scroll: Bible AI** is saved and strictly verified in App Store Connect for existing

@@ -5,6 +5,7 @@ struct ReadingPlanDetailView: View {
     @Binding var isPresented: ReadingPlan?
     @StateObject private var plans = ReadingPlanService.shared
     @State private var showReset = false
+    @State private var showInvite = false
     @State private var completedDay: DailyReading?
 
     private var progress: UserPlanProgress? { plans.getProgress(for: plan.id) }
@@ -14,6 +15,8 @@ struct ReadingPlanDetailView: View {
             List {
                 Section {
                     Text(plan.description).foregroundStyle(.secondary)
+                    Button("Read with Someone", systemImage: "person.badge.plus") { showInvite = true }
+                        .accessibilityIdentifier("plan.invite")
                     if let progress {
                         ProgressView(value: Double(progress.completedDays.count), total: Double(plan.duration)) {
                             Text("\(progress.completedDays.count) of \(plan.duration) complete")
@@ -41,6 +44,7 @@ struct ReadingPlanDetailView: View {
             // iPad: this view is already a form sheet, and a nested sheet is too short for the day-complete card.
             .sheet(item: isPad ? .constant(nil) : $completedDay) { day in dayComplete(day) }
             .fullScreenCover(item: isPad ? $completedDay : .constant(nil)) { day in dayComplete(day) }
+            .sheet(isPresented: $showInvite) { PlanInvitationShareView(plan: plan) }
             .confirmationDialog("Reset this plan's progress?", isPresented: $showReset, titleVisibility: .visible) {
                 Button("Reset Progress", role: .destructive) { plans.deletePlanProgress(plan.id) }
                 Button("Cancel", role: .cancel) { }
@@ -55,7 +59,7 @@ struct ReadingPlanDetailView: View {
                 if let book = BibleBookInfo.allBooks.first(where: { $0.name == reference.book }) {
                     ForEach(reference.startChapter...(reference.endChapter ?? reference.startChapter), id: \.self) { chapter in
                         NavigationLink {
-                            ChapterReadingView(book: book, chapter: chapter)
+                            ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id)
                         } label: {
                             Label("\(book.name) \(chapter)", systemImage: "book")
                         }
@@ -80,6 +84,7 @@ struct ReadingPlanDetailView: View {
     private func dayComplete(_ day: DailyReading) -> some View {
         DayCompleteView(
             reading: readingSummary(day),
+            plan: plan,
             hasNextDay: plan.dailyReadings.contains { !plans.isDayComplete(planId: plan.id, day: $0.day) },
             onDone: { completedDay = nil; isPresented = nil },
             onContinue: { completedDay = nil })

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ScriptureReaderView: View {
+    @Binding var requestedPlace: ReadingPlace?
+    var isActive = true
     @StateObject private var model = ScriptureFeedModel()
     @StateObject private var highlights = HighlightService.shared
     @AppStorage("reader.useSerif") private var useSerif = true
@@ -13,7 +15,7 @@ struct ScriptureReaderView: View {
     private var padScale: CGFloat { sizeClass == .regular ? 1.6 : 1 }
 
     private enum ReaderSheet: String, Identifiable {
-        case passage, study, note, chapter
+        case passage, study, note, chapter, share
         var id: String { rawValue }
     }
 
@@ -45,10 +47,13 @@ struct ScriptureReaderView: View {
             .overlay(alignment: .trailing) {
                 if let verse = model.current { actions(for: verse) }
             }
-            .task { await model.start() }
+            .task(id: isActive) { if isActive { await openRequestedPassage() } }
+            .onChange(of: requestedPlace) { _, _ in if isActive { Task { await openRequestedPassage() } } }
             .onChange(of: model.visibleID) { _, _ in Task { await model.didScroll() } }
             .sheet(item: $sheet) { destination in
                 switch destination {
+                case .share:
+                    if let verse = model.current { ScriptureShareView(verse: verse) }
                 case .passage:
                     PassagePickerView { place in await model.open(place) }
                 case .study:
@@ -199,15 +204,28 @@ struct ScriptureReaderView: View {
                 .accessibilityIdentifier("reader.study")
             Button { sheet = .note } label: { Image(systemName: "square.and.pencil") }
                 .accessibilityLabel("Add a Note")
-            ShareLink(item: "\(verse.text)\n\n\(verse.fullReference)") {
+            Button { sheet = .share } label: {
                 Image(systemName: "square.and.arrow.up")
             }
             .accessibilityLabel("Share Verse")
+            .accessibilityIdentifier("reader.share")
         }
         .font(.system(size: sizeClass == .regular ? 28 : 22, weight: .regular))
         .foregroundStyle(.primary)
         .frame(width: 44)
         .padding(.trailing, 10)
+    }
+
+    private func openRequestedPassage() async {
+        if let place = requestedPlace {
+            if await model.open(place) {
+                requestedPlace = nil
+                if let invite = GrowthStore.shared.acceptedInvitation, invite.readingPlace == place {
+                    GrowthStore.shared.recordFirstReading(for: invite)
+                }
+            }
+        } else { await model.start() }
+        if model.current != nil { GrowthStore.shared.recordReaderActivation() }
     }
 
     private func saved(_ verse: BibleVerse) -> Highlight? {

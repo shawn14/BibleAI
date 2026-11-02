@@ -9,6 +9,7 @@ struct NoteEditorView: View {
     @Binding var isPresented: Bool
     @StateObject private var highlights = HighlightService.shared
     @State private var note = ""
+    @State private var showShare = false
     @State private var color: HighlightColor = .yellow
 
     var body: some View {
@@ -17,7 +18,7 @@ struct NoteEditorView: View {
                 Section {
                     Text(verseText).font(.system(.body, design: .serif)).lineSpacing(4)
                         .textSelection(.enabled)
-                    ShareLink(item: "\(verseText)\n\n\(book) \(chapter):\(verse) (KJV)") {
+                    Button { showShare = true } label: {
                         Label("Share Verse", systemImage: "square.and.arrow.up")
                     }
                 }
@@ -50,6 +51,9 @@ struct NoteEditorView: View {
                     }.accessibilityIdentifier("note.save")
                 }
             }
+        }
+        .sheet(isPresented: $showShare) {
+            ScriptureShareView(verse: BibleVerse(book: book, chapter: chapter, verse: verse, text: verseText))
         }
         .onAppear {
             note = highlight?.note ?? ""

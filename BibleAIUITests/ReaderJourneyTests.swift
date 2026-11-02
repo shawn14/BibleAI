@@ -228,6 +228,95 @@ final class ReaderJourneyTests: XCTestCase {
         tab("Saved", in: app).tap(); sleep(3)
     }
 
+    /// Real system share sheet + a received invitation before the ordinary onboarding funnel.
+    func testZShareAndInvitationJourney() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-hasCompletedOnboarding", "NO"]
+        app.launch()
+        let openInvite = app.buttons["onboarding.openInvitation"]
+        XCTAssertTrue(openInvite.waitForExistence(timeout: 10))
+        openInvite.tap()
+        let entry = app.descendants(matching: .any)["invitation.link"].firstMatch
+        XCTAssertTrue(entry.waitForExistence(timeout: 5))
+        entry.tap()
+        let invalid = "https://example.com/"
+        entry.typeText(invalid)
+        app.buttons["invitation.open"].tap()
+        XCTAssertTrue(app.staticTexts["invitation.invalid"].waitForExistence(timeout: 3))
+        entry.tap()
+        entry.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: invalid.count))
+        entry.typeText("https://www.bibleaicompanion.com/share?kind=verse&book=John&chapter=3&verse=16&invite=850b0200-1275-4dad-a5a1-ae7cb4090ce1")
+        app.buttons["invitation.open"].tap()
+        let invitation = app.staticTexts["invitation.verse"]
+        XCTAssertTrue(invitation.waitForExistence(timeout: 30))
+        XCTAssertTrue(invitation.label.contains("For God so loved the world"))
+        XCTAssertFalse(app.buttons["paywall.close"].exists)
+        capture("growth-recipient-verse")
+        app.buttons["invitation.accept"].tap()
+        let verse = app.buttons["reader.verse.John|3|16"]
+        XCTAssertTrue(verse.waitForExistence(timeout: 15))
+        XCTAssertTrue(verse.isHittable)
+        app.buttons["reader.share"].tap()
+        XCTAssertTrue(app.buttons["share.send"].waitForExistence(timeout: 5))
+        capture("growth-share-paper")
+        let night = app.buttons["Night"]
+        XCTAssertTrue(night.exists)
+        night.tap()
+        capture("growth-share-night")
+        app.buttons["share.send"].tap()
+        // iOS26 exposes system share actions as collection cells (observed in the failing run).
+        let copy = app.cells["Copy"].firstMatch
+        XCTAssertTrue(copy.waitForExistence(timeout: 10), "Real iOS share sheet must offer Copy")
+        let caption = app.otherElements["LP.CaptionBar.BottomCaption"]
+        XCTAssertTrue(caption.label.contains("For God so loved the world"))
+        XCTAssertTrue(caption.label.contains("https://www.bibleaicompanion.com/share?kind=verse&book=John&chapter=3&verse=16&invite="))
+        capture("growth-system-share")
+        copy.tap()
+        let completed = app.staticTexts["share.status"]
+        XCTAssertTrue(completed.waitForExistence(timeout: 5))
+        XCTAssertEqual(completed.label, "Share activity completed.")
+        XCTAssertTrue(app.buttons["share.close"].waitForExistence(timeout: 5))
+        app.buttons["share.close"].tap()
+        // The system Close path must remain usable and must not count as a completed activity.
+        app.buttons["reader.share"].tap()
+        app.buttons["share.send"].tap()
+        let closeActivity = app.buttons["header.closeButton"]
+        XCTAssertTrue(closeActivity.waitForExistence(timeout: 5))
+        closeActivity.tap()
+        XCTAssertTrue(app.buttons["share.close"].waitForExistence(timeout: 5))
+        app.buttons["share.close"].tap()
+        app.terminate()
+        app.launchArguments = []
+        app.launch()
+        XCTAssertTrue(app.buttons["reader.verse.John|3|16"].waitForExistence(timeout: 20))
+        XCTAssertFalse(app.buttons["onboarding.continue"].exists)
+        tab("Plans", in: app).tap()
+        app.open(URL(string: "brightscroll://share?kind=plan&plan=6f1c2a10-0001-4b1a-9e1e-0000000000a1&invite=3d8eed79-247b-4b3b-8f10-8cd3a30bf2e7")!)
+        XCTAssertTrue(app.staticTexts["invitation.plan"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["invitation.plan"].label, "Gospel Tour")
+        capture("growth-recipient-plan")
+        app.buttons["invitation.accept"].tap()
+        XCTAssertTrue(app.buttons["plan.invite"].waitForExistence(timeout: 5))
+        app.buttons["plan.invite"].tap()
+        XCTAssertTrue(app.buttons["share.send"].waitForExistence(timeout: 5))
+        capture("growth-plan-invitation")
+        app.buttons["share.send"].tap()
+        let planCopy = app.cells["Copy"].firstMatch
+        XCTAssertTrue(planCopy.waitForExistence(timeout: 10))
+        capture("growth-plan-system-share")
+        planCopy.tap()
+        XCTAssertTrue(app.staticTexts["share.status"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["share.status"].label, "Share activity completed.")
+        app.buttons["share.close"].tap()
+        let chapter = app.buttons["Matthew 1"].firstMatch
+        XCTAssertTrue(chapter.waitForExistence(timeout: 5))
+        chapter.tap()
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "The book of the generation of Jesus Christ")).firstMatch.waitForExistence(timeout: 30))
+        capture("growth-plan-reading")
+        print("GROWTH_ASSERTED invalid-link exact-verse onboarding-bypass share-sheet copy plan-invite real-chapter relaunch")
+    }
+
     /// Notification permission (daily reminder, trial heads-up) comes from SpringBoard, outside the app.
     private func allowSystemAlert() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
