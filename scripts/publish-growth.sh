@@ -17,6 +17,7 @@ done
 # Documentation/publication wiring may advance; native inputs must remain exactly the reviewed candidate.
 git diff --quiet "$tested" HEAD -- BibleAI BibleAI.xcodeproj BibleAIUITests Podfile Podfile.lock || { echo 'Native input changed since reviewed growth run'; exit 1; }
 head=$(git rev-parse HEAD)
+main=$(git rev-parse origin/main)
 printf 'Reviewed native source %s; publication source %s; current main %s\n' "$tested" "$head" "$(git rev-parse origin/main)"
 [[ "$mode" == --publish ]] || { echo 'CHECK PASSED; no GitHub writes'; exit 0; }
 git push --set-upstream origin "HEAD:refs/heads/$branch"
@@ -26,10 +27,13 @@ if [[ -z "$pr" ]]; then
   pr=$(gh pr list --repo "$repo" --head "$branch" --base main --state open --json number --jq '.[0].number // empty')
 fi
 [[ -n "$pr" && "$(gh pr view "$pr" --repo "$repo" --json headRefOid --jq .headRefOid)" == "$head" ]] || { echo 'PR source mismatch'; exit 1; }
+git fetch --no-tags origin main
+[[ "$(git rev-parse origin/main)" == "$main" ]] || { echo "Main changed during publication; stop before merge"; exit 1; }
 gh pr merge "$pr" --repo "$repo" --merge --match-head-commit "$head"
 [[ -n "$(gh pr view "$pr" --repo "$repo" --json mergedAt --jq '.mergedAt // empty')" ]] || { echo 'PR is not merged'; exit 1; }
 git fetch --no-tags origin main
 git merge-base --is-ancestor "$head" origin/main
+git diff --quiet "$tested" origin/main -- BibleAI BibleAI.xcodeproj BibleAIUITests Podfile Podfile.lock || { echo "Merged native input differs from reviewed candidate"; exit 1; }
 # Finish on clean, current main so a later separately approved native release has one source of truth.
 git switch main
 git pull --ff-only origin main
