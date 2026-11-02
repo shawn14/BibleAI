@@ -1,12 +1,19 @@
 # Scroll Bible App Store refresh
 
-November 1 draft for the existing iOS 2.0.1/build 8. App Store title: **Scroll Bible: Daily Verses**. **Not uploaded.** The inspected Apple version
-is WAITING_FOR_REVIEW. The full local package passed format/copy checks and independent
-visual review on November 1. Shawn approved publication and replacement/resubmission of this
-listing by voice later that day. He confirmed being back at the Air at16:37CST; publication can resume through the existing
-Mac authentication path. No store writes have occurred yet. The latest native source also has an unboxed
-onboarding/completion pass and the Scroll Bible icon label/in-app name; these source changes
-are not in Apple's pending build 8. The display-label rename requires the next binary.
+November 1 package for existing iOS **2.0.1/build 8** is uploaded and verified in App Store
+Connect. Title: **Scroll Bible: Daily Verses**. All nine public metadata fields, review notes,
+18 screenshots, App Preview, and header/search videos match the approved package. All processing
+is complete and creative placements are ACTIVE. Strict verification passed at 18:09 CST;
+independent readback at 18:29:47 CST preserved the same assets and build 8 VALID/MANUAL.
+
+**Resubmission remains outstanding.** The 18:09 submission job's Mac password prompt expired
+at 18:29:37 CST without executing. Apple remains DEVELOPER_REJECTED with no active review.
+Shawn has already approved publication and same-build resubmission. Confirm Mac availability
+before queuing `submit_review` once; do not rerun `apply_aso` or `resume_aso_videos`.
+
+The short icon/in-app label **Scroll Bible**, plus later native onboarding/completion changes,
+are saved in source and require the next binary. This package keeps existing build 8 and manual
+release; the public version 1.0 remains unchanged. No new binary or pricing change was made.
 
 | Deliverable | Location | Specification |
 |---|---|---|
@@ -36,14 +43,14 @@ Apple specifications: [screenshots](https://developer.apple.com/help/app-store-c
 [creative assets](https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications/),
 [product page](https://developer.apple.com/app-store/product-page/).
 
-## Apply the approved package
+## Canonical workflow and recovery
 
 Use committed `docs/os.yaml` actions through mac-run. These actions reuse the BibleAI ASC client
 and the inspect/apply/verify pattern already used for Milepost.
 
 1. `inspect_aso` reads Apple; no changes. Stop if the intended version/build differs.
-2. If still waiting for review, obtain Shawn's explicit cancellation/resubmission approval.
-   Use the existing review workflow only after that approval; re-inspect once Apple is editable.
+2. Cancellation/resubmission requires explicit approval. November 1 approval is recorded and
+   cancellation has completed; do not repeat it for this package.
 3. `apply_aso` requires the inspected inventory to match, exact 2.0.1/build 8, MANUAL release,
    and an editable version/app-info state. It uploads all nine metadata fields, review notes,
    18 screenshots, the App Preview and two creative placements. It saves the prior state and
@@ -64,3 +71,11 @@ central text over this package. If central staging changes, review it before sub
 
 The November 1 public lookup still showed the old 1.0 listing at $6.99. This refresh makes no
 free-download claim and changes no pricing. A free-download correction is a separate decision.
+
+
+November 1 recovery: `apply_aso` stopped after saving metadata/screenshots/preview because a
+library video temporarily reported COMPLETE before PREPARE_FOR_SUBMISSION. The guarded
+`resume_aso_videos` action reused that header and uploaded/placed only the absent search video.
+It passed at 18:00:38 CST. Preserve the recorded package hash and one-time receipts; both write
+stages are finished. `verify_aso` subsequently required and observed full processing/checksums.
+For future video uploads, poll through COMPLETE and place only PREPARE_FOR_SUBMISSION/APPROVED.

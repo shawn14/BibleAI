@@ -55,4 +55,4 @@ capabilities:
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
 release:
   status: unverified
-  note: Same-build8 ASO publication and resubmission explicitly approved November1; new binary and manual public release remain outside scope.
+  note: ASO and rename uploaded and verified for 2.0.1/build8; resubmission did not execute because Mac authentication expired. Approval persists; confirm owner availability before requeue. No new binary, pricing change or manual public release.

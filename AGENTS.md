@@ -57,61 +57,47 @@ Journeys6–8 and the stated gaps remain unverified; do not turn those into pass
 
 ## Source control and release
 
-Work on claude/scroll-parity (from codex/scroll-bible) until local proof is acceptable. Main starts at872beac; no main push,
-store changes, billing changes, deployment or submission is authorized by this design continuation.
-The newer source includes the previously submitted2.0.1 build8; keep its history intact. Publish the
-review branch via the committed ask-first publish_review_branch action. Main merge/release requires
-Shawn's explicit go. Follow the actual docs/os.yaml actions; do not infer permission from their names.
+GitHub main includes the original main, recorded 2.0.1/build-8 source c63c68d, tested native
+source 2841df3 and November 1 ASO/rename changes (PRs 1–3, main4de94c2). Preserve this ancestry.
+Publish deliberate review-branch commits via the committed ask-first publish_review_branch
+then merge the reviewed PR into main; keep main fast-forward current. Follow docs/os.yaml.
 
 ## November 1 ASO continuation
 
-Shawn requested the complete App Store listing/creative refresh used for Milepost. This authorizes
-preparing and updating listing text, screenshots, preview, and header/search assets when editable.
-Live read on November 1: 2.0.1 is WAITING_FOR_REVIEW; do not cancel or resubmit that review without
-explicit approval after the complete asset package is ready. No new binary or pricing change is
-authorized. The one approved Air test already passed within 20 minutes; reuse retained app captures.
-Render the three video exports with render_store_videos, which uses the normal runner load guard
-and two ffmpeg encoder threads. No Simulator is started by that action.
+Shawn explicitly approved GitHub main publication and replacement/resubmission of existing
+2.0.1/build 8. That approval persists. No new binary, public manual release, or pricing change.
+Additional decisions: one at a time. Use mac-run authentication; never bypass it.
 
-The first publish_review_branch Mac password prompt expired without running; do not requeue it
-until Shawn is available to confirm. ASO sources and the app redesign remain local until then.
+Shawn requires both Scroll and Bible in the name. Store title: Scroll Bible: Daily Verses.
+Short icon/in-app display name: Scroll Bible. Bundle/product IDs, storage keys, repo and service
+URLs stay unchanged. Listing/media rename is verified in Apple; the short native display name
+requires a later binary and is not in uploaded build 8.
 
-The ASO runbook is docs/aso/README.md. inspect_aso reads the exact version/build and complete
-asset inventory; apply_aso refuses noneditable or changed Apple state and records prior values;
-verify_aso requires exact copy, ordered screenshot checksums, complete preview/video processing
-and ACTIVE creative placements. Do not call the old store-assets job directly. docs/aso/en-US
-is the BibleAI listing source. Central submit_review uses Fastfile-relative metadata, observed
-empty for BibleAI on November 1; do not stage historical root-level metadata over the new copy.
+The complete ASO package is uploaded and verified: nine public fields, review notes,
+18 screenshots and three videos; all processing complete, creative placements ACTIVE.
+Strict verify_aso passed at18:09CST. Independent actual read at18:29:47CST confirmed unchanged
+assets, copy and build8 VALID/MANUAL. Original review was canceled with approval.
 
-November 1, later: Shawn explicitly approved publishing the reviewed changes and replacing/
-resubmitting the pending listing by voice in the Pose chat (01a17d7a): "I approve the Bible one."
-This supersedes the pending-approval hold above for GitHub main publication and the prepared ASO
-replacement/resubmission of existing2.0.1/build8 only. Keep Mac authentication, fresh preflight,
-and exact-target guards. No new binary, public manual release, or pricing change was approved.
+The submission job BibleAI-submit_review-20261101-180943-mqxd EXPIRED at18:29:37CST without
+executing (allowed=false, no start time). Apple remains DEVELOPER_REJECTED, no active review.
+Confirm Shawn is at the Mac before queuing submit_review again; do not ask for repeat product
+approval. After execution, verify actual review state/build/copy/assets. Do not rerun apply_aso
+or resume_aso_videos: their writes are complete and one-time receipts must be preserved.
 
-Later owner clarification: Shawn is away from the MacBook Air. The approved publication and ASO
-resubmission scope remains authorized, but do not queue another authentication prompt until he
-is at the Mac. The14:06publication prompt was withdrawn before execution and the runner recorded
-DENIED/allowed=false at14:13CST; no publishing command ran. Resume the established path without
-asking him to approve the same product scope again. Additional decisions: one at a time.
+Runbook: docs/aso/README.md. inspect_aso reads exact version/build/assets; verify_aso requires
+exact copy, ordered screenshot checksums, complete preview/video processing and ACTIVE
+creative placements. docs/aso/en-US is canonical listing copy. Central submit_review uses
+Fastfile-relative fastlane/apps/bibleai/metadata, observed empty November1. Historical
+root-level apps/bibleai/metadata is not its input; never stage it over the new copy.
 
-November 1 naming update: Shawn requires both Scroll and Bible in the app name. Store title:
-Scroll Bible: Daily Verses; icon label and in-app display brand: Scroll Bible. Technical project,
-bundle ID, product IDs, storage keys, repository and service URLs stay as existing identifiers.
-The prepared listing/media rename can accompany the approved build8 ASO update; icon-label and
-in-app text source changes require a later binary and are not already in uploaded build8.
+ASC review-item reads require ?include=appStoreVersion. The actual default response omitted
+version relationships; the exact-version cancellation guard correctly refused before writes.
+Keep the positive version-id match; never fall back to one active submission.
 
-November 1,16:37CST: owner confirmed being at the Air in Milepost chat01a182fa; its upload
-authentication subsequently succeeded. The availability hold is superseded. Resume the already
-approved BibleAI publication/resubmission through the existing guarded Mac actions.
+Library video state can transition COMPLETE → PREPARE_FOR_SUBMISSION. Poll through COMPLETE;
+only PREPARE_FOR_SUBMISSION/APPROVED permit placement. The scoped November1 recovery reused
+recorded assets, verified package hash/copy/checksums/placements, and completed without repeating
+metadata/screenshots/preview writes. A processing state is not a failed asset or reason to reupload.
 
-ASC review-item reads must request `?include=appStoreVersion`. The November1 actual default
-response contained only item id/state, causing the exact-version cancellation guard to refuse
-before any write. The corrected read returned the exact version id at23:09:39Z. Keep the positive version-id match; never fall back to one active submission.
-
-November1 upload recovery: library video `state` briefly returned COMPLETE, then advanced to
-PREPARE_FOR_SUBMISSION. Poll through COMPLETE; keep PREPARE/APPROVED as the placement gate.
-`resume_aso_videos` is a guarded, one-time recovery of the recorded header and absent search
-upload: it verifies exact copy, completed screenshot checksums, recorded ids/file sizes for
-UPLOAD_COMPLETE screenshots, preview checksum, source hash and unchanged old
-placements, reuses the uploaded header, and never repeats metadata/screenshots/preview writes.
+The approved Air test already passed within20minutes. Reuse retained real-screen captures for
+ASO work. Render actions use normal load/disk/memory guards and two FFmpeg threads, no Simulator.
