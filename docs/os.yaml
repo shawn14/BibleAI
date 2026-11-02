@@ -16,6 +16,7 @@ data_sources:
 canvas: null
 canonical_deploy_script: null
 canonical_scripts:
+  growth_core_test: bash scripts/growth-core-proof.sh
   check_source: python3 scripts/check-source.py
   prepare_dependencies: pod install --deployment --no-repo-update
   test_reader: bash scripts/simulator-reader-proof.sh
