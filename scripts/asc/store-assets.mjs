@@ -27,6 +27,7 @@ async function screenshotSet(api, loc, type, files) {
   return `${files.length} ${type}`;
 }
 async function libraryVideo(api, loc, placementType, kind, file, options = {}) {
+  const recordVideo = options.record || record;
   const sha = api.md5(file).slice(0, 12);
   let res;
   if (options.existingHeaderId && kind === "header") {
@@ -39,14 +40,14 @@ async function libraryVideo(api, loc, placementType, kind, file, options = {}) {
   res = (await api.post(`/v1/appAssetLibraryVideos`, { data: { type: "appAssetLibraryVideos",
     attributes: { category: "CREATIVE_ASSETS", fileName: path.basename(file), fileSize: fs.statSync(file).size, referenceName: `BibleAI-${VERSION}-${kind}-${sha}-${Date.now()}` },
     relationships: { assetLibrary: { data: { type: "appAssetLibraries", id: APP } } } } })).data;
-  record({kind: typeof kind === "string" ? kind : "video", id:res.id, file, state:"reserved"});
+  recordVideo({kind: typeof kind === "string" ? kind : "video", id:res.id, file, state:"reserved"});
   for (const op of res.attributes.uploadOperations) await api.upload(op, file);
   await api.patch(`/v1/appAssetLibraryVideos/${res.id}`, { data: { type: "appAssetLibraryVideos", id: res.id, attributes: { uploaded: true } } });
   }
   let state, previousState;
   for (let i = 0; i < 60; i++) {
     state = (await api.get(`/v1/appAssetLibraryVideos/${res.id}`)).data.attributes;
-    if (state.state !== previousState) record({kind:"video-state", assetKind:kind, id:res.id, state:state.state});
+    if (state.state !== previousState) recordVideo({kind:"video-state", assetKind:kind, id:res.id, state:state.state});
     previousState = state.state;
     if (!["AWAITING_UPLOAD", "UPLOAD_COMPLETE", "PROCESSING", "COMPLETE"].includes(state.state)) break;
     await new Promise((r) => setTimeout(r, 10000));

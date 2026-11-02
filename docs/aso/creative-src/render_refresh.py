@@ -70,7 +70,7 @@ def header(search=False):
   c=Image.new('RGB',(W,H),'white')
   end=text_lines(c,head,(x,y),hs,True)
   text_lines(c,sub,(x+4,end+85),ss,color=MUTED)
-  text_lines(c,'SCROLL BIBLE',(x+4,end+240),round(ss*.65),color=MUTED)
+  text_lines(c,'BRIGHT SCROLL',(x+4,end+240),round(ss*.65),color=MUTED)
   device(c,CAP/'iphone'/(src+'.png'),pw,px,py,24 if search else 18,136 if search else 90)
   p=SCRATCH/f'{name}-scene-{i}.png'; c.save(p); files.append(str(p))
  out=ASO/'header-video'; out.mkdir(exist_ok=True)

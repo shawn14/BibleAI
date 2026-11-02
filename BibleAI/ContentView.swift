@@ -69,7 +69,7 @@ struct EmptyChatView: View {
                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
                 VStack(spacing: 8) {
-                    Text("Scroll Bible")
+                    Text("Bright Scroll")
                         .font(.title)
                         .fontWeight(.semibold)
 

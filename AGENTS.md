@@ -68,10 +68,10 @@ Shawn explicitly approved GitHub main publication and replacement/resubmission o
 2.0.1/build 8. That approval persists. No new binary, public manual release, or pricing change.
 Additional decisions: one at a time. Use mac-run authentication; never bypass it.
 
-Shawn requires both Scroll and Bible in the name. Store title: Scroll Bible: Daily Verses.
-Short icon/in-app display name: Scroll Bible. Bundle/product IDs, storage keys, repo and service
-URLs stay unchanged. Listing/media rename is verified in Apple; the short native display name
-requires a later binary and is not in uploaded build 8.
+Shawn selected the more distinct Bright Scroll: Bible AI after raising competitor-name overlap.
+Short icon/in-app display name: Bright Scroll. The earlier Scroll Bible title is superseded locally. Bundle/product IDs, storage keys, repo and service
+URLs stay unchanged. The original Scroll Bible listing/media remain verified in Apple; Bright Scroll is prepared
+locally. The short native display name requires a later binary and is not in uploaded build 8.
 
 The complete ASO package is uploaded and verified: nine public fields, review notes,
 18 screenshots and three videos; all processing complete, creative placements ACTIVE.
@@ -83,11 +83,18 @@ Independent inspect_aso read at19:22:32CST confirmed WAITING_FOR_REVIEW, exact2.
 VALID/MANUAL, unchanged nine public fields and assets; library videos WAITING_FOR_REVIEW,
 placements ACTIVE. The prior expired prompt never ran. Do not repeat this completed submission.
 
-Owner then raised overlap with Scroll The Bible and proposed Bible Scroll AI. BibleScroll:
-Christian Focus also exists in Apple (6755406222). Bright Scroll: Bible AI is another candidate.
-Final naming choice is pending; no further rename, cancellation or resubmission has occurred.
-Prepare/review selected name and matching media before changing Apple again. Existing build8
-and manual-release limits remain. Do not rerun completed apply_aso or resume_aso_videos.
+Owner then raised overlap with Scroll The Bible and BibleScroll: Christian Focus. He selected
+Bright Scroll: Bible AI. Matching copy/native labels and two branded videos are prepared locally;
+render_store_brand193223-pdgv passed84s. No further Apple rename/cancellation/resubmission yet.
+
+Use plan_rebrand (read-only actual Apple preflight), then reviewed/approved apply_rebrand,
+verify_rebrand and existing submit_review. This narrow path preserves18screenshots, preview,
+other metadata, build8, manual release, live app info and pricing. The plan pins exact review and
+package; one-time apply receipt prevents blind retry. Never rerun completed apply_aso or
+resume_aso_videos for this rebrand. Complete prepared-package review before requesting the final
+approval to replace the newly submitted review. Shawn subsequently gave that explicit approval
+in this chat; proceed through existing guarded actions without asking for repeat product approval.
+Keep Mac authentication and source publication.
 
 Runbook: docs/aso/README.md. inspect_aso reads exact version/build/assets; verify_aso requires
 exact copy, ordered screenshot checksums, complete preview/video processing and ACTIVE

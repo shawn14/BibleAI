@@ -1,4 +1,29 @@
-# Current checkpoint — 2026-11-01, 19:22 CST
+# Current checkpoint — Bright Scroll preparation, 2026-11-01
+
+- Shawn selected **Bright Scroll: Bible AI** after checking overlap with Scroll The Bible and
+  BibleScroll. Short native label: **Bright Scroll**. Source/copy and two branded creative videos
+  are prepared locally; this new name is not yet saved in Apple.
+- Guarded render_store_brand `BibleAI-render_store_brand-20261101-193223-pdgv` passed in84.0s.
+  Both actual encoded posters show BRIGHT SCROLL; all format/copy limits pass. Title23characters.
+  The18screenshots and21-second App Preview are preserved. No native build/Simulator started;
+  icon/in-app label changes still require a later binary.
+- Existing Apple submission remains **Scroll Bible: Daily Verses**,2.0.1/build8, WAITING_FOR_REVIEW,
+  MANUAL release, independently verified19:22:32CST. Historical checkpoint below records it.
+- Narrow `plan_rebrand`/`apply_rebrand`/`verify_rebrand` actions are prepared. Plan reads actual Apple
+  state and requires only name/description-brand/review-note-brand changes plus two creatives.
+  Apply is ask-first, cancels only the planned exact review, preserves existing18screenshots/preview,
+  and refuses a second application. Existing submit_review remains separate.
+- Actual read-only plan `BibleAI-plan_rebrand-20261101-193632-nvcb` passed12.5s at19:43:58CST,
+  pinning review684b6508-7b6f-410f-9721-80e04cbdc2cd and package
+  `96425a30d3c5fe80766fbb6f1eb6a47eac37eb39843899507135b2187533c717`. Local/source/format checks
+  and independent visual/source review passed. Shawn explicitly approved rebrand publication and
+  replacement/resubmission in this chat. Execute existing guarded actions; no rebrand writes yet.
+- Published GitHub main before this preparation: `d805ba17cba9bb7304d13702876418d25feb8dbf`
+  (PR4), including recorded build8 sourcec63c68d and tested native source2841df3.
+
+---
+
+# Submitted package checkpoint — 2026-11-01, 19:22 CST
 
 - App Store Connect now holds **Scroll Bible: Daily Verses** for 2.0.1/build 8. All nine public
   metadata fields, review notes, 18 screenshots and three videos match the approved package.

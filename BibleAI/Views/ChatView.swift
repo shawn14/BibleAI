@@ -32,7 +32,7 @@ struct ChatView: View {
                                     .font(.system(size: 48))
                                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
-                                Text("Scroll Bible")
+                                Text("Bright Scroll")
                                     .font(.title2)
                                     .fontWeight(.semibold)
                             }
@@ -139,7 +139,7 @@ struct ChatView: View {
                 .background(Color(.systemBackground))
             }
         }
-        .navigationTitle("Scroll Bible")
+        .navigationTitle("Bright Scroll")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Error", isPresented: $viewModel.showError) {
             Button("OK", role: .cancel) { }
