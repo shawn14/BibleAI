@@ -301,6 +301,13 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["plan.invite"].tap()
         XCTAssertTrue(app.buttons["share.send"].waitForExistence(timeout: 5))
         capture("growth-plan-invitation")
+        app.buttons["share.send"].tap()
+        let planCopy = app.cells["Copy"].firstMatch
+        XCTAssertTrue(planCopy.waitForExistence(timeout: 10))
+        capture("growth-plan-system-share")
+        planCopy.tap()
+        XCTAssertTrue(app.staticTexts["share.status"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["share.status"].label, "Share activity completed.")
         app.buttons["share.close"].tap()
         let chapter = app.buttons["Matthew 1"].firstMatch
         XCTAssertTrue(chapter.waitForExistence(timeout: 5))

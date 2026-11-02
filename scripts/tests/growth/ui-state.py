@@ -17,7 +17,7 @@ observed = {
 print("GROWTH_PERSISTED " + json.dumps(observed, sort_keys=True))
 if sys.argv[2] == "0":
     assert observed["readerActivated"] and observed["newRecipient"] and observed["recipientActivated"], observed
-    for key, expected in {"sharePresented": 2, "shareCompleted": 1, "shareCancelled": 1,
+    for key, expected in {"sharePresented": 3, "shareCompleted": 2, "shareCancelled": 1,
                           "invitationOpened": 2, "invitationAccepted": 2, "firstReading": 1}.items():
         assert counts.get(key, 0) == expected, (key, counts)
     assert counts.get("shareFailed", 0) == 0, counts
