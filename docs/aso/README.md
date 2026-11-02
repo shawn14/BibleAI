@@ -6,10 +6,16 @@ Connect. Title: **Scroll Bible: Daily Verses**. All nine public metadata fields,
 is complete and creative placements are ACTIVE. Strict verification passed at 18:09 CST;
 independent readback at 18:29:47 CST preserved the same assets and build 8 VALID/MANUAL.
 
-**Resubmission remains outstanding.** The 18:09 submission job's Mac password prompt expired
-at 18:29:37 CST without executing. Apple remains DEVELOPER_REJECTED with no active review.
-Shawn has already approved publication and same-build resubmission. Confirm Mac availability
-before queuing `submit_review` once; do not rerun `apply_aso` or `resume_aso_videos`.
+**Submitted and WAITING_FOR_REVIEW.** The authenticated November 1 retry completed at
+19:17:50 CST in 46.6 seconds. Independent Apple readback at 19:22:32 CST confirmed submission,
+exact build 8 VALID/MANUAL, all nine public metadata fields, screenshot/preview checksums and
+both creative placements unchanged. Library videos moved to WAITING_FOR_REVIEW; their
+placements remain ACTIVE. No public manual release was performed.
+
+Shawn subsequently raised naming overlap with Scroll The Bible and proposed “Bible Scroll AI.”
+An existing BibleScroll: Christian Focus listing also exists. Final replacement-name selection is
+pending; the submitted name remains Scroll Bible: Daily Verses. Do not cancel or rename again
+until the selected replacement and matching media are prepared and reviewed.
 
 The short icon/in-app label **Scroll Bible**, plus later native onboarding/completion changes,
 are saved in source and require the next binary. This package keeps existing build 8 and manual

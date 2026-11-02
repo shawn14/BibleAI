@@ -1,4 +1,4 @@
-# Current checkpoint — 2026-11-01, 18:29 CST
+# Current checkpoint — 2026-11-01, 19:22 CST
 
 - App Store Connect now holds **Scroll Bible: Daily Verses** for 2.0.1/build 8. All nine public
   metadata fields, review notes, 18 screenshots and three videos match the approved package.
@@ -6,15 +6,22 @@
 - Strict `verify_aso` passed (`BibleAI-verify_aso-20261101-180911-fabw`). Independent Apple
   readback at 18:29:47 CST confirmed exact assets/copy and unchanged build 8 VALID/MANUAL.
   Package hash: `8fb4dbbaf295f8297117662c112660c250335bffb11cd885a66a7ad4028df480`.
-- **Resubmission did not run.** `BibleAI-submit_review-20261101-180943-mqxd` expired at its
-  Mac password prompt at 18:29:37 CST, allowed=false, with no start time. Apple remains
-  DEVELOPER_REJECTED with no active review. Shawn's publication/resubmission approval persists;
-  confirm he is at the Mac before requeuing the existing `submit_review` action once. Do not
-  ask for the same product approval again. No new binary, pricing change or public manual release.
+- **Submitted and WAITING_FOR_REVIEW.** Shawn confirmed Mac availability; authenticated job
+  `BibleAI-submit_review-20261101-191639-vjky` passed in 46.6 seconds at 19:17:50 CST.
+  Independent readback `BibleAI-inspect_aso-20261101-191808-hatx` at 19:22:32 CST confirmed
+  review submission at 19:17:47 CST, exact 2.0.1/build 8 VALID/MANUAL and all nine public fields,
+  screenshots, preview and creative placements unchanged. Screenshots/preview COMPLETE;
+  creative placements ACTIVE, library videos WAITING_FOR_REVIEW. No mismatches found.
+  Review notes retain the earlier strict verification; the inspector does not fetch them.
+- **Naming decision pending.** Shawn noted the existing Scroll The Bible app. Apple also has
+  BibleScroll: Christian Focus (6755406222). He proposed “Bible Scroll AI”; an exact web search
+  found no exact title match, which does not establish Apple availability. “Bright Scroll: Bible AI”
+  was offered as a more distinct alternative. Await his selection before preparing another rename;
+  no second cancellation, rename or resubmission has occurred. Manual release remains enabled.
 - Source and assets are published through PRs 1–3 at GitHub main
   `4de94c244e567e8f844a142780864853435f2fb4`. Recorded build-8 source `c63c68d` and tested
-  native source `2841df3` are ancestors. This checkpoint documentation is a later local commit
-  until it goes through the existing guarded publication path.
+  native source `2841df3` are ancestors. Final checkpoint documentation follows through the
+  existing guarded review-branch publication and merge path.
 - Short icon/in-app label **Scroll Bible** is in source and requires the next binary. The later
   native onboarding/completion refinements also are not in uploaded build 8. This ASO-only
   operation does not claim to ship those changes. Public version 1.0 remains unchanged.
@@ -28,9 +35,9 @@
   state. Scoped `resume_aso_videos` passed at 18:00:38 CST, reusing the uploaded header and adding
   only the missing search video/placements. All processing later completed without re-upload.
   **Do not rerun apply_aso or resume_aso_videos:** both have completed their writes and preserve
-  one-time receipts in ignored `build/aso-refresh/`. The only remaining Apple action is submission.
-- After authenticated submission, read the actual review state/build/copy/assets through
-  `inspect_aso`; retain manual release. Central Fastlane's actual submit metadata directory
+  one-time receipts in ignored `build/aso-refresh/`. Submission has now completed.
+- Post-submit `inspect_aso` confirmed actual review state/build/copy/assets; retain manual release.
+  Central Fastlane's actual submit metadata directory
   `fastlane/apps/bibleai/metadata` was empty, so it cannot overwrite the prepared copy with the
   historical root-level metadata. See [ASO runbook](docs/aso/README.md).
 

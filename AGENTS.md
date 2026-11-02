@@ -78,11 +78,16 @@ The complete ASO package is uploaded and verified: nine public fields, review no
 Strict verify_aso passed at18:09CST. Independent actual read at18:29:47CST confirmed unchanged
 assets, copy and build8 VALID/MANUAL. Original review was canceled with approval.
 
-The submission job BibleAI-submit_review-20261101-180943-mqxd EXPIRED at18:29:37CST without
-executing (allowed=false, no start time). Apple remains DEVELOPER_REJECTED, no active review.
-Confirm Shawn is at the Mac before queuing submit_review again; do not ask for repeat product
-approval. After execution, verify actual review state/build/copy/assets. Do not rerun apply_aso
-or resume_aso_videos: their writes are complete and one-time receipts must be preserved.
+Authenticated retry BibleAI-submit_review-20261101-191639-vjky passed at19:17:50CST in46.6s.
+Independent inspect_aso read at19:22:32CST confirmed WAITING_FOR_REVIEW, exact2.0.1/build8
+VALID/MANUAL, unchanged nine public fields and assets; library videos WAITING_FOR_REVIEW,
+placements ACTIVE. The prior expired prompt never ran. Do not repeat this completed submission.
+
+Owner then raised overlap with Scroll The Bible and proposed Bible Scroll AI. BibleScroll:
+Christian Focus also exists in Apple (6755406222). Bright Scroll: Bible AI is another candidate.
+Final naming choice is pending; no further rename, cancellation or resubmission has occurred.
+Prepare/review selected name and matching media before changing Apple again. Existing build8
+and manual-release limits remain. Do not rerun completed apply_aso or resume_aso_videos.
 
 Runbook: docs/aso/README.md. inspect_aso reads exact version/build/assets; verify_aso requires
 exact copy, ordered screenshot checksums, complete preview/video processing and ACTIVE

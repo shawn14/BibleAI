@@ -54,5 +54,5 @@ capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
 release:
-  status: unverified
-  note: ASO and rename uploaded and verified for 2.0.1/build8; resubmission did not execute because Mac authentication expired. Approval persists; confirm owner availability before requeue. No new binary, pricing change or manual public release.
+  status: waiting_for_review
+  note: Scroll Bible ASO submitted for existing 2.0.1/build8 and independently verified November1 at19:22CST; manual release. Owner is considering a further name change; selection pending. No new binary, pricing change or public release.
