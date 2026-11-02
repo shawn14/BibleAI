@@ -1,81 +1,62 @@
-# Current checkpoint — 2026-11-01
+# Current checkpoint — 2026-11-01, 19:22 CST
 
-- Apple now holds Scroll Bible: Daily Verses in pending2.0.1/build8; original review canceled
-  successfully at17:12CST. Copy,18screenshots and preview uploaded. Apply stopped on the header
-  intermediate COMPLETE state before replacing either old creative placement. Readback23:24Z
-  confirms header PREPARE_FOR_SUBMISSION and pending title; preview still processing.
-  At23:24Z,16of18screenshots COMPLETE; the final large-iPhone and iPad images remain
-  UPLOAD_COMPLETE. New resume_aso_videos finishes only recorded header/search placements after
-  verifying copy/completed assets and preserving recorded screenshots still processing. Final
-  verify_aso still requires all18 COMPLETE with exact checksums. Never rerun apply_aso.
+- App Store Connect now holds **Scroll Bible: Daily Verses** for 2.0.1/build 8. All nine public
+  metadata fields, review notes, 18 screenshots and three videos match the approved package.
+  All screenshot/preview processing is COMPLETE; header/search placements are ACTIVE.
+- Strict `verify_aso` passed (`BibleAI-verify_aso-20261101-180911-fabw`). Independent Apple
+  readback at 18:29:47 CST confirmed exact assets/copy and unchanged build 8 VALID/MANUAL.
+  Package hash: `8fb4dbbaf295f8297117662c112660c250335bffb11cd885a66a7ad4028df480`.
+- **Submitted and WAITING_FOR_REVIEW.** Shawn confirmed Mac availability; authenticated job
+  `BibleAI-submit_review-20261101-191639-vjky` passed in 46.6 seconds at 19:17:50 CST.
+  Independent readback `BibleAI-inspect_aso-20261101-191808-hatx` at 19:22:32 CST confirmed
+  review submission at 19:17:47 CST, exact 2.0.1/build 8 VALID/MANUAL and all nine public fields,
+  screenshots, preview and creative placements unchanged. Screenshots/preview COMPLETE;
+  creative placements ACTIVE, library videos WAITING_FOR_REVIEW. No mismatches found.
+  Review notes retain the earlier strict verification; the inspector does not fetch them.
+- **Naming decision pending.** Shawn noted the existing Scroll The Bible app. Apple also has
+  BibleScroll: Christian Focus (6755406222). He proposed “Bible Scroll AI”; an exact web search
+  found no exact title match, which does not establish Apple availability. “Bright Scroll: Bible AI”
+  was offered as a more distinct alternative. Await his selection before preparing another rename;
+  no second cancellation, rename or resubmission has occurred. Manual release remains enabled.
+- Source and assets are published through PRs 1–3 at GitHub main
+  `4de94c244e567e8f844a142780864853435f2fb4`. Recorded build-8 source `c63c68d` and tested
+  native source `2841df3` are ancestors. Final checkpoint documentation follows through the
+  existing guarded review-branch publication and merge path.
+- Short icon/in-app label **Scroll Bible** is in source and requires the next binary. The later
+  native onboarding/completion refinements also are not in uploaded build 8. This ASO-only
+  operation does not claim to ship those changes. Public version 1.0 remains unchanged.
 
-- Renamed source/ASO media merged through PR1 at GitHub main5086fde. Both recorded build8
-  sourcec63c68d and tested native source2841df3 are ancestors. Cancellation then stopped before
-  any Apple write: the default review-item response omitted appStoreVersion relationships.
-  Added the documented include option; read-only inspect_aso passed at23:09:39Z and returned
-  the exact2.0.1 version id for the sole review item. Existing review remains intact.
+## Completed operations and safe continuation
 
-- Shawn confirmed publication/resubmission approval in this chat and requested Scroll and Bible
-  in the name. Prepared title: Scroll Bible: Daily Verses. Source icon/in-app label: Scroll Bible.
-  The latter needs a later binary; same-build8 ASO approval does not upload a new binary.
-  Header/search videos now show SCROLL BIBLE. Guarded render_store_brand passed at16:48CST
-  in95.9sec, with both encoded posters visually checked. Full ASO format/copy check passed.
-  Reviewed screenshots and21-second interaction preview contain no old brand and are unchanged.
+- Original review cancellation passed at 17:12 CST (`BibleAI-swap_to_201-20261101-171114-dsyo`).
+  The default Apple review-item response omitted the version relationship; explicit
+  `?include=appStoreVersion` fixed the exact-version read before cancellation. Preserve that guard.
+- `apply_aso` saved metadata/screenshots/preview but stopped on an intermediate video COMPLETE
+  state. Scoped `resume_aso_videos` passed at 18:00:38 CST, reusing the uploaded header and adding
+  only the missing search video/placements. All processing later completed without re-upload.
+  **Do not rerun apply_aso or resume_aso_videos:** both have completed their writes and preserve
+  one-time receipts in ignored `build/aso-refresh/`. Submission has now completed.
+- Post-submit `inspect_aso` confirmed actual review state/build/copy/assets; retain manual release.
+  Central Fastlane's actual submit metadata directory
+  `fastlane/apps/bibleai/metadata` was empty, so it cannot overwrite the prepared copy with the
+  historical root-level metadata. See [ASO runbook](docs/aso/README.md).
 
-- Earlier availability hold (superseded): Shawn was away from the MacBook Air.
-  Publication/resubmission approval remains valid. Do not queue another prompt until he is at
-  the Mac. Job BibleAI-publish_review_branch-20261101-140622-wpee was safely withdrawn before
-  execution at his request: runner terminal DENIED at 14:13:16 CST, approval.allowed=false,
-  no started_at and no command log. This was withdrawn authentication, not revoked task approval.
-  Shawn subsequently said "I’m at the Air—reopen it" in Milepost chat01a182fa at16:37CST;
-  its upload job then authenticated successfully and passed at16:46CST. The approved BibleAI
-  publication can resume through the existing Mac prompt. No BibleAI push or Apple write yet.
+## Native proof and limits
 
-- Shawn approved publishing the reviewed changes and replacing/resubmitting the pending Apple
-  listing by voice in the Pose chat (01a17d7a), explicitly: "I approve the Bible one."
-  Fresh 20:05Z Apple preflight still shows 2.0.1/build 8 VALID, WAITING_FOR_REVIEW, MANUAL.
-  Scope: GitHub publication and ASO replacement/resubmission of the same build; no new binary
-  or pricing change. Additional decisions must be presented one at a time.
-
-
-- Complete ASO draft is ready and independently reviewed: English title/subtitle/keywords,
-  promotional text/description/release and review notes, 18 actual-screen screenshots (6 large
-  iPhone, 6 medium iPhone, 6 iPad), a 21-second App Preview, and two 10.5-second header/search loops.
-  Open docs/aso/README.md or docs/aso/preview-board.png. No Apple writes made.
-- Actual formats/copy limits passed in guarded render_store_videos (87.1 sec) and the scoped
-  preview-ending correction render_store_preview (13.5 sec). Independent review inspected all
-  screenshots and encoded videos, captions, posters, loop seams and final preview frame.
-- Apple inventory read at 18:32Z: 2.0.1/build 8 VALID, WAITING_FOR_REVIEW, MANUAL release,
-  en-US only. Existing screenshot sets: 6 large iPhone + 6 iPad; the new medium set is prepared.
-  Public 1.0 remains live. inspect_aso/apply_aso/verify_aso reuse the existing ASC path with
-  exact version/build, inspected-state and full processing/readback checks. Upload path is unrun.
-- Publication/resubmission approval requested after the complete package review. Do not cancel
-  review, merge main, submit another build or change pricing without the relevant explicit go.
-- Branch publication job BibleAI-publish_review_branch-20261101-115701-lbto expired at its Mac
-  password prompt; nothing was pushed. Requeue only once Shawn is available to confirm.
-- AppleCharts research: 150 sampled reviews across three apps, incomplete three-month coverage;
-  retained under docs/aso/research. Support/marketing/privacy/terms URLs all returned HTTP 200.
-- Removed this session's research dependency install and temporary frame/caption inputs. Captures,
-  source recording and final assets are retained in docs/aso so they can be reproduced cheaply.
-
-- Native Apple-style redesign is locally verified on iPhone 16: clearer reading hierarchy,
-  system navigation/sheets, and unboxed onboarding summary and reading completion.
-- One approved Air run finished in 664.3 seconds (11m04s), within the 20-minute cap:
-  `BibleAI-test_reader-20261101-114317-ygdf`, exit 0. Reader journey passed in 201.036 seconds,
-  zero failures; the separate recording-only test was intentionally skipped. Owned simulator deleted.
-- Verified onboarding/free reading, actual KJV swipe/search, save/note/cancel/relaunch, and day-one
-  completion/restoration for all four plans. Independent feature review completed. Updated screens:
-  [reader](docs/design-preview/reader.png), [onboarding](docs/design-preview/onboarding-plan.png),
-  [completion](docs/design-preview/reading-complete.png).
-- Native source tested: `2841df3`; later changes include ASO assets and the uncompiled display-name/text rename.
-  Existing October 30 iPad capture passed before this typography pass; no second native run started.
-- Preserved the newer `claude/scroll-parity` history, including the recorded 2.0.1/build 8 submission.
-  GitHub main remains `872beac405913046496effcf9aeaffdcd76b1184`; branch publication is next through
-  `publish_review_branch`. The later explicit ASO approval above authorizes main publication.
-- Device AI, purchase/restore, reminder delivery, and two-device iCloud remain unverified.
-  Public Apple lookup on November 1 returned version 1.0 at $6.99; no store/pricing changes made.
-- Replacement rule 54 controls test scope; older approval holds and full-gate language below are
-  historical. This session honored Shawn's additional one-run, 20-minute Air limit.
+- The one approved Air run passed in 664.3 seconds, within the 20-minute cap:
+  `BibleAI-test_reader-20261101-114317-ygdf`. Reader journey: 201.036 seconds, zero failures;
+  recording-only test intentionally skipped. Independent feature review completed.
+- Proven on iPhone Simulator: onboarding/free reading, real KJV swipe/search, saved verse and
+  note/cancel/relaunch persistence, reading-place restoration, all four plans' day-one completion
+  and restoration. Screens: [reader](docs/design-preview/reader.png),
+  [onboarding](docs/design-preview/onboarding-plan.png), [completion](docs/design-preview/reading-complete.png).
+- Native source tested: `2841df3`; later display-name/text rename has source checks only.
+  Device study, purchase/restore, notification delivery and two-device iCloud remain unverified.
+  No additional Simulator/build was started; owned Simulator and temporary render inputs removed.
+- AppleCharts research retained 150 sampled reviews from three apps, incomplete three-month
+  coverage. Actual-screen assets/source recordings are retained for cheap reproduction.
+- November 1 public lookup showed version 1.0 at $6.99. Pricing was unchanged; no free-download
+  claim was made. Replacement rule 54 controls future test scope; older holds below are historical.
 
 ---
 
