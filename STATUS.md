@@ -1,25 +1,34 @@
-# Current checkpoint — Bright Scroll preparation, 2026-11-01
+# Current checkpoint — Bright Scroll, 2026-11-01
 
-- Shawn selected **Bright Scroll: Bible AI** after checking overlap with Scroll The Bible and
-  BibleScroll. Short native label: **Bright Scroll**. Source/copy and two branded creative videos
-  are prepared locally; this new name is not yet saved in Apple.
-- Guarded render_store_brand `BibleAI-render_store_brand-20261101-193223-pdgv` passed in84.0s.
-  Both actual encoded posters show BRIGHT SCROLL; all format/copy limits pass. Title23characters.
-  The18screenshots and21-second App Preview are preserved. No native build/Simulator started;
-  icon/in-app label changes still require a later binary.
-- Existing Apple submission remains **Scroll Bible: Daily Verses**,2.0.1/build8, WAITING_FOR_REVIEW,
-  MANUAL release, independently verified19:22:32CST. Historical checkpoint below records it.
-- Narrow `plan_rebrand`/`apply_rebrand`/`verify_rebrand` actions are prepared. Plan reads actual Apple
-  state and requires only name/description-brand/review-note-brand changes plus two creatives.
-  Apply is ask-first, cancels only the planned exact review, preserves existing18screenshots/preview,
-  and refuses a second application. Existing submit_review remains separate.
-- Actual read-only plan `BibleAI-plan_rebrand-20261101-193632-nvcb` passed12.5s at19:43:58CST,
-  pinning review684b6508-7b6f-410f-9721-80e04cbdc2cd and package
-  `96425a30d3c5fe80766fbb6f1eb6a47eac37eb39843899507135b2187533c717`. Local/source/format checks
-  and independent visual/source review passed. Shawn explicitly approved rebrand publication and
-  replacement/resubmission in this chat. Execute existing guarded actions; no rebrand writes yet.
-- Published GitHub main before this preparation: `d805ba17cba9bb7304d13702876418d25feb8dbf`
-  (PR4), including recorded build8 sourcec63c68d and tested native source2841df3.
+- **Bright Scroll: Bible AI** is saved and strictly verified in App Store Connect for existing
+  **2.0.1/build8**. Only the title, two copy brand references and header/search videos changed.
+  All18screenshot IDs/checksums/order and the21-second App Preview were preserved.
+- Approved rebrand source/assets are published on clean GitHub main
+  `112eb65a6d8a085ac72cf80848afb277ca0582b0` through PR5. Recorded build8 sourcec63c68d and
+  tested native source2841df3 are ancestors. Native short label **Bright Scroll** remains source-only
+  until a later binary; no new native build/Simulator, pricing change or public manual release.
+- `BibleAI-apply_rebrand-20261101-200450-bfxv` passed97.1s. It canceled only planned review
+  684b6508-7b6f-410f-9721-80e04cbdc2cd, updated name/copy and replaced the two branded videos.
+  Do not rerun apply_rebrand or earlier ASO apply/recovery actions; one-time receipts are retained.
+- First strict verify stopped at PROCESSING versus COMPLETE. The actual20:17:07CST read then
+  showed all preview/poster processing COMPLETE, both placements ACTIVE, exact title/copy/assets,
+  unchanged build8 VALID/MANUAL and preserved live info. Independent readback comparison passed.
+  The original generic error cannot identify its pending field retrospectively.
+- `BibleAI-verify_rebrand-20261101-201746-jhcq` passed5.5s, including review notes, all public
+  metadata, retained assets and new video hashes/posters. Package hash:
+  `96425a30d3c5fe80766fbb6f1eb6a47eac37eb39843899507135b2187533c717`.
+- **Submitted and WAITING_FOR_REVIEW.** `BibleAI-submit_review-20261101-201830-yibo` passed45.1s
+  at20:24:52CST. The single independent post-submit read `BibleAI-inspect_aso-20261101-201913-xmlr`
+  observed Apple at20:25:04CST: submitted20:24:51CST, exact2.0.1/build8 VALID/MANUAL,
+  Bright Scroll: Bible AI, nine public fields,18screenshots, App Preview and both new video placements
+  unchanged. All processing complete, placements ACTIVE, videos WAITING_FOR_REVIEW. No mismatches.
+  Review notes retain the strictverify proof; the independent inspector does not fetch them.
+- Rebrand publication and same-build resubmission are complete. No automatic/public release was
+  performed. Next: Apple review; later binary for the short native label and later UX refinements.
+  Device study, purchase/restore, notification delivery and two-device iCloud remain unverified.
+- No owned native jobs, Simulator or dev server remain. Temporary render inputs were removed;
+  final assets, retained real-screen inputs and ignored Apple plan/progress receipts remain.
+  Historical native proof and original listing checkpoints are below.
 
 ---
 

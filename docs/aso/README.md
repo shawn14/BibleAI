@@ -1,19 +1,23 @@
 # Bright Scroll App Store rebrand
 
-Prepared title: **Bright Scroll: Bible AI** (23 characters). Short native label: **Bright Scroll**.
-Shawn selected this name after noting overlap with existing Scroll The Bible/BibleScroll apps.
-The description/review-note brand mentions and two encoded header/search videos now match.
-Guarded render_store_brand passed in84.0seconds; both encoded posters were visually checked.
-The18screenshots and21-second App Preview are unchanged. No new native binary was built.
-Independent local review passed. Actual read-only plan193632-nvcb passed in12.5seconds at
-19:43:58CST, confirming the exact current review and narrow metadata/media difference.
-Shawn approved publication and replacement/resubmission in this chat; no rebrand writes have run yet.
+**Bright Scroll: Bible AI** is submitted and **WAITING_FOR_REVIEW** for existing **2.0.1/build8**.
+The title, description/review-note brand mentions and two header/search videos match the approved
+package. All18screenshots and the21-second App Preview retain their exact IDs/checksums/order.
+Manual release remains enabled; no new binary, pricing change or public release was performed.
 
-**Apple still has Scroll Bible: Daily Verses**,2.0.1/build8, WAITING_FOR_REVIEW with manual release.
-Independent readback confirmed the original submission at19:22:32CST. This new rebrand is prepared
-locally, not uploaded. The icon/in-app label requires the next binary. No pricing/public release.
+Scoped apply passed97.1seconds. Strict verification passed at20:17CST, including review notes,
+all metadata, retained assets and video hashes/processing. Resubmission passed45.1seconds at
+20:24:52CST. Independent Apple readback at20:25:04CST confirmed WAITING_FOR_REVIEW, build8 VALID,
+all nine public fields and assets unchanged, complete processing, ACTIVE creative placements
+and unchanged live app information. No mismatches found.
 
-## Apply the prepared rebrand
+Short native label: **Bright Scroll**. That source change and later native UX refinements require
+the next binary. The uploaded build remains8. The selected rebrand was independently reviewed;
+its render_store_brand job passed84seconds using retained app captures, without another Simulator.
+
+## Completed rebrand runbook
+
+These November1 writes and submission are complete. Preserve receipts; do not repeat them.
 
 1. `mac-run BibleAI plan_rebrand` reads actual Apple state and validates the exact pending review,
    build8/MANUAL, retained18screenshots/preview and unchanged metadata. It pins the package hash

@@ -58,4 +58,4 @@ capabilities:
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
 release:
   status: waiting_for_review
-  note: Scroll Bible ASO submitted for existing 2.0.1/build8 and independently verified November1 at19:22CST; manual release. Bright Scroll rebrand selected and prepared locally; actual read-only plan and local review passed; replacement/publication/resubmission explicitly approved. No new binary, pricing change or public release.
+  note: Bright Scroll Bible AI submitted for existing2.0.1/build8 at20:24CST November1; independently verified WAITING_FOR_REVIEW and MANUAL with all metadata/assets intact. No new binary, pricing change or public release. Native short-label change requires a later binary.
