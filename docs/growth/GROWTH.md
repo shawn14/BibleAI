@@ -36,8 +36,9 @@ Core three outcomes:
 - Native: Paper/Night verse composer, system share completion events, plan invitations, validated
   link handling, content-first recipient screen, explicit link entry during onboarding and Plans.
 - Website: `/share` content preview, actual KJV lookup, metadata, Open in Bright Scroll and App Store
-  fallback. The existing website clone failed once on transport; additive patch is prepared from
-  GitHub connector source. It is not deployed. Do not release native links while destination is absent.
+  fallback. Website branchcodex/bright-scroll-sharing atc496508 passed20actual Next16 browser
+  cases, including live KJV/all4plans/mobile/desktop and actual dev-SDK redaction. It is not
+  deployed. Do not release native links while the destination is absent.
 - Measurement: device-local diagnostics currently preserve a random installation identity,
   activation, first invitation attribution, bounded events and lifetime counters. Nothing is sent.
   A real first-party cross-install collection path, privacy disclosure/choice and cohort collection
@@ -72,3 +73,16 @@ First experiments after the complete path is live:
 
 Defer rewards/paywall unlocks, public feeds, leaderboards, referral contests and group chat.
 They add moderation, billing and social-state work before the acquisition path is proven.
+
+## November2 local result
+
+Native sourcebcc4893 passed the actual scoped UI journey and persisted-state readback; independent
+review inspected eight screenshots, actual logs and built URL scheme. Verse Copy, native Close,
+plan Copy, warm app link, first chapter and relaunch passed. Counts3presented/2completed/1cancelled
+and1new-reader activation are from the disposable Simulator, not real-user growth. Existing reader
+critical journey passed separately. See STATUS.md for the exact runs and outstanding coverage.
+
+Website local sourcec496508 is verified in Next16 dev mode, not production/deployed. No first-party
+collector or public growth experiment exists yet. Public Apple lookup still showed$6.99 while the
+existing homepage claims free reading; no price/copy change is included. Resolve before acquisition
+rollout. Native/website publication and a new binary still need explicit approval.

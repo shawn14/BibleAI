@@ -1,21 +1,28 @@
-# Growth implementation checkpoint — 2026-11-02
+# Growth checkpoint — November 2, 2026
 
-- Shawn approved the pending local composer copy; it is now in the app target. Source registration
-  and whitespace checks pass. Native UI integration is complete in source but awaits test_reader.
-- Branch `codex/bright-scroll-growth`; committed core67bb671 passed363checks/0failures via
-  BibleAI-growth_core_test-20261102-021956-cthz. Cohort reportf368e2f passed14arithmetic tests.
-  Those checks do not prove the complete app, delivered invitations or a live K-factor.
-- Candidate: Paper/Night verse artwork and system share sheet; contextual plan invitations;
-  strict custom-scheme/manual links; actual content before onboarding; explicit acceptance;
-  local activation/attribution diagnostics; real UI journey for invalid/verse/plan links and sharing.
-- Next: run committed canonical test_reader, inspect actual screens and one independent feature
-  review. Website exact-base83b5ae5patch remains a draft; Next16 runtime, successful live KJV
-  fetch, deployed recipient page and cross-install collection are still outstanding.
-- Native links must not ship until their destination is live/proven. No publication, new binary,
-  pricing change or live collection is authorized by this local-copy approval. GitHub main last
-  verifiedc72aaa61; sourcec63c68d(build8) and2841df3(native design) remain ancestors.
-- Research and release order: docs/growth/GROWTH.md. Durable website patch/composer/notes in
-  ~/.codex/visualizations/2026/10/28/01a18470-63ee-72f3-8e43-81d61043a030/bright-scroll-growth/.
+- Approved local composer copy applied. Native sharing/invitation candidate `bcc4893` passed
+  `BibleAI-test_growth-20261102-083816-fpuh` (352.4s total; UI80.029s,0failures).
+  Actual verse/plan Copy, native Close cancellation, invalid link, content before onboarding,
+  warm plan URL, Matthew1 and relaunch passed. Persisted3presented/2completed/1cancelled,
+  2accepted invitations and1new-reader activation. Independent native-scope review passed.
+- Existing reader/save/note/search/all4plan persistence journey passed203.014s in hyuj at5ed8627.
+  Core363checks and report14tests remain passed; no unchanged full-suite replay needed.
+- First failures were the iOS26 Copy cell selector, then missing completion feedback. UIKit
+  now owns final outcomes; SwiftUI onDismiss no longer preempts completion. Feedback stays
+  beside Share. Real failed/passed UI checks and saved-state counts verify the local fix.
+- Native screens: docs/growth/preview. Website clean local branchcodex/bright-scroll-sharing at
+  c496508 passed20actual Next16 browser cases plus parser/tsc; docs/SHARING.md in its repo.
+  No website deployment or new native binary. Exported image pixels, saved-note share entry,
+  iPad/accessibility/device handoff, cross-install collection and measuredK remain unverified.
+- Both local branches remain unpushed. GitHub BibleAI main freshly readc72aaa61; existing
+  build8sourcec63c68d and tested native2841df3 ancestry preserved. No ASC/pricing changes.
+- Next: finish remaining sharing coverage and real device/web handoff; prepare production
+  website build and guarded publication path before asking to publish. Existing publish action
+  targets oldclaude/scroll-parity and must not publish this branch. First-party cohort collection
+  and actual growth experiments still needed; completed UIKit activity is not delivered referral.
+- All owned native jobs finished; owned Simulators deleted, website server/browser closed.
+  Failed raw bundles removed only after exported screens/AX/logs/summaries were retained.
+  Latest observed free space21GiB. Completed ASO receipts remain untouched.
 
 ---
 

@@ -44,7 +44,7 @@ Level1: run the touched-screen journey. Level2: touched flows plus critical jour
 feature review. Level3, only before a release: full suite/CI and required device checks. No
 per-control manifests or refuter for each edit. Never claim device behavior from simulator output.
 
-Critical journeys (the current ReaderJourneyTests covers the first five, except sharing/full-chapter):
+Critical journeys (test_reader plus test_growth cover the first five except the saved-note sharing entry):
 1. Complete onboarding, choose a plan, and dismiss Premium into free Scripture reading.
 2. Swipe verses and restore the saved reading place after relaunch.
 3. Find an exact passage and open its full chapter.
@@ -96,3 +96,22 @@ placement only in PREPARE_FOR_SUBMISSION/APPROVED. Final verification requires c
 
 The approved Air native test already passed within20minutes. Reuse retained real-screen captures
 for ASO changes. Render actions use normal resource guards and two FFmpeg threads, no Simulator.
+
+## Growth sharing development
+
+`test_growth` scopes the real Simulator journey to invitations and sharing; `test_reader` retains
+the existing critical reader/plan journey. `inspect_reader` exports the latest retained result
+without rebuilding. Test failures also export screenshots now. Keep native jobs serialized.
+
+UIKit's activity completion handler owns completed/cancelled/failed outcomes. Do not use SwiftUI
+onDismiss to record cancellation: sheet teardown can preempt the delivered UIKit callback. Outer
+interactive dismissal is disabled; the native Close action remains available. The November2 real
+Copy/Close test passed, with persisted3presented/2completed/1cancelled and1new-reader activation.
+These are disposable-Simulator diagnostics, never delivered invitations or measuredK.
+
+Recipient website is `~/projects/v0-bible-ai-companion-website`; /share query contract and all four
+plan IDs must stay aligned. Its local Next16 browser proof passed; source is not deployed. Never
+ship invitation links before the destination and compatible binary are verified. Native device
+handoff, post-install return, exported pixels and cross-install metrics remain outstanding.
+Growth publication needs its own guarded action: the existing publish_review_branch points to
+the completed ASO branch, not codex/bright-scroll-growth. Do not push the wrong source.
