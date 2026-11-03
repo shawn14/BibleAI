@@ -1,12 +1,13 @@
-import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 export default async (api) => {
-  const project = fs.readFileSync('BibleAI.xcodeproj/project.pbxproj', 'utf8');
-  const identifiers = [...project.matchAll(/PRODUCT_BUNDLE_IDENTIFIER = ([^;]+);/g)]
-    .map((match) => match[1].replaceAll('"', ''))
-    .filter((value) => !value.endsWith('UITests'));
-  const unique = [...new Set(identifiers)];
-  if (unique.length !== 1) throw new Error('Expected one native app identifier');
+  const unique = JSON.parse(execFileSync('ruby', ['-rxcodeproj', '-rjson', '-e',
+    'p = Xcodeproj::Project.open("BibleAI.xcodeproj"); ' +
+    'a = p.targets.select { |t| t.product_type == "com.apple.product-type.application" }; ' +
+    'abort "Expected one app target" unless a.length == 1; ' +
+    'puts JSON.generate(a.first.build_configurations.map { |c| c.build_settings["PRODUCT_BUNDLE_IDENTIFIER"] }.uniq)'
+  ], { encoding: 'utf8' }));
+  if (unique.length !== 1 || typeof unique[0] !== 'string') throw new Error('Expected one native app identifier');
   const identifier = unique[0];
   const bundle = (await api.get(`/v1/bundleIds?filter[identifier]=${encodeURIComponent(identifier)}&filter[platform]=IOS`))
     .data.find((item) => item.attributes.identifier === identifier);
