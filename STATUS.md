@@ -11,9 +11,10 @@
   exact iCloud KVS entitlement; embedded development profile includes this phone and existing cert.
   No certificates/device registrations deleted or created; one development profile created.
 - Actual Mirroring shows the new Account tab and Premium active. Native Apple authorization
-  sheet names Bright Scroll and presents Continue with Passcode. Shawn reported sign-in failed;
-  the observed sheet remains open with no visible error. Asked which step/error stopped him.
-  Successful authentication, relaunch persistence and Sign Out remain UNVERIFIED.
+  sheet names Bright Scroll and presents Continue with Passcode. Shawn clarified the stop was
+  Face ID while using Mirroring; no app error has been observed. Handed authentication to the
+  physical iPhone, then requested locking it for verification. Positive authentication, relaunch
+  persistence and Sign Out remain UNVERIFIED until that handoff completes.
 - Focused Simulator Apple prompt/Close test passed95.138s,0failures at8ab4276. Earlier critical
   reader/save/note/search/plan and account/restore-wait assertions passed. Independent local review
   complete. Paid restore, subscription management and profile removal still need device proof.

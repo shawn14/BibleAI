@@ -45,8 +45,9 @@ The signed app carries applesignin=[Default] and the exact app iCloud KVS identi
 is adapted from Cairn's device signer and fastlane-configs' profile API, with narrower mutations.
 
 Actual iPhone Mirroring shows the Account tab and Premium active. The real Apple sheet names
-Bright Scroll and reaches Continue with Passcode. Shawn reported failure, but the currently visible
-sheet has no error; clarification of the failing step is pending. Do not call authentication verified.
+Bright Scroll and reaches Continue with Passcode. Shawn clarified that Face ID was the stop while
+using Mirroring; no app error was observed. Authentication has been handed to the physical iPhone,
+with a request to lock it afterward for inspection. Do not call authentication verified yet.
 Positive sign-in, relaunch persistence, Sign Out, profile removal, revoked credentials, Manage
 Subscription and paid restoration remain unproven. The installed candidate retains2.0.1/build8;
 it is a local development install, not a new public version.
