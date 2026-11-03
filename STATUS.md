@@ -1,3 +1,13 @@
+# Rename checkpoint — November 3, 2026
+
+- Shawn renamed the app: **BibleAI: Scroll Scripture** (subtitle "Swipe through the Bible daily",
+  short label BibleAI). "Bright Scroll" removed everywhere. Avoid "Scroll Bible"/"Scroll The Bible".
+- Branch claude/scroll-scripture (from main ea6eb3e, no Account tab). 2.0.2 (9) passed test_reader
+  and test_growth, uploaded, and is WAITING_FOR_REVIEW (submitted 16:01 CST, MANUAL release).
+- New device-frame screenshots: docs/aso/creative-src/render_pro.py (render_store_art). 18 screenshots,
+  preview, header/search videos uploaded to 2.0.2. Website main 9e35ec68 renamed.
+- codex/standard-account (Account tab) is untouched and still needs the rename merged in.
+
 # Growth checkpoint — November 2, 2026
 
 - Approved local composer copy applied. Native sharing/invitation candidate `bcc4893` passed
