@@ -58,7 +58,7 @@ struct InvitationLandingView: View {
                 .padding(24)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .navigationTitle("Bright Scroll")
+            .navigationTitle("BibleAI")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) {
                 Button("Not Now") { GrowthStore.shared.dismissInvitation() }
@@ -96,7 +96,7 @@ struct ImportInvitationView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Paste your Bright Scroll invitation link", text: $link, axis: .vertical)
+                    TextField("Paste your BibleAI invitation link", text: $link, axis: .vertical)
                         .textInputAutocapitalization(.never).autocorrectionDisabled()
                         .accessibilityIdentifier("invitation.link")
                     Button("Open Invitation") {
@@ -107,10 +107,10 @@ struct ImportInvitationView: View {
                     .disabled(link.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .accessibilityIdentifier("invitation.open")
                 } footer: {
-                    Text("You can also return to the message you received and tap Open in Bright Scroll after installing the app.")
+                    Text("You can also return to the message you received and tap Open in BibleAI after installing the app.")
                 }
                 if invalid {
-                    Text("That link isn't a valid Bright Scroll invitation. Check that you copied the whole link.")
+                    Text("That link isn't a valid BibleAI invitation. Check that you copied the whole link.")
                         .foregroundStyle(.red).accessibilityIdentifier("invitation.invalid")
                 }
             }

@@ -49,7 +49,7 @@ struct ContentView: View {
         .onOpenURL { url in if !growth.receive(url: url) { invalidInvitation = true } }
         .alert("Couldn't open this invitation", isPresented: $invalidInvitation) {
             Button("OK", role: .cancel) { }
-        } message: { Text("Ask the sender for a new Bright Scroll link. Your reading progress is unchanged.") }
+        } message: { Text("Ask the sender for a new BibleAI link. Your reading progress is unchanged.") }
     }
 }
 
@@ -96,7 +96,7 @@ struct EmptyChatView: View {
                     .foregroundColor(Color(red: 0.6, green: 0.4, blue: 0.2))
 
                 VStack(spacing: 8) {
-                    Text("Bright Scroll")
+                    Text("BibleAI")
                         .font(.title)
                         .fontWeight(.semibold)
 

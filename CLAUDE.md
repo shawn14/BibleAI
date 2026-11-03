@@ -65,7 +65,7 @@ was authorized by the November1 ASO/rebrand task. Additional decisions: one at a
 
 ## November 1 completed ASO and rebrand
 
-Selected App Store title: Bright Scroll: Bible AI. Short icon/in-app brand: Bright Scroll.
+Selected App Store title (Shawn 2026-11-03): BibleAI: Scroll Scripture. Short icon/in-app brand: BibleAI. Do not use "Scroll Bible" or "Scroll The Bible" as a brand (another app). "Scroll" stays a plain verb.
 The store title/copy and two branded creative videos are saved and verified. The short native
 label and later UX refinements require a later binary; they are not in uploaded build8.
 Bundle/product IDs, storage keys, repo and service URLs remain unchanged.

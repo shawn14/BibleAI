@@ -12,7 +12,7 @@ SERIF=Path('/System/Library/Fonts/Supplemental/Georgia.ttf')
 SANS=Path('/System/Library/Fonts/Supplemental/Arial.ttf')
 INK='#171717'; MUTED='#666666'; BLUE='#007AFF'
 STORY=[
- ('reader','Make room for\nScripture.','Read the Bible, one verse at a time.'),
+ ('reader','Scroll\nScripture.','Read the Bible, one verse at a time.'),
  ('resume','Pick up where\nyou left off.','Your reading place is saved as you go.'),
  ('plans','A little reading.\nEvery day.','Four guided plans. One clear next step.'),
  ('saved','Keep what speaks\nto you.','Save a verse. Add your own reflection.'),
@@ -63,14 +63,14 @@ def header(search=False):
  # The center stays readable when App Store placements crop at the edges.
  x,y,hs,ss,pw,px,py=(430,770,158,60,990,2350,175) if search else (560,470,126,54,660,2350,105)
  captions=[('resume','A quiet moment.\nOne verse at a time.','Read Scripture at your own pace.'),
-           ('reader','Make room\nfor Scripture.','The King James Version, one swipe at a time.'),
+           ('reader','Scroll\nScripture.','The King James Version, one swipe at a time.'),
            ('plans','A little reading.\nEvery day.','Choose a plan and keep your place.')]
  files=[]
  for i,(src,head,sub) in enumerate(captions):
   c=Image.new('RGB',(W,H),'white')
   end=text_lines(c,head,(x,y),hs,True)
   text_lines(c,sub,(x+4,end+85),ss,color=MUTED)
-  text_lines(c,'BRIGHT SCROLL',(x+4,end+240),round(ss*.65),color=MUTED)
+  text_lines(c,'BIBLEAI',(x+4,end+240),round(ss*.65),color=MUTED)
   device(c,CAP/'iphone'/(src+'.png'),pw,px,py,24 if search else 18,136 if search else 90)
   p=SCRATCH/f'{name}-scene-{i}.png'; c.save(p); files.append(str(p))
  out=ASO/'header-video'; out.mkdir(exist_ok=True)

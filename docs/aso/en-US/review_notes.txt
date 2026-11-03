@@ -8,4 +8,4 @@ The study allowance is five per day. Monthly or yearly Premium unlocks unlimited
 
 The King James Version is requested one chapter at a time from bible-api.com. Previously opened chapters are cached; first-time chapter downloads require internet. No account credentials are needed for review.
 
-Onboarding offers goal, familiarity, reading-time and reminder choices. Daily reminders can be changed or disabled in Settings > Daily Reading. iCloud key-value sync uses the user's existing Apple account; no separate Bright Scroll account is created.
+Onboarding offers goal, familiarity, reading-time and reminder choices. Daily reminders can be changed or disabled in Settings > Daily Reading. iCloud key-value sync uses the user's existing Apple account; no separate BibleAI account is created.

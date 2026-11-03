@@ -1,9 +1,7 @@
-A fresh way to spend time with Scripture.
+BibleAI is the new name for the app, with a clearer focus: scroll Scripture, one verse at a time.
 
+• The app name, sharing cards and invitations now say BibleAI
+• Share a verse as an image, or invite someone to read a plan with you
+• Your saved verses, notes, plans and streak sync with iCloud
 • Read the Bible one verse at a time and return to your saved place
-• Find a passage by book, chapter, and verse
-• Save meaningful verses, add notes, and share
-• Follow four reading plans and keep track of completed readings
-• Build a reading streak and choose a daily reminder
-• Open verse-study tools on compatible Apple Intelligence devices
-• A quieter native design for iPhone and iPad
+• Follow four reading plans, build a streak, and choose a daily reminder

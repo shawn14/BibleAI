@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Bright Scroll</string>
+	<string>BibleAI</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,7 +22,7 @@
 	<string>8</string>
 	<key>CFBundleURLTypes</key>
 	<array><dict>
-		<key>CFBundleURLName</key><string>Bright Scroll invitations</string>
+		<key>CFBundleURLName</key><string>BibleAI invitations</string>
 		<key>CFBundleURLSchemes</key><array><string>brightscroll</string></array>
 	</dict></array>
 	<key>LSRequiresIPhoneOS</key>
