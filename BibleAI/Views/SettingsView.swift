@@ -2,11 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var subscriptions: RevenueCatManager
     @AppStorage("reader.useSerif") private var useSerif = true
     @AppStorage("reader.textSize") private var textSize = 28.0
     @State private var reminderTick = 0
-    @State private var showPremium = false
     @State private var showIntroduction = false
 
     var body: some View {
@@ -42,7 +40,7 @@ struct SettingsView: View {
                         .font(.footnote).foregroundStyle(.secondary)
                 }
                 Section("Bright Scroll") {
-                    Button(subscriptions.isPremium ? "Your Subscription" : "Explore Premium") { showPremium = true }
+                    NavigationLink("Subscription") { SubscriptionView() }
                     Button("Show Introduction") { showIntroduction = true }
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                 }
@@ -51,7 +49,6 @@ struct SettingsView: View {
             .navigationTitle("Reading Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
-            .sheet(isPresented: $showPremium) { PaywallView(isPresented: $showPremium) }
             .fullScreenCover(isPresented: $showIntroduction) { OnboardingView(isPresented: $showIntroduction) }
         }
     }

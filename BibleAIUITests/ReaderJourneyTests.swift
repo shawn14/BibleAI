@@ -122,6 +122,50 @@ final class ReaderJourneyTests: XCTestCase {
         print("INTERACTION_ASSERTED settings.openClose")
 
         try exerciseAllPlanPersistence(app)
+        exerciseAccount(app)
+    }
+
+    private func exerciseAccount(_ app: XCUIApplication) {
+        let account = tab("Account", in: app)
+        XCTAssertTrue(account.waitForExistence(timeout: 5))
+        account.tap()
+        let subscription = app.buttons["account.subscription"]
+        XCTAssertTrue(subscription.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["account.streak"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["account.icloud"].exists)
+        capture("account-overview")
+        subscription.tap()
+        let status = app.staticTexts["subscription.status"]
+        XCTAssertTrue(status.waitForExistence(timeout: 5))
+        let resolved = NSPredicate(format: "label != %@", "Checking subscription…")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: resolved, evaluatedWith: status)], timeout: 30), .completed)
+        XCTAssertTrue(["Free plan", "Status unavailable"].contains(status.label),
+                      "This disposable Simulator has no paid account; never invent a trial or payment")
+        if status.label == "Status unavailable" {
+            XCTAssertTrue(app.staticTexts["subscription.error"].exists)
+        }
+        XCTAssertTrue(app.buttons["subscription.manage"].exists)
+        XCTAssertTrue(app.buttons["subscription.restore"].exists)
+        reveal(app.buttons["subscription.history"], in: app)
+        XCTAssertTrue(app.buttons["subscription.history"].isHittable)
+        capture("account-subscription")
+        // Exercise the real restore call on this disposable Simulator; never initiate a purchase.
+        let restore = app.buttons["subscription.restore"]
+        reveal(restore, in: app)
+        restore.tap()
+        let result = app.alerts["Restore Purchases"]
+        XCTAssertTrue(result.waitForExistence(timeout: 30), "Restore must finish with an explicit result")
+        XCTAssertFalse(result.staticTexts["Your Premium access has been restored."].exists)
+        capture("account-restore-result")
+        result.buttons["OK"].tap()
+        app.navigationBars.buttons.firstMatch.tap()
+        XCTAssertTrue(app.buttons["account.settings"].waitForExistence(timeout: 5))
+        app.buttons["account.settings"].tap()
+        XCTAssertTrue(app.sliders["settings.textSize"].waitForExistence(timeout: 5))
+        app.buttons["Done"].tap()
+        tab("Saved", in: app).tap()
+        assertSavedNote(app, equals: "A quiet moment with Scripture.")
+        print("INTERACTION_ASSERTED account.subscription.settings.restore")
     }
 
     private func assertSavedNote(_ app: XCUIApplication, equals note: String,

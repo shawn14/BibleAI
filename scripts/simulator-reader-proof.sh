@@ -18,6 +18,7 @@ print(d["identifier"],r["identifier"])')
 filters=()
 case "${1:-}" in
   "") ;;
+  --account) filters=(-only-testing:BibleAIUITests/ReaderJourneyTests/testReadSaveNoteResumeAndSearch) ;;
   --growth) filters=(-only-testing:BibleAIUITests/ReaderJourneyTests/testZShareAndInvitationJourney) ;;
   *) echo 'Unsupported proof scope'; exit 1 ;;
 esac

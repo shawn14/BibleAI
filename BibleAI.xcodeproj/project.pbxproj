@@ -17,6 +17,7 @@
 		4F06A121A76A45A1AAB42C13 /* ReadingPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */; };
 		590A3FCEDA97109F8B204E6C /* ReaderJourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C71DD2916BDFBCAB5B2D25 /* ReaderJourneyTests.swift */; };
 		59FB5658FDA24B5F890BB30F /* ReadingPlanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3A8CF9A924D4FBDAA8B04 /* ReadingPlanDetailView.swift */; };
+		75AD0BEE567AC45765871963 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA9AC5E5DE95E03CA02FB /* AccountView.swift */; };
 		75E29E63A1BC30B866BA92DD /* GrowthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00242C81F8F51DD5D96FC071 /* GrowthStore.swift */; };
 		8379C02F027317DD3D132998 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000020 /* Config.swift */; };
 		8F7429DA45F3792A6F7F9517 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */; };
@@ -133,6 +134,7 @@
 		CC2000006 /* BibleAI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BibleAI.entitlements; sourceTree = "<group>"; };
 		DA9CCDFE735FEC6D7CED1264 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		DBE7FD9604F6787F4A333B39 /* Pods_BibleAI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BibleAI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDDAA9AC5E5DE95E03CA02FB /* AccountView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		E0E7F85FDB3F161F44CE316D /* VerseStudySheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerseStudySheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -265,6 +267,7 @@
 				556B1BCC9F210EB8B04A57D5 /* OnboardingView.swift */,
 				F558F99AB6C266311DF19417 /* Reader */,
 				21B74E2FC9BF35556AF46874 /* InvitationLandingView.swift */,
+				DDDAA9AC5E5DE95E03CA02FB /* AccountView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				75E29E63A1BC30B866BA92DD /* GrowthStore.swift in Sources */,
 				93C065AD7063A4209EBF04CF /* InvitationLandingView.swift in Sources */,
 				36CAB98719D298D4DEAC73D5 /* ScriptureShareView.swift in Sources */,
+				75AD0BEE567AC45765871963 /* AccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

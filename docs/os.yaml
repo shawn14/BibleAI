@@ -21,6 +21,7 @@ canonical_scripts:
   publish_growth: bash scripts/publish-growth.sh --publish
   check_source: python3 scripts/check-source.py
   prepare_dependencies: pod install --deployment --no-repo-update
+  test_account: bash scripts/simulator-reader-proof.sh --account
   test_reader: bash scripts/simulator-reader-proof.sh
   test_growth: bash scripts/simulator-reader-proof.sh --growth
   inspect_reader: bash scripts/inspect-reader-proof.sh
