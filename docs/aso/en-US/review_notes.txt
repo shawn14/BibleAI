@@ -1,4 +1,4 @@
-No app account or sign-in is required. Reading, saved verses, notes and plans do not require a subscription. Close the subscription screen to continue reading. Premium is optional.
+Sign-in is optional: the Account tab offers Sign in with Apple, Sign Out and Delete Account (Account > Delete Account removes the stored Apple sign-in; BibleAI has no server account). Reading needs no sign-in. Reading, saved verses, notes and plans do not require a subscription. Close the subscription screen to continue reading. Premium is optional.
 
 To test the core flow, finish onboarding, open The Bible, swipe between verses, tap the heart to save, and use the note control to add a reflection. Saved contains the verse and note. Use search for John 3:16. Plans contains four guided selections; mark a reading complete to update progress and streak.
 

@@ -5,41 +5,7 @@ import XCTest
 final class ReaderJourneyTests: XCTestCase {
     func testReadSaveNoteResumeAndSearch() throws {
         continueAfterFailure = false
-        let app = XCUIApplication()
-        app.launch()
-        let next = app.buttons["onboarding.continue"]
-        XCTAssertTrue(next.waitForExistence(timeout: 10))
-        // Intro pages, then the paywall sequence; the plan picker's close keeps free reading.
-        var page = 1
-        while !app.buttons["paywall.close"].exists {
-            XCTAssertLessThanOrEqual(page, 18, "Onboarding never reached the plan picker")
-            let allPlans = app.buttons["onboarding.allPlans"]
-            XCTAssertTrue(next.waitForExistence(timeout: 5) || allPlans.exists
-                      || app.descendants(matching: .any)["onboarding.commit"].exists)
-            capture("onboarding-\(page)")
-            // Personal questions: pick the first answer before continuing.
-            let option = app.buttons["onboarding.option.0"]
-            if option.exists { option.tap() }
-            let commit = app.descendants(matching: .any)["onboarding.commit"]
-            if commit.exists {
-                commit.press(forDuration: 1.8)
-                _ = next.waitForExistence(timeout: 3)
-            } else if allPlans.exists {
-                // The trial timeline's main button starts a purchase; take "View all plans" instead.
-                allPlans.tap()
-            } else {
-                next.tap()
-            }
-            allowSystemAlert()
-            page += 1
-            _ = app.buttons["paywall.close"].waitForExistence(timeout: 1)
-        }
-        capture("onboarding-plans")
-        app.buttons["paywall.close"].tap()
-        XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 30))
-        XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].exists)
-        capture("reader-initial")
-        print("INTERACTION_ASSERTED onboarding.continue")
+        let app = launchReader()
 
         app.scrollViews["reader.feed"].swipeUp()
         let verseTwo = app.buttons["reader.verse.Genesis|1|2"]
@@ -122,6 +88,142 @@ final class ReaderJourneyTests: XCTestCase {
         print("INTERACTION_ASSERTED settings.openClose")
 
         try exerciseAllPlanPersistence(app)
+        exerciseAccount(app)
+    }
+
+    private func launchReader() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launch()
+        let next = app.buttons["onboarding.continue"]
+        if app.buttons["reader.study"].waitForExistence(timeout: 2) { return app }
+        XCTAssertTrue(next.waitForExistence(timeout: 10))
+        // Intro pages, then the paywall sequence; the plan picker's close keeps free reading.
+        var page = 1
+        while !app.buttons["paywall.close"].exists {
+            XCTAssertLessThanOrEqual(page, 18, "Onboarding never reached the plan picker")
+            let allPlans = app.buttons["onboarding.allPlans"]
+            XCTAssertTrue(next.waitForExistence(timeout: 5) || allPlans.exists
+                      || app.descendants(matching: .any)["onboarding.commit"].exists)
+            capture("onboarding-\(page)")
+            // Personal questions: pick the first answer before continuing.
+            let option = app.buttons["onboarding.option.0"]
+            if option.exists { option.tap() }
+            let commit = app.descendants(matching: .any)["onboarding.commit"]
+            if commit.exists {
+                commit.press(forDuration: 1.8)
+                _ = next.waitForExistence(timeout: 3)
+            } else if allPlans.exists {
+                // The trial timeline's main button starts a purchase; take "View all plans" instead.
+                allPlans.tap()
+            } else {
+                next.tap()
+            }
+            allowSystemAlert()
+            page += 1
+            _ = app.buttons["paywall.close"].waitForExistence(timeout: 1)
+        }
+        capture("onboarding-plans")
+        app.buttons["paywall.close"].tap()
+        XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 30))
+        XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].exists)
+        capture("reader-initial")
+        print("INTERACTION_ASSERTED onboarding.continue")
+
+        return app
+    }
+
+    func testAppleSignInCancellation() {
+        continueAfterFailure = false
+        let app = launchReader()
+        tab("Account", in: app).tap()
+        exerciseAppleCancellation(app)
+    }
+
+    private func exerciseAccount(_ app: XCUIApplication) {
+        let account = tab("Account", in: app)
+        XCTAssertTrue(account.waitForExistence(timeout: 5))
+        account.tap()
+        let subscription = app.buttons["account.subscription"]
+        XCTAssertTrue(subscription.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["account.appleSignIn"].exists)
+        XCTAssertFalse(app.buttons["account.signOut"].exists, "Do not invent a signed-in identity")
+        XCTAssertTrue(app.descendants(matching: .any)["account.streak"].exists)
+        capture("account-overview")
+        reveal(subscription, in: app)
+        subscription.tap()
+        let status = app.staticTexts["subscription.status"]
+        XCTAssertTrue(status.waitForExistence(timeout: 5))
+        let resolved = NSPredicate(format: "label != %@", "Checking subscription…")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: resolved, evaluatedWith: status)], timeout: 30), .completed)
+        XCTAssertTrue(["Free plan", "Status unavailable"].contains(status.label),
+                      "This disposable Simulator has no paid account; never invent a trial or payment")
+        if status.label == "Status unavailable" {
+            XCTAssertTrue(app.staticTexts["subscription.error"].exists)
+        }
+        XCTAssertTrue(app.buttons["subscription.manage"].exists)
+        XCTAssertTrue(app.buttons["subscription.restore"].exists)
+        reveal(app.buttons["subscription.history"], in: app)
+        XCTAssertTrue(app.buttons["subscription.history"].isHittable)
+        capture("account-subscription")
+        // Exercise the real restore call on this disposable Simulator; never initiate a purchase.
+        let restore = app.buttons["subscription.restore"]
+        reveal(restore, in: app)
+        restore.tap()
+        let result = app.alerts["Restore Purchases"]
+        let pending = app.staticTexts["subscription.restorePending"]
+        let feedback = NSPredicate { _, _ in result.exists || pending.exists }
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: feedback, evaluatedWith: app)], timeout: 25), .completed,
+                       "Restore must explain a long wait, not leave only a spinner")
+        if result.exists {
+            XCTAssertFalse(result.staticTexts["Your Premium access has been restored."].exists)
+            capture("account-restore-result")
+            result.buttons["OK"].tap()
+        } else {
+            XCTAssertTrue(pending.label.contains("You can keep reading"))
+            XCTAssertFalse(restore.isEnabled, "Do not allow duplicate restores while the first is pending")
+            XCTAssertEqual(status.label, "Free plan", "Pending restore must not claim Premium")
+            capture("account-restore-pending")
+            print("RESTORE_BOUNDARY StoreKit still pending; paid restoration remains unverified")
+        }
+        app.navigationBars.buttons.firstMatch.tap()
+        let readingSettings = app.buttons["account.settings"]
+        reveal(readingSettings, in: app)
+        readingSettings.tap()
+        XCTAssertTrue(app.sliders["settings.textSize"].waitForExistence(timeout: 5))
+        app.buttons["Done"].tap()
+        tab("Saved", in: app).tap()
+        assertSavedNote(app, equals: "A quiet moment with Scripture.")
+        tab("Account", in: app).tap()
+        print("INTERACTION_ASSERTED account.subscription.settings.restore")
+    }
+
+    private func exerciseAppleCancellation(_ app: XCUIApplication) {
+        for _ in 0..<3 { app.swipeDown() }
+        let signIn = app.buttons["account.appleSignIn"]
+        XCTAssertTrue(signIn.waitForExistence(timeout: 5))
+        signIn.tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let authError = app.staticTexts["account.authError"]
+        let cancel = app.buttons["Cancel"].firstMatch
+        let systemCancel = springboard.buttons["Cancel"].firstMatch
+        let close = app.buttons["Close"].firstMatch
+        let systemClose = springboard.buttons["Close"].firstMatch
+        let appleResponse = NSPredicate { _, _ in
+            authError.exists || cancel.exists || systemCancel.exists || close.exists || systemClose.exists
+        }
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: appleResponse, evaluatedWith: app)], timeout: 20), .completed,
+                       "The real Apple request must respond or present a cancellable sheet")
+        capture("account-apple-signin-response")
+        if cancel.exists { cancel.tap() }
+        else if systemCancel.exists { systemCancel.tap() }
+        else if close.exists { close.tap() }
+        else if systemClose.exists { systemClose.tap() }
+        let ready = NSPredicate(format: "exists == true AND enabled == true")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: ready, evaluatedWith: signIn)], timeout: 8), .completed)
+        XCTAssertFalse(app.buttons["account.signOut"].exists,
+                       "A canceled/unsupported Simulator authorization must not create a session")
+        print("INTERACTION_ASSERTED account.appleCancellation")
+        print("APPLE_BOUNDARY Signed Apple login and sign-out still require an authenticated physical device")
     }
 
     private func assertSavedNote(_ app: XCUIApplication, equals note: String,

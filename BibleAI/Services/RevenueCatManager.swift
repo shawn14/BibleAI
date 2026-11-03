@@ -12,7 +12,13 @@ import RevenueCat
 class RevenueCatManager: ObservableObject {
     static let shared = RevenueCatManager()
 
-    @Published var isPremium: Bool = false
+    @Published private(set) var isPremium: Bool = false
+    @Published private(set) var customerInfo: CustomerInfo?
+    @Published private(set) var checkingStatus = false
+    @Published private(set) var statusError: String?
+    private var statusRequest = 0
+    @Published private(set) var restoringPurchases = false
+    private var restoreTask: Task<Void, Error>?
     @Published var offerings: Offerings?
     @Published var loadingOfferings = false
     @Published var offeringsError: String?
@@ -44,16 +50,47 @@ class RevenueCatManager: ObservableObject {
 
     // MARK: - Subscription Status
 
-    func checkSubscriptionStatus() async {
+    func checkSubscriptionStatus(forceRefresh: Bool = false) async {
+        guard !checkingStatus else { return }
+        checkingStatus = true
+        statusRequest += 1
+        let request = statusRequest
+        defer { if request == statusRequest { checkingStatus = false } }
         do {
-            let customerInfo = try await Purchases.shared.customerInfo()
-            isPremium = customerInfo.entitlements[RevenueCatConfig.premiumEntitlementID]?.isActive == true
-
-            print(isPremium ? "✅ User is premium" : "ℹ️ User is free tier")
+            let info = try await Purchases.shared.customerInfo(fetchPolicy: forceRefresh ? .fetchCurrent : .default)
+            // A purchase or restore may finish while this older read is pending.
+            guard request == statusRequest else { return }
+            apply(info)
         } catch {
-            print("❌ Failed to check subscription: \(error)")
-            isPremium = false
+            guard request == statusRequest else { return }
+            statusError = "Couldn't check your subscription. Check your connection and try again."
+            // A failed refresh is unknown, not evidence that existing access was removed.
         }
+    }
+
+    private func apply(_ info: CustomerInfo) {
+        customerInfo = info
+        isPremium = info.entitlements[RevenueCatConfig.premiumEntitlementID]?.isActive == true
+        statusError = nil
+    }
+
+    private func applyTransaction(_ info: CustomerInfo) {
+        statusRequest += 1
+        checkingStatus = false
+        apply(info)
+    }
+
+    var premiumEntitlement: EntitlementInfo? {
+        customerInfo?.entitlements[RevenueCatConfig.premiumEntitlementID]
+    }
+
+    var subscriptionTitle: String {
+        guard customerInfo != nil else {
+            return statusError == nil ? "Checking subscription…" : "Status unavailable"
+        }
+        guard let entitlement = premiumEntitlement else { return "Free plan" }
+        guard entitlement.isActive else { return "Premium expired" }
+        return entitlement.periodType == .trial ? "Free trial" : "Premium active"
     }
 
     // MARK: - Offerings
@@ -75,7 +112,7 @@ class RevenueCatManager: ObservableObject {
     func purchase(package: Package) async throws -> Bool {
         do {
             let result = try await Purchases.shared.purchase(package: package)
-            await checkSubscriptionStatus()
+            applyTransaction(result.customerInfo)
             return result.customerInfo.entitlements[RevenueCatConfig.premiumEntitlementID]?.isActive == true
         } catch {
             print("❌ Purchase failed: \(error)")
@@ -86,14 +123,20 @@ class RevenueCatManager: ObservableObject {
     // MARK: - Restore
 
     func restorePurchases() async throws {
-        do {
-            let customerInfo = try await Purchases.shared.restorePurchases()
-            isPremium = customerInfo.entitlements[RevenueCatConfig.premiumEntitlementID]?.isActive == true
-            print(isPremium ? "✅ Purchases restored - Premium active" : "ℹ️ No active subscriptions found")
-        } catch {
-            print("❌ Restore failed: \(error)")
-            throw error
+        // Keep one restore alive across navigation. A second screen joins it instead of
+        // starting another StoreKit request or claiming an uncertain result succeeded.
+        if let restoreTask { return try await restoreTask.value }
+        restoringPurchases = true
+        let task = Task { @MainActor in
+            let info = try await Purchases.shared.restorePurchases()
+            applyTransaction(info)
         }
+        restoreTask = task
+        defer {
+            restoreTask = nil
+            restoringPurchases = false
+        }
+        try await task.value
     }
 
     // MARK: - Free Tier Limits

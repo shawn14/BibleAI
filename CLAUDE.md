@@ -117,3 +117,26 @@ Growth source publication uses check_growth_publication then the ask-first publi
 It binds native inputs to reviewed bcc4893, preserves shipped/tested ancestry, merges the exact PR
 head and finishes on clean pushed main. No native upload or App Store write is included. The older
 publish_review_branch targets the completed ASO branch; do not use it for growth changes.
+
+## Account identity candidate — November 3
+
+Account uses the native Apple button and checked Keychain session persistence. It is local Apple
+identity, not backend/RevenueCat authentication. Keep iCloud reading and App Store billing separate;
+Sign Out retains reading and does not cancel subscriptions. Remove Apple Profile removes local
+identity metadata, not Apple's authorization grant. UI copy must preserve these boundaries.
+
+Canonical scopes: test_account (reader/account/restore wait), test_apple_account (native Apple
+prompt cancellation), inspect_apple_account (read-only capability). enable_apple_account requires
+explicit approval and Mac authentication. Source entitlements do not prove live capability or
+signed provisioning. Successful login/logout/removal, revocation and billing require device proof.
+See docs/account/README.md. Apple’s signed-out Simulator prompt has Close, not Cancel.
+
+Device setup: prepare_account_device reuses an existing local development certificate and the one
+reachable already registered iPhone; it creates only a missing matching development profile.
+No profile deletion, certificate creation or device registration. Explicit primary-app consent is
+required when enabling APPLE_ID_AUTH; settings[] produces Apple409. Approved capability and signed
+install passed November3. Actual Apple login, signed-in relaunch persistence and Sign Out passed
+on Shawn's iPhone; independent reviewer confirmed signed-out identity plus retained Premium.
+An extra post-logout relaunch check hit repeated Mirroring noWindowsAvailable, so remains unverified.
+Subscription detail is sandbox/Test subscription · No real charge; never infer actual payment from it.
+Reuse the installed build; full paid restore/removal/revocation/release checks remain separate.

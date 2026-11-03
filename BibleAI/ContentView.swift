@@ -39,6 +39,8 @@ struct ContentView: View {
                         .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }.tag(1)
                     HighlightsListView()
                         .tabItem { Label("Saved", systemImage: "heart") }.tag(2)
+                    AccountView()
+                        .tabItem { Label("Account", systemImage: "person.crop.circle") }.tag(3)
                 }
                 .fullScreenCover(isPresented: $showOnboarding) {
                     OnboardingView(isPresented: $showOnboarding)
