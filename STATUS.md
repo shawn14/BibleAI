@@ -1,3 +1,21 @@
+# Account checkpoint — November 3, 2026
+
+- User explicitly chose real Sign in with Apple and Sign Out. Local branch codex/standard-account
+  adds an Account tab, native Apple identity/Keychain session, Sign Out, profile removal and
+  clear subscription/restore/history controls. iCloud reading and App Store billing remain separate.
+- Native8ab4276 compiled; focused Apple prompt/Close test passed95.138s,0failures
+  (BibleAI-test_apple_account-20261103-123550-wofm). Earlier reader/account/restore-wait assertions
+  passed before a wrong Cancel selector failed that combined run; only the failed scope was rerun.
+- Independent review complete. Successful authenticated login/logout/profile removal and paid
+  restore remain unverified. Actual ASC read18:34:06UTC: APPLE_ID_AUTH disabled; IAP+iCloud present.
+- Prepared enable_apple_account is ask-first and has NOT run. Next: approve Apple capability setup,
+  verify a signed profile/artifact, then exercise actual iPhone login/logout. No upload or device install.
+- Changes committed locally, not pushed. Fresh GitHub main ea6eb3eb35daaeb3234376aa5c5606ee577e2bfa
+  contains recorded build8 sourcec63c68d and tested2841df3. Prior sharing-export branch preserved.
+- Method, actual previews and limits: [Account candidate](docs/account/README.md).
+
+---
+
 # Growth checkpoint — November 2, 2026
 
 - Approved local composer copy applied. Native sharing/invitation candidate `bcc4893` passed

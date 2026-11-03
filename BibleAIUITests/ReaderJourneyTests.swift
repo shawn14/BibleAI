@@ -222,7 +222,7 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: ready, evaluatedWith: signIn)], timeout: 8), .completed)
         XCTAssertFalse(app.buttons["account.signOut"].exists,
                        "A canceled/unsupported Simulator authorization must not create a session")
-        print("INTERACTION_ASSERTED account.subscription.settings.restore.appleCancellation")
+        print("INTERACTION_ASSERTED account.appleCancellation")
         print("APPLE_BOUNDARY Signed Apple login and sign-out still require an authenticated physical device")
     }
 
