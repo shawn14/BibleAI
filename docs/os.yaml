@@ -27,6 +27,7 @@ canonical_scripts:
   test_growth: bash scripts/simulator-reader-proof.sh --growth
   inspect_reader: bash scripts/inspect-reader-proof.sh
   enable_apple_account: bash scripts/enable-apple-account.sh
+  inspect_account_phone: python3 scripts/inspect-account-phone.py
   inspect_apple_account: bash scripts/apple-account-preflight.sh
   inspect_aso: node scripts/aso-inspect.mjs
   check_aso: node scripts/aso-refresh.mjs check
