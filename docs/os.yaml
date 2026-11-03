@@ -42,23 +42,24 @@ canonical_scripts:
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
-  submit_review: cd ~/projects/fastlane-configs && fastlane submit_review app:bibleai version:2.0.1 build:8
+  submit_review: cd ~/projects/fastlane-configs && fastlane submit_review app:bibleai version:2.0.2 build:9
   version_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/version-check.mjs && cat scripts/asc/version-check.out.json
   ipad_shots: bash scripts/ipad-shots.sh
   review_media: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/review-media.mjs && cat scripts/asc/review-media.out.json
-  store_assets: node scripts/aso-refresh.mjs apply
+  store_assets: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/release-assets.mjs && cat scripts/asc/release-assets.out.json
   age_rating: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/age-rating.mjs && cat scripts/asc/age-rating.out.json
   asset_state: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/asset-state.mjs && cat scripts/asc/asset-state.out.json
   fix_stuck_shots: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/fix-stuck-shots.mjs && cat scripts/asc/fix-stuck-shots.out.json
   sync_logic_test: mkdir -p build && xcrun swiftc -O BibleAI/Models/Highlight.swift BibleAI/Models/ReadingPlan.swift BibleAI/Services/CloudSyncMerge.swift scripts/tests/cloudsync/main.swift -o build/cloudsync-merge-test && build/cloudsync-merge-test
   icloud_capability: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/icloud-capability.mjs && cat scripts/asc/icloud-capability.out.json
   swap_to_201: node scripts/aso-refresh.mjs cancel
+  create_version: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/create-version.mjs && cat scripts/asc/create-version.out.json
   yearly_trial: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/trial.mjs && cat scripts/asc/trial.out.json
   listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0.1 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
   timeout_minutes: 30
-  ask_first: [publish_growth, apply_rebrand, testflight, listing_push, publish_review_branch, apply_aso, resume_aso_videos, submit_review, store_assets, swap_to_201]
+  ask_first: [create_version, publish_growth, apply_rebrand, testflight, listing_push, publish_review_branch, apply_aso, resume_aso_videos, submit_review, store_assets, swap_to_201]
 capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md
