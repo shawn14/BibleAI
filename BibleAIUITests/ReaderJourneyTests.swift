@@ -179,7 +179,25 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["Done"].tap()
         tab("Saved", in: app).tap()
         assertSavedNote(app, equals: "A quiet moment with Scripture.")
-        print("INTERACTION_ASSERTED account.subscription.settings.restore")
+        tab("Account", in: app).tap()
+        for _ in 0..<3 { app.swipeDown() }
+        let signIn = app.buttons["account.appleSignIn"]
+        XCTAssertTrue(signIn.waitForExistence(timeout: 5))
+        signIn.tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let authError = app.staticTexts["account.authError"]
+        let cancel = app.buttons["Cancel"].firstMatch
+        let systemCancel = springboard.buttons["Cancel"].firstMatch
+        let appleResponse = NSPredicate { _, _ in authError.exists || cancel.exists || systemCancel.exists }
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: appleResponse, evaluatedWith: app)], timeout: 20), .completed,
+                       "The real Apple request must respond or present a cancellable sheet")
+        capture("account-apple-signin-response")
+        if cancel.exists { cancel.tap() }
+        else if systemCancel.exists { systemCancel.tap() }
+        XCTAssertFalse(app.buttons["account.signOut"].exists,
+                       "A canceled/unsupported Simulator authorization must not create a session")
+        print("INTERACTION_ASSERTED account.subscription.settings.restore.appleCancellation")
+        print("APPLE_BOUNDARY Signed Apple login and sign-out still require an authenticated physical device")
     }
 
     private func assertSavedNote(_ app: XCUIApplication, equals note: String,
