@@ -1,25 +1,27 @@
 # Account checkpoint — November 3, 2026
 
-- User explicitly chose real Sign in with Apple and Sign Out. Local branch codex/standard-account
-  adds an Account tab, native Apple identity/Keychain session, Sign Out, profile removal and
-  clear subscription/restore/history controls. iCloud reading and App Store billing remain separate.
-- Native8ab4276 compiled; focused Apple prompt/Close test passed95.138s,0failures
-  (BibleAI-test_apple_account-20261103-123550-wofm). Earlier reader/account/restore-wait assertions
-  passed before a wrong Cancel selector failed that combined run; only the failed scope was rerun.
-- Independent review complete. Successful authenticated login/logout/profile removal and paid
-  restore remain unverified. Initial ASC read18:34:06UTC: APPLE_ID_AUTH disabled; IAP+iCloud present.
-- Shawn approved Apple capability setup. Job125814-skhd ran but Apple rejected settings[] with
-  HTTP409 requiring a configuration. Corrected to Fastlane's explicit primary-app setting in1f68ee9.
-  Replacement job BibleAI-enable_apple_account-20261103-130821-kztk is awaiting Mac authentication;
-  follow this exact job, do not requeue while it is live. No capability success, upload or install claimed.
-- Next after setup: verify signed profile/artifact and actual iPhone login/logout. Read-only signing
-  inventory BibleAI-inspect_account_signing-20261103-130953-roqe is queued behind setup.
-- Changes committed locally, not pushed. Fresh GitHub main ea6eb3eb35daaeb3234376aa5c5606ee577e2bfa
-  contains recorded build8 sourcec63c68d and tested2841df3. Prior sharing-export branch preserved.
-- Read-only phone inventory130116-funl passed after requiring an active paired connection:
-  Shawn's iPhone16Pro is paired, tunnel unavailable; no app inspection attempted. Installed version
-  remains unknown. Requested USB connection/unlock for signed-device testing; no answer yet.
-- Method, actual previews and limits: [Account candidate](docs/account/README.md).
+- User chose real Sign in with Apple and Sign Out. Branch codex/standard-account adds the fourth
+  Account tab, native Apple identity/Keychain session, Sign Out, local profile removal, and clear
+  subscription/restore/history controls. iCloud reading and App Store billing remain separate.
+- Apple capability enabled with approval: job133658-rpru passed at19:37:09UTC, APPLE_ID_AUTH
+  present alongside unchanged IN_APP_PURCHASE and ICLOUD. Initial settings[] request failed409;
+  Fastlane's explicit APPLE_ID_AUTH_APP_CONSENT / PRIMARY_APP_CONSENT configuration passed.
+- Signed device candidate34b4161 built, verified, installed and launched on Shawn's iPhone16Pro
+  in prepare_account_device134027-eywo (282.9s). Actual signed app has applesignin=[Default] and
+  exact iCloud KVS entitlement; embedded development profile includes this phone and existing cert.
+  No certificates/device registrations deleted or created; one development profile created.
+- Actual Mirroring shows the new Account tab and Premium active. Native Apple authorization
+  sheet names Bright Scroll and presents Continue with Passcode. Shawn reported sign-in failed;
+  the observed sheet remains open with no visible error. Asked which step/error stopped him.
+  Successful authentication, relaunch persistence and Sign Out remain UNVERIFIED.
+- Focused Simulator Apple prompt/Close test passed95.138s,0failures at8ab4276. Earlier critical
+  reader/save/note/search/plan and account/restore-wait assertions passed. Independent local review
+  complete. Paid restore, subscription management and profile removal still need device proof.
+- Source clean and committed locally, not pushed. Fresh GitHub main
+  ea6eb3eb35daaeb3234376aa5c5606ee577e2bfa contains recorded build8 sourcec63c68d and tested2841df3.
+  Installed candidate keeps2.0.1/build8 for local iteration; it is not a new App Store release.
+- Resume on the existing signed installed build; do not recreate profiles or rebuild unchanged code.
+  Method, actual previews and limits: [Account candidate](docs/account/README.md).
 
 ---
 

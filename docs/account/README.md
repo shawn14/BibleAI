@@ -26,24 +26,30 @@ Do not claim that this establishes App Review deletion compliance or authenticat
 - Independent feature review inspected actual native captures, raw results and the final source.
   Screens: [Account](preview/account.png), [Subscription](preview/subscription.png),
   [restore waiting](preview/restore-pending.png), [native Apple prompt](preview/apple-prompt.png).
-- Tests and exports cleaned their owned Simulators. No new binary was uploaded or installed on
-  Shawn's phone; no customer, purchase, pricing or Apple capability was changed.
+- Tests and exports cleaned their owned Simulators. No store binary was uploaded, and no
+  purchase or pricing changed. The approved signed-device installation is described below.
 
-## Remaining device prerequisites
+## Signed device candidate
 
-Read-only inspect_apple_account job122801-sveg observed Apple at18:34:06UTC:
-com.shawncarpenter.bibleai-companion has IN_APP_PURCHASE and ICLOUD, but no APPLE_ID_AUTH.
-The source entitlement alone does not enable sign-in on an installed app.
+Approved enable_apple_account job133658-rpru passed November3 at19:37:09UTC. Apple readback
+has APPLE_ID_AUTH, IN_APP_PURCHASE and ICLOUD. The earlier request with settings[] failed409;
+use Fastlane's APPLE_ID_AUTH_APP_CONSENT / PRIMARY_APP_CONSENT configuration. Do not rerun
+completed capability writes; the action itself reads before writing.
 
-Shawn explicitly approved the guarded enable_apple_account action. Its first request failed
-HTTP409 because Apple requires a configuration. The corrected request uses Fastlane's
-APPLE_ID_AUTH_APP_CONSENT / PRIMARY_APP_CONSENT setting; replacement job130821-kztk is
-awaiting Mac authentication. Follow the exact job before making a capability-success claim.
-It reads the app target from Xcode, enables only APPLE_ID_AUTH if missing and checks that existing capabilities remain.
-It neither creates a signing profile nor uploads a build. Recreate/verify the signed profile
-and built app entitlement using the established native pipeline before device installation.
-Successful Apple sign-in, relaunch persistence, Sign Out, profile removal, revoked credentials,
-Manage Subscription and paid purchase/restore still require actual signed-device checks.
+prepare_account_device134027-eywo passed282.9s from34b416169ed73dbbd85032d2e0fc62e26effa982.
+It reused a valid local development identity and the already registered connected phone, created
+one narrow development profile, built through the existing CocoaPods workspace/cache, verified
+actual signed entitlements plus embedded profile, and installed/launched the app without deleting
+its data. It never creates certificates, registers devices, deletes profiles or uploads to Apple.
+The signed app carries applesignin=[Default] and the exact app iCloud KVS identifier. Source method
+is adapted from Cairn's device signer and fastlane-configs' profile API, with narrower mutations.
+
+Actual iPhone Mirroring shows the Account tab and Premium active. The real Apple sheet names
+Bright Scroll and reaches Continue with Passcode. Shawn reported failure, but the currently visible
+sheet has no error; clarification of the failing step is pending. Do not call authentication verified.
+Positive sign-in, relaunch persistence, Sign Out, profile removal, revoked credentials, Manage
+Subscription and paid restoration remain unproven. The installed candidate retains2.0.1/build8;
+it is a local development install, not a new public version.
 
 Use test_account for reader/account/restore-wait checks and test_apple_account for native Apple
 prompt cancellation. Never seed a fake signed-in profile as evidence that Apple authentication works.

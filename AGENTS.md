@@ -130,3 +130,9 @@ prompt cancellation), inspect_apple_account (read-only capability). enable_apple
 explicit approval and Mac authentication. Source entitlements do not prove live capability or
 signed provisioning. Successful login/logout/removal, revocation and billing require device proof.
 See docs/account/README.md. Apple’s signed-out Simulator prompt has Close, not Cancel.
+
+Device setup: prepare_account_device reuses an existing local development certificate and the one
+reachable already registered iPhone; it creates only a missing matching development profile.
+No profile deletion, certificate creation or device registration. Explicit primary-app consent is
+required when enabling APPLE_ID_AUTH; settings[] produces Apple409. Approved capability and signed
+install passed November3; actual positive login/logout is still pending. Reuse the installed build.
