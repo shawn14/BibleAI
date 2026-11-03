@@ -17,6 +17,8 @@ class RevenueCatManager: ObservableObject {
     @Published private(set) var checkingStatus = false
     @Published private(set) var statusError: String?
     private var statusRequest = 0
+    @Published private(set) var restoringPurchases = false
+    private var restoreTask: Task<Void, Error>?
     @Published var offerings: Offerings?
     @Published var loadingOfferings = false
     @Published var offeringsError: String?
@@ -121,14 +123,20 @@ class RevenueCatManager: ObservableObject {
     // MARK: - Restore
 
     func restorePurchases() async throws {
-        do {
-            let customerInfo = try await Purchases.shared.restorePurchases()
-            applyTransaction(customerInfo)
-            print(isPremium ? "✅ Purchases restored - Premium active" : "ℹ️ No active subscriptions found")
-        } catch {
-            print("❌ Restore failed: \(error)")
-            throw error
+        // Keep one restore alive across navigation. A second screen joins it instead of
+        // starting another StoreKit request or claiming an uncertain result succeeded.
+        if let restoreTask { return try await restoreTask.value }
+        restoringPurchases = true
+        let task = Task { @MainActor in
+            let info = try await Purchases.shared.restorePurchases()
+            applyTransaction(info)
         }
+        restoreTask = task
+        defer {
+            restoreTask = nil
+            restoringPurchases = false
+        }
+        try await task.value
     }
 
     // MARK: - Free Tier Limits

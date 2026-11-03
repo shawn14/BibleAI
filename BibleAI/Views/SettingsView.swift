@@ -33,7 +33,7 @@ struct SettingsView: View {
                     }
                     .id(reminderTick)
                     .accessibilityIdentifier("settings.dailyReminder")
-                    LabeledContent("Reading Streak", value: "\(StreakStore.shared.currentStreak()) days")
+                    LabeledContent("Reading Streak", value: StreakStore.shared.currentStreakDescription)
                 }
                 Section {
                     Text("Opened chapters are cached on this iPhone. New chapters need a connection.")

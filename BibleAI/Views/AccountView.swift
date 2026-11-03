@@ -25,7 +25,7 @@ struct AccountView: View {
                     .accessibilityIdentifier("account.subscription")
                 }
                 Section("Your reading") {
-                    LabeledContent("Reading Streak", value: "\(StreakStore.shared.currentStreak()) days")
+                    LabeledContent("Reading Streak", value: StreakStore.shared.currentStreakDescription)
                         .accessibilityIdentifier("account.streak")
                     Button { showSettings = true } label: {
                         Label("Reading Settings", systemImage: "textformat.size")
@@ -33,14 +33,14 @@ struct AccountView: View {
                     .accessibilityIdentifier("account.settings")
                 }
                 Section {
-                    LabeledContent("iCloud", value: iCloudAvailable ? "Available" : "Not signed in")
+                    LabeledContent("iCloud", value: iCloudAvailable ? "Available" : "Unavailable")
                         .accessibilityIdentifier("account.icloud")
                 } header: {
                     Text("Saved reading")
                 } footer: {
                     Text(iCloudAvailable
                          ? "Saved verses, notes and reading progress use this device's iCloud account. Changes may take time to appear on another device."
-                         : "Your reading is saved on this device. Sign in to iCloud in iPhone Settings to use iCloud for saved reading.")
+                         : "Your reading is saved on this device. Check iCloud in iPhone Settings to use it for saved reading.")
                 }
                 Section {
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
@@ -67,7 +67,8 @@ struct SubscriptionView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var showPremium = false
     @State private var showManage = false
-    @State private var restoring = false
+    @State private var restoreTakingLonger = false
+    private var restoring: Bool { subscriptions.restoringPurchases }
     @State private var restoreMessage: String?
 
     var body: some View {
@@ -124,6 +125,11 @@ struct SubscriptionView: View {
                 }
                 .disabled(restoring)
                 .accessibilityIdentifier("subscription.restore")
+                if restoreTakingLonger && restoring {
+                    Text("The App Store hasn't finished restoring yet. You can keep reading; your access will update when it responds.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                        .accessibilityIdentifier("subscription.restorePending")
+                }
             } footer: {
                 Text("Purchases use your App Store account. Restore if you subscribed on another device or reinstalled the app.")
             }
@@ -141,6 +147,14 @@ struct SubscriptionView: View {
         .refreshable { await subscriptions.checkSubscriptionStatus(forceRefresh: true) }
         .sheet(isPresented: $showPremium) { PaywallView(isPresented: $showPremium) }
         .manageSubscriptionsSheet(isPresented: $showManage)
+        .task(id: restoring) {
+            restoreTakingLonger = false
+            guard restoring else { return }
+            do {
+                try await Task.sleep(for: .seconds(15))
+                restoreTakingLonger = true
+            } catch { /* Leaving this view cancels only the waiting-message timer. */ }
+        }
         .onChange(of: showManage) { _, presented in
             if !presented { Task { await subscriptions.checkSubscriptionStatus(forceRefresh: true) } }
         }
@@ -162,8 +176,6 @@ struct SubscriptionView: View {
 
     private func restore() async {
         guard !restoring else { return }
-        restoring = true
-        defer { restoring = false }
         do {
             try await subscriptions.restorePurchases()
             restoreMessage = subscriptions.isPremium

@@ -154,10 +154,21 @@ final class ReaderJourneyTests: XCTestCase {
         reveal(restore, in: app)
         restore.tap()
         let result = app.alerts["Restore Purchases"]
-        XCTAssertTrue(result.waitForExistence(timeout: 30), "Restore must finish with an explicit result")
-        XCTAssertFalse(result.staticTexts["Your Premium access has been restored."].exists)
-        capture("account-restore-result")
-        result.buttons["OK"].tap()
+        let pending = app.staticTexts["subscription.restorePending"]
+        let feedback = NSPredicate { _, _ in result.exists || pending.exists }
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: feedback, evaluatedWith: app)], timeout: 25), .completed,
+                       "Restore must explain a long wait, not leave only a spinner")
+        if result.exists {
+            XCTAssertFalse(result.staticTexts["Your Premium access has been restored."].exists)
+            capture("account-restore-result")
+            result.buttons["OK"].tap()
+        } else {
+            XCTAssertTrue(pending.label.contains("You can keep reading"))
+            XCTAssertFalse(restore.isEnabled, "Do not allow duplicate restores while the first is pending")
+            XCTAssertEqual(status.label, "Free plan", "Pending restore must not claim Premium")
+            capture("account-restore-pending")
+            print("RESTORE_BOUNDARY StoreKit still pending; paid restoration remains unverified")
+        }
         app.navigationBars.buttons.firstMatch.tap()
         XCTAssertTrue(app.buttons["account.settings"].waitForExistence(timeout: 5))
         app.buttons["account.settings"].tap()

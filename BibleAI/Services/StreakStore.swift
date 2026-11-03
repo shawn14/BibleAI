@@ -4,6 +4,11 @@ import Foundation
 /// days ending today (or yesterday, so it isn't lost before today's reading).
 final class StreakStore: ObservableObject {
     static let shared = StreakStore()
+    var currentStreakDescription: String {
+        let days = currentStreak()
+        return "\(days) " + (days == 1 ? "day" : "days")
+    }
+
     private let key = "streak.readingDays"
     @Published private(set) var days: Set<String>
 
