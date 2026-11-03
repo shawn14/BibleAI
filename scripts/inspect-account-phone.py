@@ -39,12 +39,13 @@ with tempfile.TemporaryDirectory(prefix="bible-account-phone-read-") as scratch:
         if hardware.get("deviceType") != "iPhone":
             continue
         item = {"name": props.get("name"), "model": hardware.get("marketingName"),
+                "coreDeviceIdentifier": device.get("identifier"), "udid": hardware.get("udid"),
                 "pairingState": connection.get("pairingState"),
                 "tunnelState": connection.get("tunnelState"),
                 "transportType": connection.get("transportType"),
                 "osVersion": props.get("osVersionNumber")}
         report["devices"].append(item)
-        if connection.get("pairingState") == "paired" and connection.get("tunnelState") == "connected":
+        if connection.get("pairingState") == "paired" and connection.get("tunnelState") != "unavailable" and connection.get("transportType"):
             try:
                 apps = query("bible", ["device", "info", "apps", "--device", device["identifier"],
                                       "--include-default-apps", "--bundle-id", targets[0]])["apps"]
@@ -56,5 +57,5 @@ with tempfile.TemporaryDirectory(prefix="bible-account-phone-read-") as scratch:
             item["bible"] = [{k: app.get(k) for k in ["name", "bundleIdentifier", "version", "bundleVersion", "builtByDeveloper"]}
                             for app in apps]
         else:
-            item["bible"] = "Not inspected: no active paired connection"
+            item["bible"] = "Not inspected: no reachable paired connection"
     print(json.dumps(report, indent=2))
