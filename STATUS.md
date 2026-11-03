@@ -12,6 +12,9 @@
   verify a signed profile/artifact, then exercise actual iPhone login/logout. No upload or device install.
 - Changes committed locally, not pushed. Fresh GitHub main ea6eb3eb35daaeb3234376aa5c5606ee577e2bfa
   contains recorded build8 sourcec63c68d and tested2841df3. Prior sharing-export branch preserved.
+- Read-only phone inventory124619-dgdj stopped on CoreDevice1011: a paired identifier could not
+  be located. Installed phone version remains unknown. Inspector now requires an active paired
+  connection; that correction has syntax validation only, with no device retry. Setup approval pending.
 - Method, actual previews and limits: [Account candidate](docs/account/README.md).
 
 ---

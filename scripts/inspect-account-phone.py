@@ -44,9 +44,17 @@ with tempfile.TemporaryDirectory(prefix="bible-account-phone-read-") as scratch:
                 "transportType": connection.get("transportType"),
                 "osVersion": props.get("osVersionNumber")}
         report["devices"].append(item)
-        if connection.get("pairingState") == "paired":
-            apps = query("bible", ["device", "info", "apps", "--device", device["identifier"],
-                                  "--include-default-apps", "--bundle-id", targets[0]])["apps"]
+        if connection.get("pairingState") == "paired" and connection.get("tunnelState") == "connected":
+            try:
+                apps = query("bible", ["device", "info", "apps", "--device", device["identifier"],
+                                      "--include-default-apps", "--bundle-id", targets[0]])["apps"]
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                item["bible"] = "Inspection failed; installed version remains unknown"
+                report["scope"] = "Partial connectivity result; app query stopped on the first device error"
+                print(json.dumps(report, indent=2))
+                raise SystemExit("CoreDevice app inspection failed; no retry or device change performed")
             item["bible"] = [{k: app.get(k) for k in ["name", "bundleIdentifier", "version", "bundleVersion", "builtByDeveloper"]}
                             for app in apps]
+        else:
+            item["bible"] = "Not inspected: no active paired connection"
     print(json.dumps(report, indent=2))
