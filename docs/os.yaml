@@ -25,6 +25,7 @@ canonical_scripts:
   test_reader: bash scripts/simulator-reader-proof.sh
   test_growth: bash scripts/simulator-reader-proof.sh --growth
   inspect_reader: bash scripts/inspect-reader-proof.sh
+  inspect_apple_account: bash scripts/apple-account-preflight.sh
   inspect_aso: node scripts/aso-inspect.mjs
   check_aso: node scripts/aso-refresh.mjs check
   apply_aso: node scripts/aso-refresh.mjs apply

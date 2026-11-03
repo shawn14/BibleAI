@@ -131,9 +131,11 @@ final class ReaderJourneyTests: XCTestCase {
         account.tap()
         let subscription = app.buttons["account.subscription"]
         XCTAssertTrue(subscription.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["account.appleSignIn"].exists)
+        XCTAssertFalse(app.buttons["account.signOut"].exists, "Do not invent a signed-in identity")
         XCTAssertTrue(app.descendants(matching: .any)["account.streak"].exists)
-        XCTAssertTrue(app.descendants(matching: .any)["account.icloud"].exists)
         capture("account-overview")
+        reveal(subscription, in: app)
         subscription.tap()
         let status = app.staticTexts["subscription.status"]
         XCTAssertTrue(status.waitForExistence(timeout: 5))
@@ -170,8 +172,9 @@ final class ReaderJourneyTests: XCTestCase {
             print("RESTORE_BOUNDARY StoreKit still pending; paid restoration remains unverified")
         }
         app.navigationBars.buttons.firstMatch.tap()
-        XCTAssertTrue(app.buttons["account.settings"].waitForExistence(timeout: 5))
-        app.buttons["account.settings"].tap()
+        let readingSettings = app.buttons["account.settings"]
+        reveal(readingSettings, in: app)
+        readingSettings.tap()
         XCTAssertTrue(app.sliders["settings.textSize"].waitForExistence(timeout: 5))
         app.buttons["Done"].tap()
         tab("Saved", in: app).tap()

@@ -1,7 +1,11 @@
 import SwiftUI
 import StoreKit
+import AuthenticationServices
 
 struct AccountView: View {
+    @EnvironmentObject private var appleAccount: AppleAccount
+    @Environment(\.colorScheme) private var colorScheme
+    @State private var showSignOut = false
     @EnvironmentObject private var subscriptions: RevenueCatManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var showSettings = false
@@ -10,6 +14,36 @@ struct AccountView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    if let profile = appleAccount.profile {
+                        Text(profile.name ?? "Apple Account").font(.headline)
+                            .accessibilityIdentifier("account.name")
+                        if let email = profile.email {
+                            Text(email).foregroundStyle(.secondary).textSelection(.enabled)
+                                .accessibilityIdentifier("account.email")
+                        }
+                        Label("Signed in with Apple", systemImage: "checkmark.circle")
+                            .font(.subheadline).foregroundStyle(.secondary)
+                        Button("Sign Out", role: .destructive) { showSignOut = true }
+                            .accessibilityIdentifier("account.signOut")
+                    } else {
+                        Text("Sign in to Bright Scroll").font(.headline)
+                        SignInWithAppleButton(.signIn, onRequest: appleAccount.prepare, onCompletion: appleAccount.complete)
+                            .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+                            .frame(height: 50)
+                            .disabled(appleAccount.checkingCredential || appleAccount.signingIn)
+                            .accessibilityIdentifier("account.appleSignIn")
+                    }
+                    if appleAccount.checkingCredential || appleAccount.signingIn {
+                        ProgressView("Checking your Apple account…")
+                    }
+                    if let error = appleAccount.errorMessage {
+                        Text(error).font(.footnote).foregroundStyle(.secondary)
+                            .accessibilityIdentifier("account.authError")
+                    }
+                } footer: {
+                    Text("Reading is available without signing in. Your saved reading uses iCloud; purchases use your App Store account.")
+                }
                 Section("Subscription") {
                     NavigationLink {
                         SubscriptionView()
@@ -49,6 +83,12 @@ struct AccountView: View {
             .listStyle(.plain)
             .navigationTitle("Account")
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .confirmationDialog("Sign out of Bright Scroll?", isPresented: $showSignOut, titleVisibility: .visible) {
+                Button("Sign Out", role: .destructive) { appleAccount.signOut() }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Your saved reading stays on this device and in iCloud. Signing out does not cancel your App Store subscription.")
+            }
             .task { await refresh() }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active { Task { await refresh() } }

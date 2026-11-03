@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct BibleAIApp: App {
+    @StateObject private var appleAccount = AppleAccount()
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var revenueCatManager = RevenueCatManager.shared
 
     init() {
@@ -24,6 +26,10 @@ struct BibleAIApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(revenueCatManager)
+                .environmentObject(appleAccount)
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .active { Task { await appleAccount.refreshCredential() } }
+                }
         }
     }
 }
