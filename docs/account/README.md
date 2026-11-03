@@ -35,8 +35,11 @@ Read-only inspect_apple_account job122801-sveg observed Apple at18:34:06UTC:
 com.shawncarpenter.bibleai-companion has IN_APP_PURCHASE and ICLOUD, but no APPLE_ID_AUTH.
 The source entitlement alone does not enable sign-in on an installed app.
 
-After explicit approval, run the guarded enable_apple_account action. It reads the app target
-from Xcode, enables only APPLE_ID_AUTH if missing and checks that existing capabilities remain.
+Shawn explicitly approved the guarded enable_apple_account action. Its first request failed
+HTTP409 because Apple requires a configuration. The corrected request uses Fastlane's
+APPLE_ID_AUTH_APP_CONSENT / PRIMARY_APP_CONSENT setting; replacement job130821-kztk is
+awaiting Mac authentication. Follow the exact job before making a capability-success claim.
+It reads the app target from Xcode, enables only APPLE_ID_AUTH if missing and checks that existing capabilities remain.
 It neither creates a signing profile nor uploads a build. Recreate/verify the signed profile
 and built app entitlement using the established native pipeline before device installation.
 Successful Apple sign-in, relaunch persistence, Sign Out, profile removal, revoked credentials,
