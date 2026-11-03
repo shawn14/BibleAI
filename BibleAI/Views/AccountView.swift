@@ -6,6 +6,7 @@ struct AccountView: View {
     @EnvironmentObject private var appleAccount: AppleAccount
     @Environment(\.colorScheme) private var colorScheme
     @State private var showSignOut = false
+    @State private var showRemoveProfile = false
     @EnvironmentObject private var subscriptions: RevenueCatManager
     @Environment(\.scenePhase) private var scenePhase
     @State private var showSettings = false
@@ -76,7 +77,13 @@ struct AccountView: View {
                          ? "Saved verses, notes and reading progress use this device's iCloud account. Changes may take time to appear on another device."
                          : "Your reading is saved on this device. Check iCloud in iPhone Settings to use it for saved reading.")
                 }
-                Section {
+                Section("Account settings") {
+                    if appleAccount.isSignedIn {
+                        Button("Remove Apple Profile", role: .destructive) { showRemoveProfile = true }
+                            .accessibilityIdentifier("account.removeProfile")
+                    }
+                    Link("Manage Sign in with Apple", destination: URL(string: "https://support.apple.com/102571")!)
+                        .accessibilityIdentifier("account.manageApple")
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
                 }
             }
@@ -88,6 +95,12 @@ struct AccountView: View {
                 Button("Cancel", role: .cancel) { }
             } message: {
                 Text("Your saved reading stays on this device and in iCloud. Signing out does not cancel your App Store subscription.")
+            }
+            .confirmationDialog("Remove your Apple profile?", isPresented: $showRemoveProfile, titleVisibility: .visible) {
+                Button("Remove Apple Profile", role: .destructive) { appleAccount.removeProfile() }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This removes your saved Apple sign-in name, email and app session from this device. Your reading data and App Store subscription remain. Use Manage Sign in with Apple to revoke Apple's permission separately.")
             }
             .task { await refresh() }
             .onChange(of: scenePhase) { _, phase in

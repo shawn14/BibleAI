@@ -94,6 +94,24 @@ final class AppleAccount: ObservableObject {
         }
     }
 
+    func removeProfile() {
+        guard let current = profile else { return }
+        revision += 1
+        do {
+            try keychain.remove(profileKey(current.userID))
+            try keychain.remove(sessionKey)
+            profile = nil
+            signingIn = false
+            checkingCredential = false
+            requestState = nil
+            errorMessage = nil
+        } catch {
+            // Keep the action available to retry; never report removal if either item remains.
+            checkingCredential = false
+            errorMessage = "Your Apple profile couldn't be fully removed. Unlock your iPhone and try again."
+        }
+    }
+
     func refreshCredential() async {
         guard !checkingCredential, !signingIn else { return }
         let saved: Profile
