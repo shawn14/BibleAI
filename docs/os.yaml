@@ -32,7 +32,7 @@ canonical_scripts:
   plan_rebrand: node scripts/aso-rebrand.mjs plan
   apply_rebrand: node scripts/aso-rebrand.mjs apply
   verify_rebrand: node scripts/aso-rebrand.mjs verify
-  render_store_art: python3 docs/aso/creative-src/render_refresh.py
+  render_store_art: python3 docs/aso/creative-src/render_refresh.py && python3 docs/aso/creative-src/render_pro.py docs/aso/creative-src/captures docs/aso docs/aso/creative-src/fonts
   render_store_videos: bash scripts/encode-simulator-store-media.sh
   render_store_preview: bash scripts/encode-simulator-store-media.sh --preview-only
   render_store_brand: bash scripts/encode-simulator-store-media.sh --brand-only
