@@ -13,16 +13,13 @@ TOP, BOTTOM = (251, 248, 243), (236, 229, 216)
 
 STORY = [
     ('reader', 'Scroll\nScripture.', 'The Bible, one verse at a time.'),
-    ('resume', 'Pick up where\nyou left off.', 'Your place is saved as you read.'),
-    ('plans', 'A little reading.\nEvery day.', 'Four guided plans. One clear next step.'),
-    ('saved', 'Keep what\nspeaks to you.', 'Save a verse. Add your own reflection.'),
-    ('progress', 'See how far\nyou’ve come.', 'Mark each reading complete.'),
     ('study', 'Explore\nthe passage.', 'Study tools on Apple Intelligence devices.'),
+    ('habit', 'Build a habit\nthat lasts.', 'Finish a reading. Watch your streak grow.'),
+    ('plans', 'A little reading.\nEvery day.', 'Four guided plans. One clear next step.'),
+    ('share', 'Share a verse\nyou love.', 'Send Scripture as a beautiful card.'),
+    ('account', 'Your account.\nYour choice.', 'Optional Sign in with Apple. Delete anytime.'),
 ]
-IPAD = [STORY[0], STORY[2], STORY[3],
-        ('completion', 'Build a habit.\nOne day at a time.', 'Celebrate every completed reading.'),
-        ('onboarding', 'Your plan.\nYour pace.', 'Choose a goal and a daily reading time.'),
-        STORY[5]]
+IPAD = STORY[:5] + [('invite', 'Read with\nsomeone.', 'Invite a friend to follow a plan with you.')]
 
 
 def font(name, size, wght):
