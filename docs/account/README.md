@@ -44,13 +44,21 @@ its data. It never creates certificates, registers devices, deletes profiles or 
 The signed app carries applesignin=[Default] and the exact app iCloud KVS identifier. Source method
 is adapted from Cairn's device signer and fastlane-configs' profile API, with narrower mutations.
 
-Actual iPhone Mirroring shows the Account tab and Premium active. The real Apple sheet names
-Bright Scroll and reaches Continue with Passcode. Shawn clarified that Face ID was the stop while
-using Mirroring; no app error was observed. Authentication has been handed to the physical iPhone,
-with a request to lock it afterward for inspection. Do not call authentication verified yet.
-Positive sign-in, relaunch persistence, Sign Out, profile removal, revoked credentials, Manage
-Subscription and paid restoration remain unproven. The installed candidate retains2.0.1/build8;
-it is a local development install, not a new public version.
+Actual iPhone verification November3:
+
+- Shawn completed native Face ID directly on the phone. Builder observed the actual identity
+  and Signed in with Apple, then force-closed/reopened Bright Scroll and verified persistence.
+- Sign Out confirmation completed; name/email disappeared and the Apple button returned.
+  Premium remained active. Subscription detail identifies Test subscription · No real charge,
+  with November4 renewal. This is sandbox access and does not establish real payment history.
+- Independent reviewer observed signed-out Account with no identity and retained Premium.
+  It force-closed only Bright Scroll, then Mirroring failed twice with noWindowsAvailable when
+  reopening from Spotlight. The extra signed-out relaunch/reading-position check is unverified;
+  do not hide that boundary or retry the same tool failure in a loop.
+
+Paid restoration, native subscription-management completion, profile removal and revoked
+credentials remain unproven. No destructive profile or billing changes were tested. The installed
+candidate retains2.0.1/build8; this is a local development install, not a new public version.
 
 Use test_account for reader/account/restore-wait checks and test_apple_account for native Apple
 prompt cancellation. Never seed a fake signed-in profile as evidence that Apple authentication works.

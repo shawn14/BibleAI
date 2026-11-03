@@ -135,4 +135,8 @@ Device setup: prepare_account_device reuses an existing local development certif
 reachable already registered iPhone; it creates only a missing matching development profile.
 No profile deletion, certificate creation or device registration. Explicit primary-app consent is
 required when enabling APPLE_ID_AUTH; settings[] produces Apple409. Approved capability and signed
-install passed November3; actual positive login/logout is still pending. Reuse the installed build.
+install passed November3. Actual Apple login, signed-in relaunch persistence and Sign Out passed
+on Shawn's iPhone; independent reviewer confirmed signed-out identity plus retained Premium.
+An extra post-logout relaunch check hit repeated Mirroring noWindowsAvailable, so remains unverified.
+Subscription detail is sandbox/Test subscription · No real charge; never infer actual payment from it.
+Reuse the installed build; full paid restore/removal/revocation/release checks remain separate.
