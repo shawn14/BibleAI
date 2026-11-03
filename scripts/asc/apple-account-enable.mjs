@@ -7,7 +7,11 @@ export default async (api) => {
   await api.post('/v1/bundleIdCapabilities', {
     data: {
       type: 'bundleIdCapabilities',
-      attributes: { capabilityType: 'APPLE_ID_AUTH', settings: [] },
+      attributes: {
+        capabilityType: 'APPLE_ID_AUTH',
+        // Same primary-app configuration used by fastlane produce.
+        settings: [{ key: 'APPLE_ID_AUTH_APP_CONSENT', options: [{ key: 'PRIMARY_APP_CONSENT' }] }]
+      },
       relationships: { bundleId: { data: { type: 'bundleIds', id: before.bundleResourceID } } }
     }
   });
