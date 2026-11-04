@@ -1,3 +1,12 @@
+# Submitted — November 4, 2026 06:41 CST
+
+- **BibleAI: Scroll Scripture 2.0.2 (build 10)** WAITING_FOR_REVIEW, MANUAL release. Includes the
+  Account tab (Sign in with Apple, Sign Out, Delete Account), the rename, sharing/invitations and
+  iCloud sync. Source branch claude/account-scroll (rename + codex/standard-account merged).
+- test_reader (all 3 UI tests) passed on iPhone; iPad run failed one plan-step reveal after captures.
+- 18 device-frame screenshots (render_pro.py), preview, header/search videos on 2.0.2.
+- Unproven on device: paid restore, subscription management, Delete Account, Apple revocation.
+
 # Rename checkpoint — November 3, 2026
 
 - Shawn renamed the app: **BibleAI: Scroll Scripture** (subtitle "Swipe through the Bible daily",
