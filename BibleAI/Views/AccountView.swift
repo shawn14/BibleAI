@@ -189,7 +189,7 @@ struct SubscriptionView: View {
             Section("Have I paid?") {
                 Link("View Apple Purchase History", destination: URL(string: "https://reportaproblem.apple.com/")!)
                     .accessibilityIdentifier("subscription.history")
-                Text("Apple's purchase history shows your charges and receipts. A free trial is not a paid subscription. Buying the app itself is separate from Premium.")
+                Text("Apple's purchase history shows your charges and receipts. A free trial is not a paid subscription.")
                     .font(.footnote).foregroundStyle(.secondary)
             }
         }
