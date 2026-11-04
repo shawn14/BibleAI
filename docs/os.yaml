@@ -65,6 +65,7 @@ canonical_scripts:
   set_copy: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/set-copy.mjs && cat scripts/asc/set-copy.out.json
   cancel_review: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/cancel-review.mjs && cat scripts/asc/cancel-review.out.json
   sim_status: xcrun simctl list devices booted && ps -axo pid,etime,command | grep -i -E 'simulator|xcodebuild|maestro' | grep -v grep | cut -c1-200
+  builds_list: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/builds.mjs && cat scripts/asc/builds.out.json
   yearly_trial: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/trial.mjs && cat scripts/asc/trial.out.json
   listing_read: cd ~/projects/fastlane-configs && fastlane bibleai_listing
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0.1 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
