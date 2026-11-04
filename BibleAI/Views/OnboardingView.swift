@@ -170,7 +170,7 @@ struct OnboardingView: View {
             }
         case .features:
             IntroPage(title: "Everything you need to go deeper",
-                      subtitle: "Unlock the full Bright Scroll experience",
+                      subtitle: "Unlock the full BibleAI experience",
                       brand: true, onClose: finish, noPaymentDue: annualTrial != nil, footer: true, action: next) {
                 FeatureChecklist()
             }

@@ -1,7 +1,7 @@
 // Read-only: state of every screenshot/preview and every Asset Library placement on 2.0 en-US.
 const APP = "6756225286";
 export default async (api) => {
-  const v2 = (await api.get(`/v1/apps/${APP}/appStoreVersions?filter[versionString]=2.0.1&filter[platform]=IOS`)).data[0];
+  const v2 = (await api.get(`/v1/apps/${APP}/appStoreVersions?filter[versionString]=2.0.2&filter[platform]=IOS`)).data[0];
   const loc = (await api.get(`/v1/appStoreVersions/${v2.id}/appStoreVersionLocalizations`)).data.find((l) => l.attributes.locale === "en-US");
   const out = { version: v2.attributes.appStoreState, placements: [] };
   const pl = await api.get(`/v1/appStoreVersionLocalizations/${loc.id}/placements?include=image,video`).catch((e) => ({ error: e.message }));

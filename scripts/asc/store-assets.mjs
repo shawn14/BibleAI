@@ -4,7 +4,7 @@ import fs from "node:fs";
 import assert from "node:assert/strict";
 import path from "node:path";
 const APP = "6756225286";
-const VERSION = "2.0.1";
+const VERSION = process.env.ASC_VERSION || "2.0.2";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
 const aso = (p) => path.join(root, "docs/aso", p);
 const record = data => fs.appendFileSync(path.join(root, "build/aso-refresh/apply-progress.jsonl"), JSON.stringify({at:new Date().toISOString(),...data}) + "\n");

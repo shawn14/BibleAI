@@ -1,4 +1,4 @@
-# Bright Scroll App Store rebrand
+# BibleAI App Store listing (renamed from Bright Scroll, 2026-11-03)
 
 **Bright Scroll: Bible AI** is submitted and **WAITING_FOR_REVIEW** for existing **2.0.1/build8**.
 The title, description/review-note brand mentions and two header/search videos match the approved

@@ -26,7 +26,7 @@ struct ScriptureShareView: View {
                         Text("Paper").tag(false)
                         Text("Night").tag(true)
                     }.pickerStyle(.segmented).accessibilityIdentifier("share.theme")
-                    Text("Includes this verse, its reference, and a link to read it in Bright Scroll. Your notes stay private.")
+                    Text("Includes this verse, its reference, and a link to read it in BibleAI. Your notes stay private.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }.padding(24)
             }
@@ -61,7 +61,7 @@ struct ScriptureShareView: View {
         renderer.isOpaque = true
         if let image = renderer.uiImage { items.append(image) }
         else { message = "The artwork could not be created. You can still share the verse as text." }
-        var text = "\(verse.text)\n\n\(verse.fullReference)\n\nBright Scroll"
+        var text = "\(verse.text)\n\n\(verse.fullReference)\n\nBibleAI"
         if let link { text += "\n\(link.webURL.absoluteString)" }
         else { message = "A reading link is unavailable for this passage. The verse can still be shared." }
         items.append(text)
@@ -142,7 +142,7 @@ struct PlanInvitationShareView: View {
 
     private func share() {
         guard let link else { message = "This plan's reading link is unavailable."; return }
-        let text = "Read \(plan.title) with me on Bright Scroll. \(plan.duration) days of Scripture, at your own pace.\n\n\(link.webURL.absoluteString)"
+        let text = "Read \(plan.title) with me on BibleAI. \(plan.duration) days of Scripture, at your own pace.\n\n\(link.webURL.absoluteString)"
         GrowthStore.shared.record(.sharePresented, for: link)
         handledActivity = nil
         message = nil
@@ -156,7 +156,7 @@ private struct VerseShareArtwork: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
-            Text("BRIGHT SCROLL").font(.system(size: 11, weight: .semibold)).tracking(3)
+            Text("BIBLEAI").font(.system(size: 11, weight: .semibold)).tracking(3)
             Text(verse.text).font(.system(size: 27, weight: .regular, design: .serif))
                 .lineSpacing(6).minimumScaleFactor(0.85).fixedSize(horizontal: false, vertical: true)
             Text(verse.fullReference).font(.system(size: 13, weight: .medium))

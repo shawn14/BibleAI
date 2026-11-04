@@ -1,3 +1,57 @@
+# Submitted — November 4, 2026 06:41 CST
+
+- **BibleAI: Scroll Scripture 2.0.2 (build 10)** WAITING_FOR_REVIEW, MANUAL release. Includes the
+  Account tab (Sign in with Apple, Sign Out, Delete Account), the rename, sharing/invitations and
+  iCloud sync. Source branch claude/account-scroll (rename + codex/standard-account merged).
+- test_reader (all 3 UI tests) passed on iPhone; iPad run failed one plan-step reveal after captures.
+- 18 device-frame screenshots (render_pro.py), preview, header/search videos on 2.0.2.
+- Unproven on device: paid restore, subscription management, Delete Account, Apple revocation.
+
+# Rename checkpoint — November 3, 2026
+
+- Shawn renamed the app: **BibleAI: Scroll Scripture** (subtitle "Swipe through the Bible daily",
+  short label BibleAI). "Bright Scroll" removed everywhere. Avoid "Scroll Bible"/"Scroll The Bible".
+- Branch claude/scroll-scripture (from main ea6eb3e, no Account tab). 2.0.2 (9) passed test_reader
+  and test_growth, uploaded, and is WAITING_FOR_REVIEW (submitted 16:01 CST, MANUAL release).
+- New device-frame screenshots: docs/aso/creative-src/render_pro.py (render_store_art). 18 screenshots,
+  preview, header/search videos uploaded to 2.0.2. Website main 9e35ec68 renamed.
+- codex/standard-account (Account tab) is untouched and still needs the rename merged in.
+
+---
+
+# Account checkpoint — November 3, 2026
+
+- User chose real Sign in with Apple and Sign Out. Branch codex/standard-account adds the fourth
+  Account tab, native Apple identity/Keychain session, Sign Out, local profile removal, and clear
+  subscription/restore/history controls. iCloud reading and App Store billing remain separate.
+- Apple capability enabled with approval: job133658-rpru passed at19:37:09UTC, APPLE_ID_AUTH
+  present alongside unchanged IN_APP_PURCHASE and ICLOUD. Initial settings[] request failed409;
+  Fastlane's explicit APPLE_ID_AUTH_APP_CONSENT / PRIMARY_APP_CONSENT configuration passed.
+- Signed device candidate34b4161 built, verified, installed and launched on Shawn's iPhone16Pro
+  in prepare_account_device134027-eywo (282.9s). Actual signed app has applesignin=[Default] and
+  exact iCloud KVS entitlement; embedded development profile includes this phone and existing cert.
+  No certificates/device registrations deleted or created; one development profile created.
+- Physical authentication succeeded after Shawn completed Face ID directly on the iPhone.
+  Builder observed actual name/email and Signed in with Apple, force-closed/reopened the app,
+  and verified the signed-in session persisted. Sign Out then cleared identity and restored
+  the Apple button while retaining Premium. Subscription detail says Test subscription · No real
+  charge (renews November4); this is sandbox access, not proof of a real payment.
+- Independent device reviewer observed signed-out Account with no name/email and Premium active.
+  Its additional force-close/reopen check stopped on two CUA noWindowsAvailable errors. It left
+  Spotlight open; signed-out persistence after relaunch and post-logout reading position were not
+  independently observed. Do not retry the failed UI tool loop or rebuild unchanged source.
+- Focused Simulator Apple prompt/Close test passed95.138s,0failures at8ab4276. Earlier critical
+  reader/save/note/search/plan and account/restore-wait assertions passed. Independent local review
+  complete. Paid restore, native subscription management, profile removal and Apple revocation
+  still need device proof; this is not a release-candidate sign-off.
+- Source clean and committed locally, not pushed. Fresh GitHub main
+  ea6eb3eb35daaeb3234376aa5c5606ee577e2bfa contains recorded build8 sourcec63c68d and tested2841df3.
+  Installed candidate keeps2.0.1/build8 for local iteration; it is not a new App Store release.
+- Resume on the existing signed installed build; do not recreate profiles or rebuild unchanged code.
+  Method, actual previews and limits: [Account candidate](docs/account/README.md).
+
+---
+
 # Growth checkpoint — November 2, 2026
 
 - Approved local composer copy applied. Native sharing/invitation candidate `bcc4893` passed
