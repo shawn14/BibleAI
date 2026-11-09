@@ -1,4 +1,11 @@
-# Daily reading feature branch — November 9, 2026
+# BibleAI 2.0.4 (12) TestFlight candidate — November 9, 2026
+
+All four iPhone simulator journeys passed on the versioned Today reading source
+`b5b7cf2`. Independent QA checked all 64 screenshots. The Mac release lane
+verifies the signed IPA and uploads it to App Store Connect. Use `builds_list`
+for Apple’s processing and internal testing state. [QA sign-off](docs/testing/build12-qa-signoff.md).
+
+## Daily reading feature branch — November 9, 2026
 
 - `codex/todays-reading` builds Continue today’s reading on The Bible tab. It opens the first
   unfinished day of the most recently used active plan. Chapter visits from Plans and Today
