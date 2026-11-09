@@ -108,6 +108,49 @@ final class ReaderJourneyTests: XCTestCase {
         exerciseAccount(app)
     }
 
+    func testPacedReadingAndPhraseSearch() throws {
+        continueAfterFailure = false
+        let app = launchReader() // first time choice is five minutes
+        let today = app.buttons["reader.today"]
+        XCTAssertTrue(today.waitForExistence(timeout: 8) && today.label.contains("Five Minutes in the Gospels"))
+        today.tap()
+        XCTAssertTrue(app.navigationBars["Matthew 1:20–21"].waitForExistence(timeout: 6))
+        XCTAssertTrue(app.staticTexts["chapter.reflection"].waitForExistence(timeout: 20))
+        XCTAssertFalse(app.buttons["Next chapter"].exists)
+        let finish = app.buttons["today.finish"]
+        XCTAssertEqual(finish.label, "Finish today’s reading")
+        capture("five-minute-passage-and-reflection")
+        finish.tap()
+        XCTAssertTrue(app.staticTexts["streak.title"].waitForExistence(timeout: 8))
+        app.buttons["streak.done"].tap()
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(today.waitForExistence(timeout: 12))
+        XCTAssertTrue(today.label.contains("Day 2") && today.label.contains("1-day streak"))
+        capture("returning-reader-streak")
+
+        for (edition, phrase) in [("King James Version", "only begotten Son"), ("World English Bible", "one and only Son")] {
+            app.buttons["reader.translation"].tap()
+            app.buttons[edition].tap()
+            app.buttons["reader.passage"].tap()
+            let field = app.searchFields.firstMatch
+            field.tap()
+            field.typeText(phrase)
+            let result = app.buttons["passage.result.John|3|16"]
+            reveal(result, in: app)
+            XCTAssertTrue(result.label.localizedCaseInsensitiveContains(phrase))
+            result.tap()
+            let verse = app.buttons["reader.verse.John|3|16"]
+            let shown = NSPredicate(format: "isHittable == true AND label CONTAINS[c] %@", phrase)
+            XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: shown, evaluatedWith: verse)], timeout: 12), .completed)
+            let back = app.buttons["reader.returnToPlace"]
+            XCTAssertTrue(back.waitForExistence(timeout: 6))
+            back.tap()
+            XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].waitForExistence(timeout: 10))
+            XCTAssertFalse(back.exists)
+        }
+    }
+
     func testTodayTranslationAndStudyLibrary() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
@@ -208,6 +251,11 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["study.body"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.staticTexts["study.body"].label.contains("Luke 1:26–33"))
         capture("saved-gospel-study")
+        app.buttons["study.related"].tap()
+        XCTAssertTrue(app.navigationBars["Luke 1:26–33"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["World English Bible"].waitForExistence(timeout: 8))
+        XCTAssertFalse(app.buttons["chapter.guide"].exists)
+        capture("guide-related-passage-web")
         tab("The Bible", in: app).tap()
         app.buttons["reader.translation"].tap()
         app.buttons["King James Version"].tap()

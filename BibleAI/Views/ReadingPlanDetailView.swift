@@ -15,8 +15,10 @@ struct ReadingPlanDetailView: View {
             List {
                 Section {
                     Text(plan.description).foregroundStyle(.secondary)
-                    Button("Read with Someone", systemImage: "person.badge.plus") { showInvite = true }
-                        .accessibilityIdentifier("plan.invite")
+                    if SharedScriptureLink.supportedPlanIDs.contains(plan.id) {
+                        Button("Read with Someone", systemImage: "person.badge.plus") { showInvite = true }
+                            .accessibilityIdentifier("plan.invite")
+                    }
                     if let progress {
                         ProgressView(value: Double(progress.completedDays.count), total: Double(plan.duration)) {
                             Text("\(progress.completedDays.count) of \(plan.duration) complete")
@@ -59,11 +61,12 @@ struct ReadingPlanDetailView: View {
                 if let book = BibleBookInfo.allBooks.first(where: { $0.name == reference.book }) {
                     ForEach(reference.startChapter...(reference.endChapter ?? reference.startChapter), id: \.self) { chapter in
                         NavigationLink {
-                            ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id) {
+                            ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id,
+                                               verseRange: reference.verseRange, reflection: reference.reflection) {
                                 plans.recordChapterRead(plan: plan, day: day, book: book.name, chapter: chapter)
                             }
                         } label: {
-                            Label("\(book.name) \(chapter)", systemImage: "book")
+                            Label(ReadingReference.label(book: book.name, chapter: chapter, range: reference.verseRange), systemImage: "book")
                         }
                     }
                 }
@@ -72,7 +75,7 @@ struct ReadingPlanDetailView: View {
                 if plans.isDayComplete(planId: plan.id, day: day.day) {
                     Label("Completed", systemImage: "checkmark").foregroundStyle(.secondary)
                 } else {
-                    Button("Mark Complete", systemImage: "checkmark.circle") {
+                    Button(day.readings.first?.verseRange == nil ? "Mark Complete" : "Finish today’s reading", systemImage: "checkmark.circle") {
                         if plans.markDayComplete(planId: plan.id, day: day.day) { completedDay = day }
                     }
                     .accessibilityIdentifier("plan.complete.\(day.day)")
@@ -97,7 +100,7 @@ struct ReadingPlanDetailView: View {
     private func readingSummary(_ day: DailyReading) -> String {
         day.readings.map { ref in
             if let end = ref.endChapter, end != ref.startChapter { return "\(ref.book) \(ref.startChapter)–\(end)" }
-            return "\(ref.book) \(ref.startChapter)"
+            return ref.displayText
         }.joined(separator: ", ")
     }
 }
@@ -117,7 +120,7 @@ struct TodayReadingView: View {
         _chapterIndex = State(initialValue: reading.savedChapter)
     }
 
-    private var chapters: [(book: BibleBookInfo, number: Int)] {
+    private var chapters: [(book: BibleBookInfo, number: Int, reference: ReadingReference)] {
         reading.chapters
     }
 
@@ -133,14 +136,16 @@ struct TodayReadingView: View {
             NavigationStack {
                 if chapters.indices.contains(chapterIndex) {
                     let chapter = chapters[chapterIndex]
-                    ChapterReadingView(book: chapter.book, chapter: chapter.number, invitationPlanID: reading.plan.id) {
+                    ChapterReadingView(book: chapter.book, chapter: chapter.number, invitationPlanID: reading.plan.id,
+                                       verseRange: chapter.reference.verseRange, reflection: chapter.reference.reflection) {
                         loaded = true
                         plans.recordChapterRead(plan: reading.plan, day: reading.day, book: chapter.book.name, chapter: chapter.number)
                     }
                     .id(chapterIndex)
                     .safeAreaInset(edge: .bottom) {
                         VStack(spacing: 6) {
-                            Text("\(reading.plan.title) · Day \(reading.day.day) · \(chapterIndex + 1) of \(chapters.count) chapters")
+                            Text(chapters.count == 1 ? "\(reading.plan.title) · Day \(reading.day.day)" :
+                                    "\(reading.plan.title) · Day \(reading.day.day) · \(chapterIndex + 1) of \(chapters.count) chapters")
                                 .font(.footnote).foregroundStyle(.secondary)
                             HStack {
                                 if chapterIndex > 0 {
@@ -151,7 +156,7 @@ struct TodayReadingView: View {
                                     Button("Next chapter") { loaded = false; chapterIndex += 1 }
                                         .disabled(!loaded)
                                 } else {
-                                    Button("Mark Complete") {
+                                    Button("Finish today’s reading") {
                                         if plans.markDayComplete(planId: reading.plan.id, day: reading.day.day) {
                                             finished = true
                                         } else { dismiss() }

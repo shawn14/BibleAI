@@ -3,6 +3,8 @@ import SwiftUI
 struct ScriptureReaderView: View {
     @Binding var requestedPlace: ReadingPlace?
     var isActive = true
+    var onChoosePlan: () -> Void
+    @ObservedObject private var streak = StreakStore.shared
     @StateObject private var model = ScriptureFeedModel()
     @StateObject private var highlights = HighlightService.shared
     @AppStorage("reader.useSerif") private var useSerif = true
@@ -57,14 +59,22 @@ struct ScriptureReaderView: View {
                     }
                     .frame(minHeight: 44)
                     .accessibilityIdentifier("reader.returnToPlace")
-                } else if let reading = plans.todaysReading {
-                    Button { today = reading } label: {
+                } else {
+                    let reading = plans.todaysReading
+                    Button {
+                        if let reading { today = reading } else { onChoosePlan() }
+                    } label: {
                         HStack {
                             Image(systemName: "book.pages")
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Continue today’s reading").font(.subheadline.weight(.semibold))
-                                Text("\(reading.plan.title) · Day \(reading.day.day)")
-                                    .font(.caption).foregroundStyle(.secondary)
+                                Text(reading == nil ? "Choose a reading plan" : "Continue today’s reading")
+                                    .font(.subheadline.weight(.semibold))
+                                TimelineView(.periodic(from: .now, by: 60)) { time in
+                                    let count = streak.currentStreak(asOf: time.date)
+                                    let progress = reading.map { "\($0.plan.title) · Day \($0.day.day) · " } ?? ""
+                                    Text("\(progress)\(count)-day streak")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                             }
                             Spacer()
                             Image(systemName: "chevron.right").font(.caption)
@@ -73,7 +83,7 @@ struct ScriptureReaderView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityIdentifier("reader.today")
+                    .accessibilityIdentifier(reading == nil ? "reader.choosePlan" : "reader.today")
                 }
             }
             .task(id: isActive) { if isActive { await openRequestedPassage() } }

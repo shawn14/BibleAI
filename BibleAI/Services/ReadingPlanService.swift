@@ -31,8 +31,22 @@ class ReadingPlanService: ObservableObject {
             createGospelTourPlan(),
             createPsalmsMonthPlan(),
             createNewTestamentPlan(),
-            createProverbsWisdomPlan()
+            createProverbsWisdomPlan(),
+            createFiveMinutePlan()
         ]
+    }
+
+    func recommendedPlan(minutes: Int?, newReader: Bool, seekingPeace: Bool) -> ReadingPlan? {
+        let title: String
+        switch minutes {
+        case 5: title = "Five Minutes in the Gospels"
+        case 10: title = "Proverbs Wisdom"
+        default:
+            if newReader { title = "Gospel Tour" }
+            else if seekingPeace { title = "Psalms in a Month" }
+            else { title = "New Testament in 30 Days" }
+        }
+        return availablePlans.first { $0.title == title }
     }
 
     // MARK: - User Progress
@@ -68,11 +82,11 @@ class ReadingPlanService: ObservableObject {
         let startedDate: Date
         var id: String { "\(plan.id).\(startedDate.timeIntervalSince1970).\(day.day)" }
 
-        var chapters: [(book: BibleBookInfo, number: Int)] {
-            day.readings.flatMap { reference -> [(BibleBookInfo, Int)] in
+        var chapters: [(book: BibleBookInfo, number: Int, reference: ReadingReference)] {
+            day.readings.flatMap { reference -> [(BibleBookInfo, Int, ReadingReference)] in
                 let name = reference.book == "Psalm" ? "Psalms" : reference.book
                 guard let book = BibleBookInfo.allBooks.first(where: { $0.name == name }) else { return [] }
-                return (reference.startChapter...(reference.endChapter ?? reference.startChapter)).map { (book, $0) }
+                return (reference.startChapter...(reference.endChapter ?? reference.startChapter)).map { (book, $0, reference) }
             }
         }
 
@@ -152,6 +166,29 @@ class ReadingPlanService: ObservableObject {
     }
 
     // MARK: - Pre-built Plans
+
+    private func createFiveMinutePlan() -> ReadingPlan {
+        let passages: [(String, String, Int, ClosedRange<Int>, String)] = [
+            ("A name for the child", "Matthew", 1, 20...21, "What reason does the angel give Joseph for naming the child Jesus?"),
+            ("Leaving the nets", "Mark", 1, 16...18, "What do Simon and Andrew leave behind when Jesus calls them?"),
+            ("Light that others can see", "Matthew", 5, 14...16, "What good work could bring light to someone’s day?"),
+            ("When the wind stops", "Luke", 8, 24...25, "What question do the disciples ask each other after the storm grows quiet?"),
+            ("Knowing the shepherd’s voice", "John", 10, 27...30, "Which words in this passage offer the sheep a sense of safety?"),
+            ("A new commandment", "John", 13, 34...35, "How does Jesus say other people will recognize his disciples?"),
+            ("Care at the cross", "John", 19, 25...27, "What does the disciple do for Jesus’ mother after Jesus speaks?"),
+            ("Called by name", "John", 20, 15...18, "What changes for Mary when Jesus speaks her name?")
+        ]
+        return ReadingPlan(id: UUID(uuidString: "6F1C2A10-0005-4B1A-9E1E-0000000000A5")!,
+                           title: "Five Minutes in the Gospels",
+                           description: "Read a few verses from the life of Jesus and pause for one reflection each day.",
+                           duration: passages.count, category: .devotional,
+                           dailyReadings: passages.enumerated().map { offset, entry in
+            let (title, book, chapter, range, question) = entry
+            return DailyReading(day: offset + 1, title: title, readings: [
+                ReadingReference(book: book, startChapter: chapter, verseRange: range, reflection: question)
+            ])
+        })
+    }
 
     private func createGospelTourPlan() -> ReadingPlan {
         let readings: [DailyReading] = [

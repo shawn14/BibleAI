@@ -13,6 +13,32 @@ struct ReadingProof {
     }
 
     @MainActor static func main() async throws {
+        let catalog = ReadingPlanService.shared.availablePlans
+        guard let short = catalog.first(where: { $0.title == "Five Minutes in the Gospels" }) else {
+            throw Failure(message: "Five-minute sessions must offer a short passage instead of four full chapters")
+        }
+        try check(short.dailyReadings.count == 8, "eight five-minute sessions")
+        for newReader in [false, true] {
+            for peace in [false, true] {
+                try check(ReadingPlanService.shared.recommendedPlan(minutes: 5, newReader: newReader, seekingPeace: peace)?.id == short.id,
+                          "five minutes honors time before other preferences")
+                let ten = ReadingPlanService.shared.recommendedPlan(minutes: 10, newReader: newReader, seekingPeace: peace)
+                try check(ten?.dailyReadings.allSatisfy { day in
+                    day.readings.count == 1 && day.readings[0].endChapter == nil && day.readings[0].verseRange == nil
+                } == true, "ten minutes assigns one full chapter")
+            }
+        }
+        let shortEntries = short.dailyReadings.flatMap(\.readings)
+        try check(shortEntries.count == 8 && shortEntries.allSatisfy {
+            guard let range = $0.verseRange, let question = $0.reflection else { return false }
+            return (1...4).contains(range.count) && !question.isEmpty && $0.endChapter == nil
+        }, "each short day assigns one passage and one reflection")
+        try check(shortEntries.first?.displayText == "Matthew 1:20–21", "show the passage range, not the full chapter")
+        try check(catalog.first { $0.title == "Gospel Tour" }?.dailyReadings.first?.readings.map(\.displayText) == ["Matthew 1-2", "Luke 1-2"],
+                  "existing Gospel Tour day one retains four chapters")
+        let legacy = Data(#"{"id":"1840EF09-1426-4901-8AFD-3139D908AB1A","book":"John","startChapter":3}"#.utf8)
+        let old = try JSONDecoder().decode(ReadingReference.self, from: legacy)
+        try check(old.verseRange == nil && old.displayText == "John 3", "old whole-chapter references decode unchanged")
         let session = "BibleAI-reading-proof-\(UUID())"
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(session)
         let defaults = UserDefaults(suiteName: session)!

@@ -65,18 +65,30 @@ struct ReadingReference: Identifiable, Codable {
     let startChapter: Int
     let endChapter: Int?
 
-    init(id: UUID = UUID(), book: String, startChapter: Int, endChapter: Int? = nil) {
+    let verseRange: ClosedRange<Int>?
+    let reflection: String?
+
+    init(id: UUID = UUID(), book: String, startChapter: Int, endChapter: Int? = nil,
+         verseRange: ClosedRange<Int>? = nil, reflection: String? = nil) {
         self.id = id
         self.book = book
         self.startChapter = startChapter
         self.endChapter = endChapter
+        self.verseRange = verseRange
+        self.reflection = reflection
+    }
+
+    static func label(book: String, chapter: Int, range: ClosedRange<Int>?) -> String {
+        let prefix = "\(book) \(chapter)"
+        guard let range else { return prefix }
+        return prefix + ":" + (range.lowerBound == range.upperBound ? "\(range.lowerBound)" : "\(range.lowerBound)–\(range.upperBound)")
     }
 
     var displayText: String {
         if let end = endChapter, end != startChapter {
             return "\(book) \(startChapter)-\(end)"
         } else {
-            return "\(book) \(startChapter)"
+            return Self.label(book: book, chapter: startChapter, range: verseRange)
         }
     }
 }

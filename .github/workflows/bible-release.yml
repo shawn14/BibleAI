@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        journey: [testReadSaveNoteResumeAndSearch, testAppleSignInCancellation, testZShareAndInvitationJourney, testTodayTranslationAndStudyLibrary]
+        journey: [testReadSaveNoteResumeAndSearch, testAppleSignInCancellation, testZShareAndInvitationJourney, testTodayTranslationAndStudyLibrary, testPacedReadingAndPhraseSearch]
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1

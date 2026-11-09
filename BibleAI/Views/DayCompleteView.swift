@@ -62,9 +62,11 @@ struct DayCompleteView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 16)
 
-                    Button("Invite Someone to Read This Plan", systemImage: "person.badge.plus") { showInvite = true }
-                        .accessibilityIdentifier("streak.invite")
-                        .padding(.bottom, 4)
+                    if SharedScriptureLink.supportedPlanIDs.contains(plan.id) {
+                        Button("Invite Someone to Read This Plan", systemImage: "person.badge.plus") { showInvite = true }
+                            .accessibilityIdentifier("streak.invite")
+                            .padding(.bottom, 4)
+                    }
                     Divider()
 
                     VStack(alignment: .leading, spacing: 12) {

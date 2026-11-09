@@ -34,12 +34,7 @@ struct OnboardingView: View {
 
     /// Starting plan picked from the answers.
     private var recommendedPlan: ReadingPlan? {
-        let titles: String
-        if familiarity == 0 { titles = "Gospel Tour" }
-        else if goal == 3 { titles = "Psalms in a Month" }
-        else if (minutes ?? 0) >= 15 { titles = "New Testament in 30 Days" }
-        else { titles = "Proverbs Wisdom" }
-        return ReadingPlanService.shared.availablePlans.first { $0.title == titles }
+        ReadingPlanService.shared.recommendedPlan(minutes: minutes, newReader: familiarity == 0, seekingPeace: goal == 3)
     }
 
     private var annualTrial: Int? {
@@ -137,7 +132,7 @@ struct OnboardingView: View {
         case .minutes:
             IntroPage(title: "How much time can you give each day?", subtitle: "Small and steady beats big and rare.",
                       buttonEnabled: minutes != nil, action: next) {
-                ChoiceList(options: [("5 minutes", "A verse and a short study"), ("10 minutes", "A chapter a day"),
+                ChoiceList(options: [("5 minutes", "A short passage and one reflection"), ("10 minutes", "A chapter a day"),
                                      ("15+ minutes", "Read through whole books")],
                            selection: Binding(get: { minutes.flatMap { Self.minuteChoices.firstIndex(of: $0) } },
                                               set: { minutes = $0.map { Self.minuteChoices[$0] } }))

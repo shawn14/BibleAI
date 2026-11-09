@@ -12,6 +12,8 @@ struct ChapterReadingView: View {
     let chapter: Int
     var invitationPlanID: UUID? = nil
     var edition: ReaderEdition = .preferred()
+    var verseRange: ClosedRange<Int>? = nil
+    var reflection: String? = nil
     var onRead: (() -> Void)? = nil
 
     @StateObject private var highlightService = HighlightService.shared
@@ -45,7 +47,7 @@ struct ChapterReadingView: View {
             } else {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     Text(edition.name).font(.caption).foregroundStyle(.secondary)
-                    if let first = verses.first, let guide = GospelTourGuide.study(for: first) {
+                    if verseRange == nil, let first = verses.first, let guide = GospelTourGuide.study(for: first) {
                         NavigationLink {
                             StudyDetailView(study: guide, canSave: true)
                         } label: { Label(guide.title, systemImage: "book.pages") }
@@ -61,11 +63,16 @@ struct ChapterReadingView: View {
                             highlightService: highlightService
                         )
                     }
+                    if let reflection {
+                        Divider()
+                        Text("Reflect").font(.headline)
+                        Text(reflection).font(.body).accessibilityIdentifier("chapter.reflection")
+                    }
                 }
                 .padding()
             }
         }
-        .navigationTitle("\(book.name) \(chapter)")
+        .navigationTitle(ReadingReference.label(book: book.name, chapter: chapter, range: verseRange))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -84,8 +91,14 @@ struct ChapterReadingView: View {
 
     private func loadChapter() async {
         isLoading = true
-        verses = (try? await ScriptureChapterStore.shared.chapter(book: book.name, number: chapter, edition: edition)) ?? []
+        let wholeChapter = (try? await ScriptureChapterStore.shared.chapter(book: book.name, number: chapter, edition: edition)) ?? []
         guard !Task.isCancelled else { return }
+        if let verseRange {
+            let excerpt = wholeChapter.filter { verseRange.contains($0.verse) }
+            verses = excerpt.map(\.verse) == Array(verseRange) ? excerpt : []
+        } else {
+            verses = wholeChapter
+        }
         isLoading = false
         if !verses.isEmpty {
             GrowthStore.shared.recordReaderActivation()

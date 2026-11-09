@@ -6,6 +6,6 @@ mkdir -p build
 binary=$(mktemp build/reading-core.XXXXXX)
 trap 'rm -f "$binary"' EXIT
 xcrun swiftc -parse-as-library BibleAI/Models/{BibleVerse,BibleBook,ReadingPlan,ReadingPlace,Highlight}.swift \
-    BibleAI/Services/{CloudSyncMerge,CloudSync,EnhancedBibleService,ScriptureFeedModel,StudyLibrary}.swift \
+    BibleAI/Services/{CloudSyncMerge,CloudSync,ReadingPlanService,StreakStore,EnhancedBibleService,ScriptureFeedModel,StudyLibrary}.swift \
     scripts/tests/reading/main.swift -o "$binary"
 "$binary"

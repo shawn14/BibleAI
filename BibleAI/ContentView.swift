@@ -33,7 +33,7 @@ struct ContentView: View {
                 }
             } else {
                 TabView(selection: $selectedTab) {
-                    ScriptureReaderView(requestedPlace: $requestedPlace, isActive: selectedTab == 0 && !showOnboarding)
+                    ScriptureReaderView(requestedPlace: $requestedPlace, isActive: selectedTab == 0 && !showOnboarding, onChoosePlan: { selectedTab = 1 })
                         .tabItem { Label("The Bible", systemImage: "book") }.tag(0)
                     ReadingPlansListView(requestedPlan: $requestedPlan)
                         .tabItem { Label("Plans", systemImage: "list.bullet.rectangle") }.tag(1)
