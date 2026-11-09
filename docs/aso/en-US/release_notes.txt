@@ -1,1 +1,1 @@
-The Account screen now makes it clearer when you have access to free reading and when you have Premium. Reading plans, saved verses, notes, and streak tracking are included without a subscription.
+Updated the purchase history explanation in Account. You can check your Apple receipts there or follow a reading plan and track your streak without a subscription.

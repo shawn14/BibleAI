@@ -32,7 +32,10 @@ export default async function listing(api) {
   const appRecord = (await api.get('/v1/apps/' + app)).data;
   assert.equal(appRecord.attributes.bundleId, 'com.shawncarpenter.bibleai-companion');
   const versions = await api.all('/v1/apps/' + app + '/appStoreVersions?filter[platform]=IOS');
-  const live = only(versions.filter(v => distributed.has(state(v))), 'live version');
+  // Apple retains the distributed state on earlier versions after an update ships.
+  const live = versions.filter(v => distributed.has(state(v)))
+    .sort((a, b) => b.attributes.versionString.localeCompare(a.attributes.versionString, 'en', {numeric: true}))[0];
+  assert(live, 'Missing distributed version');
   assert.equal(live.attributes.versionString, '2.0.2');
   assert(!versions.some(v => editable.has(state(v)) && v.attributes.versionString !== version), 'Another editable version exists');
   let draft = versions.find(v => v.attributes.versionString === version);
