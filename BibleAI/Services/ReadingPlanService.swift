@@ -62,14 +62,42 @@ class ReadingPlanService: ObservableObject {
         saveUserProgress()
     }
 
-    func markDayComplete(planId: UUID, day: Int) {
-        guard let index = userProgress.firstIndex(where: { $0.planId == planId }) else {
-            return
-        }
+    struct PlanReading: Identifiable {
+        let plan: ReadingPlan
+        let day: DailyReading
+        let startedDate: Date
+        var id: String { "\(plan.id).\(startedDate.timeIntervalSince1970).\(day.day)" }
+    }
 
-        userProgress[index].completedDays.insert(day)
+    func nextReading(for plan: ReadingPlan) -> PlanReading? {
+        guard let progress = getProgress(for: plan.id),
+              let day = plan.nextReading(completed: progress.completedDays) else { return nil }
+        return PlanReading(plan: plan, day: day, startedDate: progress.startedDate)
+    }
+
+    var todaysReading: PlanReading? {
+        let recent = userProgress.sorted {
+            let lhs = $0.lastReadDate ?? $0.startedDate
+            let rhs = $1.lastReadDate ?? $1.startedDate
+            return lhs == rhs ? $0.planId.uuidString < $1.planId.uuidString : lhs > rhs
+        }
+        for item in recent {
+            if let plan = availablePlans.first(where: { $0.id == item.planId }),
+               let next = nextReading(for: plan) { return next }
+        }
+        return nil
+    }
+
+    @discardableResult
+    func markDayComplete(planId: UUID, day: Int) -> Bool {
+        guard let index = userProgress.firstIndex(where: { $0.planId == planId }),
+              let plan = availablePlans.first(where: { $0.id == planId }),
+              plan.dailyReadings.contains(where: { $0.day == day }),
+              userProgress[index].completedDays.insert(day).inserted else { return false }
         userProgress[index].lastReadDate = Date()
         saveUserProgress()
+        StreakStore.shared.recordReading()
+        return true
     }
 
     func isDayComplete(planId: UUID, day: Int) -> Bool {

@@ -87,6 +87,17 @@ final class ReaderJourneyTests: XCTestCase {
         XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 5))
         print("INTERACTION_ASSERTED settings.openClose")
 
+        // An invitation can be read and swiped without replacing the personal bookmark.
+        app.open(URL(string: "brightscroll://share?kind=verse&book=Psalms&chapter=23&verse=1&invite=c36c686f-09f1-40c2-b3a4-3df51cdd49d1")!)
+        XCTAssertTrue(app.buttons["invitation.accept"].waitForExistence(timeout: 20))
+        app.buttons["invitation.accept"].tap()
+        XCTAssertTrue(app.buttons["reader.verse.Psalms|23|1"].waitForExistence(timeout: 15))
+        app.scrollViews["reader.feed"].swipeUp()
+        XCTAssertTrue(app.buttons["reader.returnToPlace"].exists)
+        app.terminate()
+        app.launch()
+        let restored = app.buttons["reader.verse.John|3|16"]
+        XCTAssertTrue(restored.waitForExistence(timeout: 20) && restored.isHittable)
         try exerciseAllPlanPersistence(app)
         exerciseAccount(app)
     }
@@ -259,6 +270,14 @@ final class ReaderJourneyTests: XCTestCase {
             XCTAssertTrue(row.label.contains("1 of \(duration) readings complete"))
             print("INTERACTION_ASSERTED plan.complete.\(title).1")
         }
+        tab("The Bible", in: app).tap()
+        let today = app.buttons["reader.today"]
+        XCTAssertTrue(today.waitForExistence(timeout: 5))
+        XCTAssertTrue(today.label.contains("Proverbs Wisdom") && today.label.contains("Day 2"))
+        today.tap()
+        XCTAssertTrue(app.navigationBars["Proverbs 2"].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.buttons["today.finish"].waitForExistence(timeout: 15))
+        app.buttons["today.close"].tap()
         // The same real app store must survive process death for every built-in plan.
         app.terminate()
         app.launch()

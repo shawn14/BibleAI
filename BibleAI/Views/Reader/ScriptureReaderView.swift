@@ -8,6 +8,8 @@ struct ScriptureReaderView: View {
     @AppStorage("reader.useSerif") private var useSerif = true
     @AppStorage("reader.textSize") private var textSize = 28.0
     @ScaledMetric(relativeTo: .title2) private var scaledSize = 28.0
+    @ObservedObject private var plans = ReadingPlanService.shared
+    @State private var today: ReadingPlanService.PlanReading?
     @State private var sheet: ReaderSheet?
     @State private var showSettings = false
     @State private var pendingRemoval: Highlight?
@@ -47,6 +49,32 @@ struct ScriptureReaderView: View {
             .overlay(alignment: .trailing) {
                 if let verse = model.current { actions(for: verse) }
             }
+            .safeAreaInset(edge: .bottom) {
+                if model.isReadingSharedPassage {
+                    Button("Return to my reading", systemImage: "arrow.uturn.backward") {
+                        Task { await model.returnToReading() }
+                    }
+                    .frame(minHeight: 44)
+                    .accessibilityIdentifier("reader.returnToPlace")
+                } else if let reading = plans.todaysReading {
+                    Button { today = reading } label: {
+                        HStack {
+                            Image(systemName: "book.pages")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Continue today’s reading").font(.subheadline.weight(.semibold))
+                                Text("\(reading.plan.title) · Day \(reading.day.day)")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption)
+                        }
+                        .padding(.horizontal, 20).frame(minHeight: 48)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("reader.today")
+                }
+            }
             .task(id: isActive) { if isActive { await openRequestedPassage() } }
             .onChange(of: requestedPlace) { _, _ in if isActive { Task { await openRequestedPassage() } } }
             .onChange(of: model.visibleID) { _, _ in Task { await model.didScroll() } }
@@ -75,6 +103,9 @@ struct ScriptureReaderView: View {
                         }
                     }
                 }
+            }
+            .sheet(item: $today) { reading in
+                TodayReadingView(reading: reading) { today = $0 }.id(reading.id)
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
             .confirmationDialog("Remove this saved verse and its note?",
@@ -218,7 +249,7 @@ struct ScriptureReaderView: View {
 
     private func openRequestedPassage() async {
         if let place = requestedPlace {
-            if await model.open(place) {
+            if await model.open(place, asSharedPassage: true) {
                 requestedPlace = nil
                 if let invite = GrowthStore.shared.acceptedInvitation, invite.readingPlace == place {
                     GrowthStore.shared.recordFirstReading(for: invite)

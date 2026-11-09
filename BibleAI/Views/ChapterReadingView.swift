@@ -11,6 +11,7 @@ struct ChapterReadingView: View {
     let book: BibleBookInfo
     let chapter: Int
     var invitationPlanID: UUID? = nil
+    var onRead: (() -> Void)? = nil
 
     @StateObject private var bibleService = EnhancedBibleService.shared
     @StateObject private var highlightService = HighlightService.shared
@@ -75,8 +76,12 @@ struct ChapterReadingView: View {
     private func loadChapter() async {
         isLoading = true
         verses = await bibleService.getChapter(book: book.name, chapter: chapter) ?? []
+        guard !Task.isCancelled else { return }
         isLoading = false
-        if !verses.isEmpty { GrowthStore.shared.recordReaderActivation() }
+        if !verses.isEmpty {
+            GrowthStore.shared.recordReaderActivation()
+            onRead?()
+        }
         if !verses.isEmpty, let planID = invitationPlanID,
            let invitation = GrowthStore.shared.acceptedInvitation, invitation.planID == planID,
            let plan = ReadingPlanService.shared.availablePlans.first(where: { $0.id == planID }),

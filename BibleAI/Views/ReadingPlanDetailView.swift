@@ -71,9 +71,7 @@ struct ReadingPlanDetailView: View {
                     Label("Completed", systemImage: "checkmark").foregroundStyle(.secondary)
                 } else {
                     Button("Mark Complete", systemImage: "checkmark.circle") {
-                        plans.markDayComplete(planId: plan.id, day: day.day)
-                        StreakStore.shared.recordReading()
-                        completedDay = day
+                        if plans.markDayComplete(planId: plan.id, day: day.day) { completedDay = day }
                     }
                     .accessibilityIdentifier("plan.complete.\(day.day)")
                 }
@@ -99,6 +97,82 @@ struct ReadingPlanDetailView: View {
             if let end = ref.endChapter, end != ref.startChapter { return "\(ref.book) \(ref.startChapter)–\(end)" }
             return "\(ref.book) \(ref.startChapter)"
         }.joined(separator: ", ")
+    }
+}
+
+struct TodayReadingView: View {
+    let reading: ReadingPlanService.PlanReading
+    @ObservedObject private var plans = ReadingPlanService.shared
+    @Environment(\.dismiss) private var dismiss
+    @State private var chapterIndex: Int
+    @State private var loaded = false
+    @State private var finished = false
+    var onContinue: (ReadingPlanService.PlanReading) -> Void
+
+    init(reading: ReadingPlanService.PlanReading, onContinue: @escaping (ReadingPlanService.PlanReading) -> Void) {
+        self.reading = reading
+        self.onContinue = onContinue
+        let saved = UserDefaults.standard.integer(forKey: "today.chapter.\(reading.id)")
+        _chapterIndex = State(initialValue: max(0, min(saved, reading.day.readings.reduce(0) {
+            $0 + ($1.endChapter ?? $1.startChapter) - $1.startChapter + 1
+        } - 1)))
+    }
+
+    private var chapters: [(book: BibleBookInfo, number: Int)] {
+        reading.day.readings.flatMap { reference -> [(BibleBookInfo, Int)] in
+            guard let book = BibleBookInfo.allBooks.first(where: { $0.name == reference.book }) else { return [] }
+            return (reference.startChapter...(reference.endChapter ?? reference.startChapter)).map { (book, $0) }
+        }
+    }
+
+    var body: some View {
+        if finished {
+            DayCompleteView(reading: reading.day.readings.map(\.displayText).joined(separator: ", "),
+                            plan: reading.plan, hasNextDay: plans.nextReading(for: reading.plan) != nil,
+                            onDone: { dismiss() }, onContinue: {
+                if let next = plans.nextReading(for: reading.plan) { onContinue(next) }
+                else { dismiss() }
+            })
+        } else {
+            NavigationStack {
+                if chapters.indices.contains(chapterIndex) {
+                    let chapter = chapters[chapterIndex]
+                    ChapterReadingView(book: chapter.book, chapter: chapter.number, invitationPlanID: reading.plan.id) {
+                        loaded = true
+                        UserDefaults.standard.set(chapterIndex, forKey: "today.chapter.\(reading.id)")
+                    }
+                    .id(chapterIndex)
+                    .safeAreaInset(edge: .bottom) {
+                        VStack(spacing: 6) {
+                            Text("\(reading.plan.title) · Day \(reading.day.day) · \(chapterIndex + 1) of \(chapters.count) chapters")
+                                .font(.footnote).foregroundStyle(.secondary)
+                            HStack {
+                                if chapterIndex > 0 {
+                                    Button("Previous") { loaded = false; chapterIndex -= 1 }
+                                }
+                                Spacer()
+                                if chapterIndex + 1 < chapters.count {
+                                    Button("Next chapter") { loaded = false; chapterIndex += 1 }
+                                        .disabled(!loaded)
+                                } else {
+                                    Button("Mark Complete") {
+                                        if plans.markDayComplete(planId: reading.plan.id, day: reading.day.day) {
+                                            finished = true
+                                            UserDefaults.standard.removeObject(forKey: "today.chapter.\(reading.id)")
+                                        } else { dismiss() }
+                                    }
+                                    .disabled(!loaded)
+                                    .accessibilityIdentifier("today.finish")
+                                }
+                            }.frame(minHeight: 44)
+                        }.padding(.horizontal).background(.bar)
+                    }
+                    .toolbar { ToolbarItem(placement: .cancellationAction) {
+                        Button("Close") { dismiss() }.accessibilityIdentifier("today.close")
+                    } }
+                }
+            }
+        }
     }
 }
 

@@ -29,4 +29,9 @@ check(CloudSyncMerge.plans([UserPlanProgress(planId: plan, startedDate: t2)], []
 check(CloudSyncMerge.days(["2026-10-29"], ["2026-10-30", "2026-10-29"]) == ["2026-10-29", "2026-10-30"], "streak days union")
 check(CloudSyncMerge.fingerprint([a]) == CloudSyncMerge.fingerprint([UserPlanProgress(id: a.id, planId: plan, startedDate: t1, completedDays: [2, 1], lastReadDate: t1)]), "fingerprint ignores set order")
 check(CloudSyncMerge.tombstones(["x": 1], ["x": 5, "y": 2]) == ["x": 5, "y": 2], "tombstones keep latest deletion")
+let readings = (1...3).map { DailyReading(day: $0, title: "Day \($0)", readings: []) }
+let shortPlan = ReadingPlan(id: plan, title: "Plan", description: "", duration: 3, category: .sequential, dailyReadings: readings)
+check(shortPlan.nextReading(completed: [])?.day == 1, "new plan starts on day one")
+check(shortPlan.nextReading(completed: [1, 3])?.day == 2, "resume fills the first unfinished day")
+check(shortPlan.nextReading(completed: [1, 2, 3]) == nil, "finished plan has no next day")
 print(failures == 0 ? "ALL PASS" : "\(failures) FAILED"); exit(failures == 0 ? 0 : 1)

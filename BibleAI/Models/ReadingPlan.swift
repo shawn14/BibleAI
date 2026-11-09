@@ -15,6 +15,10 @@ struct ReadingPlan: Identifiable, Codable {
     let category: PlanCategory
     let dailyReadings: [DailyReading]
 
+    func nextReading(completed: Set<Int>) -> DailyReading? {
+        dailyReadings.first { !completed.contains($0.day) }
+    }
+
     init(id: UUID = UUID(), title: String, description: String, duration: Int, category: PlanCategory, dailyReadings: [DailyReading]) {
         self.id = id
         self.title = title

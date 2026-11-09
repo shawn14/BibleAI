@@ -83,6 +83,7 @@ final class ScriptureFeedModel: ObservableObject {
     @Published private(set) var loadingNext = false
     @Published var error: String?
     @Published private(set) var nextError: String?
+    @Published private(set) var isReadingSharedPassage = false
     private let defaults: UserDefaults
     private var generation = UUID()
     private let placeKey = "scripture.readingPlace.v1"
@@ -92,12 +93,19 @@ final class ScriptureFeedModel: ObservableObject {
 
     func start() async {
         guard verses.isEmpty, !loading else { return }
-        let saved = defaults.data(forKey: placeKey).flatMap { try? JSONDecoder().decode(ReadingPlace.self, from: $0) }
-        _ = await open(saved ?? .beginning)
+        _ = await open(savedPlace ?? .beginning)
+    }
+
+    private var savedPlace: ReadingPlace? {
+        defaults.data(forKey: placeKey).flatMap { try? JSONDecoder().decode(ReadingPlace.self, from: $0) }
+    }
+
+    func returnToReading() async {
+        _ = await open(savedPlace ?? .beginning)
     }
 
     @discardableResult
-    func open(_ place: ReadingPlace) async -> Bool {
+    func open(_ place: ReadingPlace, asSharedPassage: Bool = false) async -> Bool {
         let request = UUID()
         generation = request
         loading = true
@@ -110,6 +118,8 @@ final class ScriptureFeedModel: ObservableObject {
             guard let selected = result.first(where: { $0.verse == place.verse }) else {
                 throw ScriptureError.invalidPassage
             }
+            // With no personal bookmark yet, the invitation is the reader's first passage.
+            isReadingSharedPassage = asSharedPassage && savedPlace != nil
             verses = result
             visibleID = selected.passageID
             save(selected)
@@ -122,7 +132,7 @@ final class ScriptureFeedModel: ObservableObject {
     }
 
     func didScroll() async {
-        guard !loading, let verse = current else { return }
+        guard !loading, let visibleID, let verse = verses.first(where: { $0.passageID == visibleID }) else { return }
         save(verse)
         guard let index = verses.firstIndex(where: { $0.passageID == verse.passageID }),
               index >= verses.count - 4 else { return }
@@ -154,7 +164,7 @@ final class ScriptureFeedModel: ObservableObject {
     }
 
     func previousChapter() async {
-        if let current, let previous = adjacentChapter(to: current.place, direction: -1) { await open(previous) }
+        if let current, let previous = adjacentChapter(to: current.place, direction: -1) { await open(previous, asSharedPassage: isReadingSharedPassage) }
     }
 
     var hasPreviousChapter: Bool {
@@ -174,6 +184,7 @@ final class ScriptureFeedModel: ObservableObject {
     }
 
     private func save(_ verse: BibleVerse) {
+        guard !isReadingSharedPassage else { return }
         if let data = try? JSONEncoder().encode(verse.place) {
             defaults.set(data, forKey: placeKey)
             if defaults === UserDefaults.standard { CloudSync.shared.push(.place) }
