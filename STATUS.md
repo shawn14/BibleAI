@@ -17,11 +17,18 @@
   it, reopened the next chapter initially read from Plans, marked the day complete, and
   saw Gospel Tour Day 2 after quitting again. The saved Matthew guide reopened with its
   WEB quotation. Local `reading_core_test`, `sync_logic_test` and `growth_core_test` passed.
-- On iOS 18.6 the pre-fix SE recording showed John 3:17 after selecting John 3:16.
-  `e304229` explicitly centers the selected verse after search dismissal. The live-provider
-  model checks passed at this revision. Hosted run 42673219952 received two workflow-level
-  internal server errors during GitHub’s Actions outage. Next: verify the fix on the SE.
-  Physical Apple Intelligence generation and two-device iCloud sync remain separate checks.
+- The [final hosted run](https://github.com/shawn14/BibleAI/actions/runs/42673219952/attempts/3)
+  passed all four iPhone simulator journeys at `e304229`. An iPhone SE (3rd generation)
+  running iOS 18.6 previously showed John 3:17 after selecting John 3:16. It now displays
+  John 3:16 after search, switching editions and a cold launch. On the same SE, Today
+  resumed Matthew 2, picked up Luke 1 from Plans and advanced to Day 2 after explicit
+  completion. The saved Matthew guide reopened with its WEB quotation. The three iPhone
+  17 Pro journeys passed for the reader, Apple sign-in cancellation, and system sharing.
+  The live-provider model checks also passed. A separate Mac run reached its 30-minute
+  limit after the reader test passed and removed its disposable simulator.
+- These changes are on the feature branch for a future release. The existing 2.0.3
+  submission is separate. Physical Apple Intelligence generation and two-device iCloud
+  sync remain unverified.
 
 ## 2.0.3 submitted for review — November 9, 2026
 
