@@ -62,9 +62,10 @@ struct ReadingPlanDetailView: View {
                     ForEach(reference.startChapter...(reference.endChapter ?? reference.startChapter), id: \.self) { chapter in
                         NavigationLink {
                             ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id,
-                                               verseRange: reference.verseRange, reflection: reference.reflection) {
+                                               verseRange: reference.verseRange, reflection: reference.reflection,
+                                               onFinish: finishAction(for: day, reference: reference), onRead: {
                                 plans.recordChapterRead(plan: plan, day: day, book: book.name, chapter: chapter)
-                            }
+                            })
                         } label: {
                             Label(ReadingReference.label(book: book.name, chapter: chapter, range: reference.verseRange), systemImage: "book")
                         }
@@ -81,6 +82,14 @@ struct ReadingPlanDetailView: View {
                     .accessibilityIdentifier("plan.complete.\(day.day)")
                 }
             }
+        }
+    }
+
+    private func finishAction(for day: DailyReading, reference: ReadingReference) -> (() -> Void)? {
+        guard reference.verseRange != nil, progress != nil,
+              !plans.isDayComplete(planId: plan.id, day: day.day) else { return nil }
+        return {
+            if plans.markDayComplete(planId: plan.id, day: day.day) { completedDay = day }
         }
     }
 
@@ -137,10 +146,10 @@ struct TodayReadingView: View {
                 if chapters.indices.contains(chapterIndex) {
                     let chapter = chapters[chapterIndex]
                     ChapterReadingView(book: chapter.book, chapter: chapter.number, invitationPlanID: reading.plan.id,
-                                       verseRange: chapter.reference.verseRange, reflection: chapter.reference.reflection) {
+                                       verseRange: chapter.reference.verseRange, reflection: chapter.reference.reflection, onRead: {
                         loaded = true
                         plans.recordChapterRead(plan: reading.plan, day: reading.day, book: chapter.book.name, chapter: chapter.number)
-                    }
+                    })
                     .id(chapterIndex)
                     .safeAreaInset(edge: .bottom) {
                         VStack(spacing: 6) {

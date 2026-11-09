@@ -14,6 +14,7 @@ struct ChapterReadingView: View {
     var edition: ReaderEdition = .preferred()
     var verseRange: ClosedRange<Int>? = nil
     var reflection: String? = nil
+    var onFinish: (() -> Void)? = nil
     var onRead: (() -> Void)? = nil
 
     @StateObject private var highlightService = HighlightService.shared
@@ -70,6 +71,15 @@ struct ChapterReadingView: View {
                     }
                 }
                 .padding()
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if let onFinish, !verses.isEmpty {
+                Button("Finish today’s reading", action: onFinish)
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity, minHeight: 52)
+                    .background(.bar)
+                    .accessibilityIdentifier("chapter.finish")
             }
         }
         .navigationTitle(ReadingReference.label(book: book.name, chapter: chapter, range: verseRange))

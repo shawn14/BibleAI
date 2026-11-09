@@ -151,6 +151,19 @@ final class ReaderJourneyTests: XCTestCase {
         }
         app.buttons["reader.translation"].tap()
         app.buttons["King James Version"].tap()
+
+        tab("Plans", in: app).tap()
+        openPlan("Five Minutes in the Gospels", in: app)
+        let dayTwo = app.buttons["Mark 1:16–18"]
+        reveal(dayTwo, in: app)
+        dayTwo.tap()
+        let finishFromPlan = app.buttons["chapter.finish"]
+        XCTAssertTrue(finishFromPlan.waitForExistence(timeout: 10))
+        finishFromPlan.tap()
+        XCTAssertTrue(app.staticTexts["streak.title"].waitForExistence(timeout: 10))
+        app.buttons["streak.done"].tap()
+        tab("The Bible", in: app).tap()
+        XCTAssertTrue(today.label.contains("Day 3") && today.label.contains("1-day streak"))
     }
 
     func testTodayTranslationAndStudyLibrary() throws {
