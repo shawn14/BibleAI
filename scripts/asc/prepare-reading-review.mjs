@@ -2,13 +2,17 @@
 // replace creative, change content rights, or publish an approved version.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import inventory, { requireDistributionClearance } from './reading-release-state.mjs';
 const app = '6756225286';
 export default async api => {
   const { READING_VERSION: version, READING_BUILD: build } = process.env;
   assert.match(version ?? '', /^\d+\.\d+\.\d+$/); assert.match(build ?? '', /^\d+$/);
+  const release=await inventory(api);
+  requireDistributionClearance(release.GBR,version,build);
+  assert.equal(release.review.length,0,'A review is open; nothing will be changed');
   const txt = name => fs.readFileSync('docs/aso/en-US/'+name+'.txt','utf8').trim();
   const builds = await api.get('/v1/builds?filter[app]='+app+'&filter[version]='+build+'&include=preReleaseVersion');
-  const versionIDs = new Set(builds.included.filter(v=>v.type==='preReleaseVersions' && v.attributes.version===version && v.attributes.platform==='IOS').map(v=>v.id));
+  const versionIDs = new Set((builds.included??[]).filter(v=>v.type==='preReleaseVersions' && v.attributes.version===version && v.attributes.platform==='IOS').map(v=>v.id));
   const found = builds.data.filter(b=>versionIDs.has(b.relationships.preReleaseVersion.data?.id) && b.attributes.version===build && b.attributes.processingState==='VALID' && !b.attributes.expired);
   assert.equal(found.length,1,'Missing exact, non-expired, VALID iOS candidate');
   const versions=await api.all('/v1/apps/'+app+'/appStoreVersions?filter[platform]=IOS');
@@ -23,6 +27,9 @@ export default async api => {
   assert(editable.includes(target.attributes.appStoreState),'Target is not editable');
   assert.equal(target.attributes.releaseType,'MANUAL','Do not change an existing release policy');
   const endpoint='/v1/appStoreVersions/'+target.id;
+  let attached;
+  try { attached=(await api.get(endpoint+'/build')).data; } catch(e){if(e.status!==404) throw e;}
+  if(attached && attached.id!==found[0].id) throw Error('A different build is already attached; leaving it unchanged');
   const loc=(await api.all(endpoint+'/appStoreVersionLocalizations')).find(l=>l.attributes.locale==='en-US');
   const review=(await api.get(endpoint+'/appStoreReviewDetail')).data;
   assert(loc && review,'Missing en-US or review details; do not overwrite contact information');
@@ -35,9 +42,6 @@ export default async api => {
     const actual=(await api.get('/v1/'+type+'/'+resource.id)).data.attributes;
     for(const [k,v] of Object.entries(fields)) assert.equal(actual[k],v);
   }
-  let attached;
-  try { attached=(await api.get(endpoint+'/build')).data; } catch(e){if(e.status!==404) throw e;}
-  if(attached && attached.id!==found[0].id) throw Error('A different build is already attached; leaving it unchanged');
   if(!attached) await api.patch(endpoint+'/relationships/build',{data:{type:'builds',id:found[0].id}});
   const readback=(await api.get(endpoint+'/build')).data;
   assert.equal(readback.id,found[0].id);assert.equal(readback.attributes.processingState,'VALID');

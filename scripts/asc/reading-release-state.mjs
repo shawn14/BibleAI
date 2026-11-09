@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
 // Read-only inventory for release decisions. Storefront availability is app-wide.
 export default async api => {
   const app = '6756225286';
@@ -27,3 +29,14 @@ export default async api => {
   return {observedAt:new Date().toISOString(), GBR:territory('GBR'),USA:territory('USA'),territoryCount:territories.filter(t=>t.attributes.available).length,
     versions:records,builds:builds.data.map(b=>({version:prerelease[b.relationships.preReleaseVersion.data?.id],build:b.attributes.version,processing:b.attributes.processingState})),review};
 };
+
+// Store scope applies to the entire app. This release must not infer a UK licence.
+export function requireDistributionClearance(gbr,version,build){
+  assert.equal(typeof gbr?.available,'boolean','Could not verify the UK storefront');
+  if(!gbr.available && !(gbr.releaseDate && Date.parse(gbr.releaseDate)>Date.now())) return;
+  const file='docs/testing/uk-kjv-clearance-'+version+'-'+build+'.json';
+  assert(fs.existsSync(file),'UK is enabled: missing build-specific rights confirmation');
+  const approval=JSON.parse(fs.readFileSync(file,'utf8'));
+  assert.equal(approval.version,version);assert.equal(approval.build,build);
+  assert.equal(approval.ukDigitalDistribution,true);assert(approval.evidence?.trim(),'Missing rights basis for this build');
+}

@@ -1,7 +1,7 @@
 // No mutation until the exact prepared version, build, rights, review slot and product page agree.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import inventory from './reading-release-state.mjs';
+import inventory, { requireDistributionClearance } from './reading-release-state.mjs';
 export default async api=>{
   const app='6756225286',version=process.env.READING_VERSION,build=process.env.READING_BUILD;
   assert.match(version??'',/^\d+\.\d+\.\d+$/);assert.match(build??'',/^\d+$/);
@@ -17,12 +17,7 @@ export default async api=>{
   assert(live.review.length<=1,'Review slot is occupied; no review will be canceled');
   const draft=live.review[0];
   if(draft)assert(draft.state==='READY_FOR_REVIEW' && draft.items.length===1 && draft.items[0].versionId===target.id,'A different review is open');
-  // A build-specific written clearance is required if GBR is enabled. Never infer it from a prior review.
-  if(live.GBR.available || live.GBR.releaseDate && Date.parse(live.GBR.releaseDate)>Date.now()){
-    const approval=JSON.parse(fs.readFileSync('docs/testing/uk-kjv-clearance-'+version+'-'+build+'.json','utf8'));
-    assert.equal(approval.version,version);assert.equal(approval.build,build);
-    assert.equal(approval.ukDigitalDistribution,true);assert(approval.evidence?.trim(),'Missing rights basis for this build');
-  }
+  requireDistributionClearance(live.GBR,version,build);
   const loc=(await api.all('/v1/appStoreVersions/'+target.id+'/appStoreVersionLocalizations')).find(l=>l.attributes.locale==='en-US');
   assert(loc);const txt=n=>fs.readFileSync('docs/aso/en-US/'+n+'.txt','utf8').trim();
   assert.equal(loc.attributes.description,txt('description'));assert.equal(loc.attributes.whatsNew,txt('release_notes'));
