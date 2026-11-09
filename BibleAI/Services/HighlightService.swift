@@ -12,7 +12,6 @@ class HighlightService: ObservableObject {
 
     @Published var highlights: [Highlight] = []
 
-    private let highlightsKey = "saved_highlights"
 
     private init() {
         loadHighlights()
@@ -24,24 +23,27 @@ class HighlightService: ObservableObject {
     // MARK: - Persistence
 
     private func loadHighlights() {
-        if let data = UserDefaults.standard.data(forKey: highlightsKey),
-           let decoded = try? JSONDecoder().decode([Highlight].self, from: data) {
-            highlights = decoded.sorted { $0.createdAt > $1.createdAt }
-        }
+        let keys: [CloudSync.Key] = [.highlights, .editionHighlights]
+        highlights = keys.flatMap { key -> [Highlight] in
+            guard let data = UserDefaults.standard.data(forKey: key.rawValue) else { return [] }
+            return (try? JSONDecoder().decode([Highlight].self, from: data)) ?? []
+        }.sorted { $0.createdAt > $1.createdAt }
     }
 
-    private func saveHighlights() {
-        if let encoded = try? JSONEncoder().encode(highlights) {
-            UserDefaults.standard.set(encoded, forKey: highlightsKey)
-        }
-        CloudSync.shared.push(.highlights)
+    private func saveHighlights(edition: String) {
+        // Older app versions assume everything in the original key is quoted from KJV.
+        let key: CloudSync.Key = edition == "KJV" ? .highlights : .editionHighlights
+        let records = highlights.filter { ($0.citationEdition == "KJV") == (key == .highlights) }
+        guard let encoded = try? JSONEncoder().encode(records) else { return }
+        UserDefaults.standard.set(encoded, forKey: key.rawValue)
+        CloudSync.shared.push(key)
     }
 
     // MARK: - Highlight Management
 
     func addHighlight(book: String, chapter: Int, verse: Int, verseText: String, translation: String = "KJV", color: HighlightColor, note: String? = nil) {
         // Check if already highlighted
-        if let existing = getHighlight(book: book, chapter: chapter, verse: verse) {
+        if let existing = getHighlight(book: book, chapter: chapter, verse: verse, translation: translation) {
             // Update existing highlight
             updateHighlight(id: existing.id, color: color, note: note)
             return
@@ -58,15 +60,14 @@ class HighlightService: ObservableObject {
         )
 
         highlights.insert(highlight, at: 0)
-        saveHighlights()
+        saveHighlights(edition: translation)
     }
 
     func removeHighlight(id: UUID) {
-        if let removed = highlights.first(where: { $0.id == id }) {
-            CloudSync.shared.recordDeletion(.highlightsDeleted, id: CloudSyncMerge.verseKey(removed))
-        }
+        guard let removed = highlights.first(where: { $0.id == id }) else { return }
+        CloudSync.shared.recordDeletion(.highlightsDeleted, id: CloudSyncMerge.verseKey(removed))
         highlights.removeAll { $0.id == id }
-        saveHighlights()
+        saveHighlights(edition: removed.citationEdition)
     }
 
     func updateHighlight(id: UUID, color: HighlightColor? = nil, note: String? = nil) {
@@ -102,11 +103,11 @@ class HighlightService: ObservableObject {
         }
 
         highlights[index] = updated
-        saveHighlights()
+        saveHighlights(edition: updated.citationEdition)
     }
 
-    func getHighlight(book: String, chapter: Int, verse: Int) -> Highlight? {
-        highlights.first { $0.book == book && $0.chapter == chapter && $0.verse == verse }
+    func getHighlight(book: String, chapter: Int, verse: Int, translation: String = "KJV") -> Highlight? {
+        highlights.first { $0.book == book && $0.chapter == chapter && $0.verse == verse && $0.citationEdition == translation }
     }
 
     func getHighlights(for book: String? = nil, chapter: Int? = nil) -> [Highlight] {

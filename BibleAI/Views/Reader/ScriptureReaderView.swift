@@ -83,7 +83,7 @@ struct ScriptureReaderView: View {
                 case .share:
                     if let verse = model.current { ScriptureShareView(verse: verse) }
                 case .passage:
-                    PassagePickerView { place in await model.open(place) }
+                    PassagePickerView { place in await model.open(place, asSharedPassage: model.isReadingSharedPassage) }
                 case .study:
                     if let verse = model.current { VerseStudySheet(verse: verse) }
                 case .note:
@@ -275,6 +275,6 @@ struct ScriptureReaderView: View {
     }
 
     private func saved(_ verse: BibleVerse) -> Highlight? {
-        highlights.getHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse)
+        highlights.getHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse, translation: verse.translation)
     }
 }

@@ -67,12 +67,36 @@ class ReadingPlanService: ObservableObject {
         let day: DailyReading
         let startedDate: Date
         var id: String { "\(plan.id).\(startedDate.timeIntervalSince1970).\(day.day)" }
+
+        var chapters: [(book: BibleBookInfo, number: Int)] {
+            day.readings.flatMap { reference -> [(BibleBookInfo, Int)] in
+                let name = reference.book == "Psalm" ? "Psalms" : reference.book
+                guard let book = BibleBookInfo.allBooks.first(where: { $0.name == name }) else { return [] }
+                return (reference.startChapter...(reference.endChapter ?? reference.startChapter)).map { (book, $0) }
+            }
+        }
+
+        var cursorKey: String { "today.chapter.\(id)" }
+        var savedChapter: Int {
+            let index = UserDefaults.standard.integer(forKey: cursorKey)
+            return chapters.indices.contains(index) ? index : 0
+        }
     }
 
     func nextReading(for plan: ReadingPlan) -> PlanReading? {
         guard let progress = getProgress(for: plan.id),
               let day = plan.nextReading(completed: progress.completedDays) else { return nil }
         return PlanReading(plan: plan, day: day, startedDate: progress.startedDate)
+    }
+
+    func recordChapterRead(plan: ReadingPlan, day: DailyReading, book: String, chapter: Int) {
+        guard let progressIndex = userProgress.firstIndex(where: { $0.planId == plan.id }),
+              !userProgress[progressIndex].completedDays.contains(day.day) else { return }
+        let reading = PlanReading(plan: plan, day: day, startedDate: userProgress[progressIndex].startedDate)
+        guard let index = reading.chapters.firstIndex(where: { $0.book.name == book && $0.number == chapter }) else { return }
+        UserDefaults.standard.set(index, forKey: reading.cursorKey)
+        userProgress[progressIndex].lastReadDate = Date()
+        saveUserProgress()
     }
 
     var todaysReading: PlanReading? {
@@ -94,6 +118,10 @@ class ReadingPlanService: ObservableObject {
               let plan = availablePlans.first(where: { $0.id == planId }),
               plan.dailyReadings.contains(where: { $0.day == day }),
               userProgress[index].completedDays.insert(day).inserted else { return false }
+        if let finished = plan.dailyReadings.first(where: { $0.day == day }) {
+            let reading = PlanReading(plan: plan, day: finished, startedDate: userProgress[index].startedDate)
+            UserDefaults.standard.removeObject(forKey: reading.cursorKey)
+        }
         userProgress[index].lastReadDate = Date()
         saveUserProgress()
         StreakStore.shared.recordReading()
@@ -112,6 +140,12 @@ class ReadingPlanService: ObservableObject {
     }
 
     func deletePlanProgress(_ planId: UUID) {
+        if let plan = availablePlans.first(where: { $0.id == planId }), let progress = getProgress(for: planId) {
+            for day in plan.dailyReadings {
+                let reading = PlanReading(plan: plan, day: day, startedDate: progress.startedDate)
+                UserDefaults.standard.removeObject(forKey: reading.cursorKey)
+            }
+        }
         CloudSync.shared.recordDeletion(.plansDeleted, id: planId.uuidString)
         userProgress.removeAll(where: { $0.planId == planId })
         saveUserProgress()

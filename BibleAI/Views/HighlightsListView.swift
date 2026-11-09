@@ -67,7 +67,7 @@ struct HighlightsListView: View {
                                     }
                                 }.padding(.vertical, 8)
                             }
-                            .accessibilityIdentifier("saved.verse.\(highlight.book)|\(highlight.chapter)|\(highlight.verse)")
+                            .accessibilityIdentifier("saved.verse.\(CloudSyncMerge.verseKey(highlight))")
                             .swipeActions {
                                 Button("Remove", role: .destructive) { pendingRemoval = highlight }
                             }

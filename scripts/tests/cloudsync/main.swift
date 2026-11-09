@@ -29,6 +29,11 @@ check(CloudSyncMerge.plans([UserPlanProgress(planId: plan, startedDate: t2)], []
 check(CloudSyncMerge.days(["2026-10-29"], ["2026-10-30", "2026-10-29"]) == ["2026-10-29", "2026-10-30"], "streak days union")
 check(CloudSyncMerge.fingerprint([a]) == CloudSyncMerge.fingerprint([UserPlanProgress(id: a.id, planId: plan, startedDate: t1, completedDays: [2, 1], lastReadDate: t1)]), "fingerprint ignores set order")
 check(CloudSyncMerge.tombstones(["x": 1], ["x": 5, "y": 2]) == ["x": 5, "y": 2], "tombstones keep latest deletion")
+let oldVerse = h(16, note: "my KJV note", at: t1)
+let modernVerse = Highlight(book: "John", chapter: 3, verse: 16, verseText: "one and only Son", translation: "WEB", color: .blue, note: "my WEB note", createdAt: t2, updatedAt: t2)
+check(CloudSyncMerge.verseKey(oldVerse) == "John|3|16", "legacy KJV tombstone key remains compatible")
+check(CloudSyncMerge.highlights([oldVerse], [modernVerse], deleted: [:]).count == 2, "both editions of the same verse retain their notes")
+check(CloudSyncMerge.highlights([oldVerse], [modernVerse], deleted: [CloudSyncMerge.verseKey(modernVerse): 4_000]).map(\.citationEdition) == ["KJV"], "WEB removal preserves the KJV note")
 let readings = (1...3).map { DailyReading(day: $0, title: "Day \($0)", readings: []) }
 let shortPlan = ReadingPlan(id: plan, title: "Plan", description: "", duration: 3, category: .sequential, dailyReadings: readings)
 check(shortPlan.nextReading(completed: [])?.day == 1, "new plan starts on day one")

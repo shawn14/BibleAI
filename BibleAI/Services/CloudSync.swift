@@ -11,6 +11,7 @@ final class CloudSync {
     enum Key: String, CaseIterable {
         case highlights = "saved_highlights"
         case highlightsDeleted = "saved_highlights.deleted"
+        case editionHighlights = "saved_highlights.editions.v1"
         case plans = "userReadingPlanProgress"
         case plansDeleted = "userReadingPlanProgress.deleted"
         case streak = "streak.readingDays"
@@ -54,9 +55,9 @@ final class CloudSync {
         let deletedPlans = CloudSyncMerge.tombstones(tombstones(local.data(forKey: Key.plansDeleted.rawValue)),
                                                      tombstones(cloud.data(forKey: Key.plansDeleted.rawValue)))
         var all = Set(keys)
-        if all.contains(.highlightsDeleted) { all.insert(.highlights) }
+        if all.contains(.highlightsDeleted) { all.formUnion([.highlights, .editionHighlights]) }
         if all.contains(.plansDeleted) { all.insert(.plans) }
-        if all.contains(.highlights) { all.insert(.highlightsDeleted) }
+        if all.contains(.highlights) || all.contains(.editionHighlights) { all.insert(.highlightsDeleted) }
         if all.contains(.plans) { all.insert(.plansDeleted) }
         for key in all {
             let name = key.rawValue
@@ -65,7 +66,7 @@ final class CloudSync {
                 let merged = key == .highlightsDeleted ? deletedHighlights : deletedPlans
                 if tombstones(local.data(forKey: name)) != merged { local.set(encode(merged), forKey: name) }
                 if tombstones(cloud.data(forKey: name)) != merged { cloud.set(encode(merged), forKey: name) }
-            case .highlights:
+            case .highlights, .editionHighlights:
                 let mine = decode([Highlight].self, local.data(forKey: name)), theirs = decode([Highlight].self, cloud.data(forKey: name))
                 let merged = CloudSyncMerge.highlights(mine, theirs, deleted: deletedHighlights)
                 let fp = CloudSyncMerge.fingerprint(merged)

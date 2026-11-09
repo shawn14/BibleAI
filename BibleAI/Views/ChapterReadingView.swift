@@ -44,6 +44,7 @@ struct ChapterReadingView: View {
                 .padding()
             } else {
                 LazyVStack(alignment: .leading, spacing: 12) {
+                    Text(edition.name).font(.caption).foregroundStyle(.secondary)
                     if let first = verses.first, let guide = GospelTourGuide.study(for: first) {
                         NavigationLink {
                             StudyDetailView(study: guide, canSave: true)
@@ -111,7 +112,7 @@ struct VerseRowView: View {
     @State private var showNoteEditor = false
 
     private var existingHighlight: Highlight? {
-        highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse)
+        highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse, translation: verse.translation)
     }
 
     var body: some View {

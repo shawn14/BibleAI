@@ -16,6 +16,7 @@ data_sources:
 canvas: null
 canonical_deploy_script: null
 canonical_scripts:
+  reading_core_test: bash scripts/reading-core-proof.sh
   growth_core_test: bash scripts/growth-core-proof.sh
   check_growth_publication: bash scripts/publish-growth.sh --check
   publish_growth: bash scripts/publish-growth.sh --publish

@@ -59,7 +59,9 @@ struct ReadingPlanDetailView: View {
                 if let book = BibleBookInfo.allBooks.first(where: { $0.name == reference.book }) {
                     ForEach(reference.startChapter...(reference.endChapter ?? reference.startChapter), id: \.self) { chapter in
                         NavigationLink {
-                            ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id)
+                            ChapterReadingView(book: book, chapter: chapter, invitationPlanID: plan.id) {
+                                plans.recordChapterRead(plan: plan, day: day, book: book.name, chapter: chapter)
+                            }
                         } label: {
                             Label("\(book.name) \(chapter)", systemImage: "book")
                         }
@@ -112,17 +114,11 @@ struct TodayReadingView: View {
     init(reading: ReadingPlanService.PlanReading, onContinue: @escaping (ReadingPlanService.PlanReading) -> Void) {
         self.reading = reading
         self.onContinue = onContinue
-        let saved = UserDefaults.standard.integer(forKey: "today.chapter.\(reading.id)")
-        _chapterIndex = State(initialValue: max(0, min(saved, reading.day.readings.reduce(0) {
-            $0 + ($1.endChapter ?? $1.startChapter) - $1.startChapter + 1
-        } - 1)))
+        _chapterIndex = State(initialValue: reading.savedChapter)
     }
 
     private var chapters: [(book: BibleBookInfo, number: Int)] {
-        reading.day.readings.flatMap { reference -> [(BibleBookInfo, Int)] in
-            guard let book = BibleBookInfo.allBooks.first(where: { $0.name == reference.book }) else { return [] }
-            return (reference.startChapter...(reference.endChapter ?? reference.startChapter)).map { (book, $0) }
-        }
+        reading.chapters
     }
 
     var body: some View {
@@ -139,7 +135,7 @@ struct TodayReadingView: View {
                     let chapter = chapters[chapterIndex]
                     ChapterReadingView(book: chapter.book, chapter: chapter.number, invitationPlanID: reading.plan.id) {
                         loaded = true
-                        UserDefaults.standard.set(chapterIndex, forKey: "today.chapter.\(reading.id)")
+                        plans.recordChapterRead(plan: reading.plan, day: reading.day, book: chapter.book.name, chapter: chapter.number)
                     }
                     .id(chapterIndex)
                     .safeAreaInset(edge: .bottom) {
@@ -158,7 +154,6 @@ struct TodayReadingView: View {
                                     Button("Mark Complete") {
                                         if plans.markDayComplete(planId: reading.plan.id, day: reading.day.day) {
                                             finished = true
-                                            UserDefaults.standard.removeObject(forKey: "today.chapter.\(reading.id)")
                                         } else { dismiss() }
                                     }
                                     .disabled(!loaded)

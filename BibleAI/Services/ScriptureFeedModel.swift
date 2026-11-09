@@ -11,9 +11,9 @@ actor ScriptureChapterStore {
     static let shared = ScriptureChapterStore()
     private let directory: URL
 
-    init() {
-        directory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("Scripture", isDirectory: true)
+    init(directory: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("Scripture", isDirectory: true)) {
+        self.directory = directory
     }
 
     /// The provider breaks some verses across lines ("darkness\nwas\nupon"); show each verse as one sentence.
@@ -92,13 +92,15 @@ final class ScriptureFeedModel: ObservableObject {
     @Published var error: String?
     @Published private(set) var nextError: String?
     @Published private(set) var isReadingSharedPassage = false
+    private let chapters: ScriptureChapterStore
     private let defaults: UserDefaults
     private var generation = UUID()
     private let placeKey = "scripture.readingPlace.v1"
 
     @Published private(set) var edition: ReaderEdition
 
-    init(defaults: UserDefaults = .standard) {
+    init(defaults: UserDefaults = .standard, chapters: ScriptureChapterStore = .shared) {
+        self.chapters = chapters
         self.defaults = defaults
         edition = .preferred(in: defaults)
     }
@@ -136,7 +138,7 @@ final class ScriptureFeedModel: ObservableObject {
         defer { if generation == request { loading = false } }
         do {
             let targetEdition = requestedEdition ?? edition
-            let result = try await ScriptureChapterStore.shared.chapter(book: place.book, number: place.chapter, edition: targetEdition)
+            let result = try await chapters.chapter(book: place.book, number: place.chapter, edition: targetEdition)
             guard generation == request else { return false }
             guard let selected = result.first(where: { $0.verse == place.verse }) else {
                 throw ScriptureError.invalidPassage
@@ -171,7 +173,7 @@ final class ScriptureFeedModel: ObservableObject {
         let request = generation
         defer { loadingNext = false }
         do {
-            let result = try await ScriptureChapterStore.shared.chapter(book: next.book, number: next.chapter, edition: edition)
+            let result = try await chapters.chapter(book: next.book, number: next.chapter, edition: edition)
             guard generation == request else { return }
             verses.append(contentsOf: result)
             // Keep at most three chapters in memory without removing the visible chapter.

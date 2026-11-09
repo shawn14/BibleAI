@@ -52,6 +52,8 @@ struct GrowthCoreTests {
         check(SharedScriptureLink(verse: BibleVerse(book: "John", chapter: 3, verse: 16, text: "", translation: "NIV")) == nil,
               "unsupported translation rejected")
 
+        let modern = SharedScriptureLink(verse: BibleVerse(book: "John", chapter: 3, verse: 16, text: "WEB text", translation: "WEB"), inviteID: invite)
+        check(modern?.webURL == link.webURL, "WEB artwork and quotation retain a compatible canonical passage invitation")
         let web = link.webURL.absoluteString
         let app = link.appURL.absoluteString
         let badURLs = [
