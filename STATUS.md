@@ -1,9 +1,14 @@
-# BibleAI 2.0.4 (12) TestFlight candidate — November 9, 2026
+# BibleAI 2.0.4 (12) on internal TestFlight — November 9, 2026
+
+Apple accepted build 12 from clean main `cd7f742` and marked it VALID.
+The signed IPA verifies the bundle ID, version, build, Apple sign-in and iCloud
+entitlements. The established export-compliance answer was applied. Apple then
+reported READY_FOR_BETA_TESTING with the existing Beta group enabled for all builds.
+The existing 2.0.3 App Review submission was left in place.
+[TestFlight build](https://appstoreconnect.apple.com/apps/6756225286/testflight/ios/56f78e5d-487c-470b-a012-20e44f08e143).
 
 All four iPhone simulator journeys passed on the versioned Today reading source
-`b5b7cf2`. Independent QA checked all 64 screenshots. The Mac release lane
-verifies the signed IPA and uploads it to App Store Connect. Use `builds_list`
-for Apple’s processing and internal testing state. [QA sign-off](docs/testing/build12-qa-signoff.md).
+`b5b7cf2`. Independent QA checked all 64 screenshots. [QA sign-off](docs/testing/build12-qa-signoff.md).
 
 ## Daily reading feature branch — November 9, 2026
 
@@ -33,9 +38,8 @@ for Apple’s processing and internal testing state. [QA sign-off](docs/testing/
   17 Pro journeys passed for the reader, Apple sign-in cancellation, and system sharing.
   The live-provider model checks also passed. A separate Mac run reached its 30-minute
   limit after the reader test passed and removed its disposable simulator.
-- These changes are on the feature branch for a future release. The existing 2.0.3
-  submission is separate. Physical Apple Intelligence generation and two-device iCloud
-  sync remain unverified.
+- These changes are in TestFlight 2.0.4 (12). Physical Apple Intelligence generation
+  and two-device iCloud sync remain unverified.
 
 ## 2.0.3 submitted for review — November 9, 2026
 
