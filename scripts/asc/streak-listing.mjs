@@ -88,6 +88,11 @@ export default async function listing(api) {
     assert.deepEqual(assets.map(a => [a.attributes.fileName, checksum(a), uploaded(a)]), files.map((f,i) => [path.basename(f), hashes[i], 'COMPLETE']), display);
     console.log(display + ' verified (' + files.length + ')');
   }
-  const build = (await api.get('/v1/appStoreVersions/' + draft.id + '/build')).data;
+  let build;
+  try {
+    build = (await api.get('/v1/appStoreVersions/' + draft.id + '/build')).data;
+  } catch (error) {
+    if (error.status !== 404) throw error;
+  }
   return { version, state: state(draft), release: draft.attributes.releaseType, build: build?.attributes?.version, processing: build?.attributes?.processingState, subtitle: infoFields.subtitle, screenshots: 18 };
 }
