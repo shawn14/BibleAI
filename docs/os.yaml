@@ -45,7 +45,7 @@ canonical_scripts:
   publish_reading_source: git push --set-upstream origin codex/todays-reading
   publish_streak_source: git push --set-upstream origin codex/streak-listing
   merge_streak_release: bash scripts/publish-release-candidate.sh codex/streak-listing 2.0.3 11
-  merge_reading_release: bash scripts/publish-release-candidate.sh codex/todays-reading 2.0.4 12
+  merge_reading_release: bash scripts/publish-release-candidate.sh codex/todays-reading 2.0.4 13
   apply_streak_listing: bash scripts/streak-listing.sh apply
   streak_review_state: bash scripts/streak-listing.sh state
   verify_streak_listing: bash scripts/streak-listing.sh verify
@@ -56,11 +56,11 @@ canonical_scripts:
   publish_account_branch: git push --set-upstream origin codex/standard-account
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
-  testflight: fastlane beta_committed version:2.0.4 build:12
+  testflight: fastlane beta_committed version:2.0.4 build:13
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
-  submit_review: cd ~/projects/fastlane-configs && fastlane submit_review app:bibleai version:2.0.3 build:11
+  submit_review: bash scripts/submit-reading-review.sh 2.0.4 13
   version_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/version-check.mjs && cat scripts/asc/version-check.out.json
   ipad_shots: bash scripts/ipad-shots.sh
   review_media: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/review-media.mjs && cat scripts/asc/review-media.out.json
