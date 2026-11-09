@@ -1,6 +1,14 @@
 #!/bin/bash
-# This entry point stays closed until the matching draft and its distribution rights are verified.
+# Submit the specific build from our prepared draft; no automatic release or review replacement.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-echo "No App Review mutation: resolve the UK KJV decision, prepare the exact draft and valid signed build, then verify rights and review item IDs before submitting $1 ($2)." >&2
-exit 2
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+export READING_VERSION="${1:?version}" READING_BUILD="${2:?build}"
+[[ "$READING_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$READING_BUILD" =~ ^[0-9]+$ ]]
+[[ "$(git branch --show-current)" == main && -z "$(git status --porcelain)" ]]
+git fetch origin main
+[[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]]
+test -s "docs/testing/build$READING_BUILD-qa-signoff.md"
+BUNDLE_ID=com.shawncarpenter.bibleai-companion ASC_APP_ID=6756225286 REQUIRE_SUB=1 ruby "$HOME/projects/fastlane-configs/scripts/check_subscription_state.rb"
+node scripts/asc/asc.mjs scripts/asc/submit-reading-review.mjs
+cat scripts/asc/submit-reading-review.out.json
