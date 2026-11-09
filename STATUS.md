@@ -1,3 +1,7 @@
+# App Review preparation — November 9, 2026
+
+Apple read at 4:06 p.m. CST: 2.0.2 (10) is live, 2.0.3 (11) is WAITING_FOR_REVIEW with manual release, and 2.0.4 (12) is the latest processed build. UK is one of 174 enabled territories. The new feature candidate is 2.0.4 (13); release and reviewer notes are staged. Do not replace the current review or change UK availability until the full-KJV distribution decision is resolved. No new submission yet.
+
 # Reading improvements — November 9, 2026
 
 Source: `codex/todays-reading`; the latest candidate is `24129ad`. This work is newer than TestFlight build 12.
