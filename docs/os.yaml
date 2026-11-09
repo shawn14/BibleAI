@@ -43,6 +43,7 @@ canonical_scripts:
   publish_streak_source: git push --set-upstream origin codex/streak-listing
   merge_streak_release: bash scripts/publish-streak-candidate.sh
   apply_streak_listing: bash scripts/streak-listing.sh apply
+  streak_review_state: bash scripts/streak-listing.sh state
   verify_streak_listing: bash scripts/streak-listing.sh verify
   render_store_art: python3 docs/aso/creative-src/render_refresh.py && python3 docs/aso/creative-src/render_pro.py docs/aso/creative-src/captures docs/aso docs/aso/creative-src/fonts
   render_store_videos: bash scripts/encode-simulator-store-media.sh
