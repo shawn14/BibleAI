@@ -51,4 +51,5 @@ try {
 } catch (e) {
   fs.writeFileSync(out, JSON.stringify({ ok: false, error: String(e.message || e) }, null, 2));
   console.log("ASC JOB FAILED", e.message);
+  process.exitCode = 1;
 }

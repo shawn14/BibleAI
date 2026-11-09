@@ -43,7 +43,7 @@ struct AccountView: View {
                             .accessibilityIdentifier("account.authError")
                     }
                 } footer: {
-                    Text("Reading is available without signing in. Your saved reading uses iCloud; purchases use your App Store account.")
+                    Text("You can read without signing in. Verses and plan progress use iCloud when available. Studies stay on this device. Purchases use your App Store account.")
                 }
                 Section("Subscription") {
                     NavigationLink {
@@ -94,7 +94,7 @@ struct AccountView: View {
                 Button("Sign Out", role: .destructive) { appleAccount.signOut() }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("Your saved reading stays on this device and in iCloud. Signing out does not cancel your App Store subscription.")
+                Text("Your verses, plans and saved studies remain available after signing out. You can manage any subscription in the App Store.")
             }
             .confirmationDialog("Delete your BibleAI account?", isPresented: $showRemoveProfile, titleVisibility: .visible) {
                 Button("Delete Account", role: .destructive) { appleAccount.removeProfile() }

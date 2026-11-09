@@ -8,7 +8,10 @@ struct ScriptureReaderView: View {
     @AppStorage("reader.useSerif") private var useSerif = true
     @AppStorage("reader.textSize") private var textSize = 28.0
     @ScaledMetric(relativeTo: .title2) private var scaledSize = 28.0
+    @ObservedObject private var plans = ReadingPlanService.shared
+    @State private var today: ReadingPlanService.PlanReading?
     @State private var sheet: ReaderSheet?
+    @State private var pickedPassage: ScriptureFeedModel.ScrollRequest?
     @State private var showSettings = false
     @State private var pendingRemoval: Highlight?
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -47,34 +50,77 @@ struct ScriptureReaderView: View {
             .overlay(alignment: .trailing) {
                 if let verse = model.current { actions(for: verse) }
             }
+            .safeAreaInset(edge: .bottom) {
+                if model.isReadingSharedPassage {
+                    Button("Return to my reading", systemImage: "arrow.uturn.backward") {
+                        Task { await model.returnToReading() }
+                    }
+                    .frame(minHeight: 44)
+                    .accessibilityIdentifier("reader.returnToPlace")
+                } else if let reading = plans.todaysReading {
+                    Button { today = reading } label: {
+                        HStack {
+                            Image(systemName: "book.pages")
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Continue today’s reading").font(.subheadline.weight(.semibold))
+                                Text("\(reading.plan.title) · Day \(reading.day.day)")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption)
+                        }
+                        .padding(.horizontal, 20).frame(minHeight: 48)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("reader.today")
+                }
+            }
             .task(id: isActive) { if isActive { await openRequestedPassage() } }
             .onChange(of: requestedPlace) { _, _ in if isActive { Task { await openRequestedPassage() } } }
-            .onChange(of: model.visibleID) { _, _ in Task { await model.didScroll() } }
-            .sheet(item: $sheet) { destination in
+            .onChange(of: model.visibleID) { _, _ in
+                if sheet != .passage && pickedPassage == nil { Task { await model.didScroll() } }
+            }
+            .sheet(item: $sheet, onDismiss: {
+                // Dismissing the search keyboard changes the usable page height on smaller phones.
+                if let pickedPassage, model.scrollRequest == pickedPassage { model.focus(pickedPassage.place) }
+                pickedPassage = nil
+            }) { destination in
                 switch destination {
                 case .share:
                     if let verse = model.current { ScriptureShareView(verse: verse) }
                 case .passage:
-                    PassagePickerView { place in await model.open(place) }
+                    PassagePickerView { place in
+                        guard await model.open(place, asSharedPassage: model.isReadingSharedPassage) else { return false }
+                        pickedPassage = model.scrollRequest
+                        return true
+                    }
                 case .study:
                     if let verse = model.current { VerseStudySheet(verse: verse) }
                 case .note:
                     if let verse = model.current {
                         NoteEditorView(highlight: saved(verse), book: verse.book, chapter: verse.chapter,
-                                       verse: verse.verse, verseText: verse.text,
+                                       verse: verse.verse, verseText: verse.text, translation: verse.translation,
                                        isPresented: Binding(get: { sheet == .note }, set: { if !$0 { sheet = nil } }))
                     }
                 case .chapter:
                     if let verse = model.current,
                        let book = BibleBookInfo.allBooks.first(where: { $0.name == verse.book }) {
                         NavigationStack {
-                            ChapterReadingView(book: book, chapter: verse.chapter)
+                            ChapterReadingView(book: book, chapter: verse.chapter, edition: model.edition)
                                 .toolbar { ToolbarItem(placement: .confirmationAction) {
                                     Button("Done") { sheet = nil }
                                 } }
                         }
                     }
                 }
+            }
+            .alert("Couldn't open this passage", isPresented: Binding(
+                get: { model.error != nil && !model.verses.isEmpty && sheet == nil },
+                set: { if !$0 { model.error = nil } }
+            )) { Button("OK") { model.error = nil } } message: { Text(model.error ?? "") }
+            .sheet(item: $today) { reading in
+                TodayReadingView(reading: reading) { today = $0 }.id(reading.id)
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
             .confirmationDialog("Remove this saved verse and its note?",
@@ -91,69 +137,88 @@ struct ScriptureReaderView: View {
 
     private var reader: some View {
         GeometryReader { geometry in
-        ScrollView(.vertical) {
-            LazyVStack(spacing: 0) {
-                ForEach(model.verses, id: \.passageID) { verse in
-                    VStack(spacing: 24) {
-                        Spacer(minLength: 20)
-                        Text(verse.reference)
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(.secondary)
-                        Button { sheet = .study } label: {
-                            Text(verse.text)
-                                .font(.system(size: scaledSize * textSize / 28 * padScale, design: useSerif ? .serif : .default))
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility5)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(7)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .foregroundStyle(.primary)
-                                .frame(maxWidth: .infinity)
+            ScrollViewReader { proxy in
+                ScrollView(.vertical) {
+                    LazyVStack(spacing: 0) {
+                        ForEach(model.verses, id: \.passageID) { verse in
+                            VStack(spacing: 24) {
+                                Spacer(minLength: 20)
+                                Text(verse.reference)
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(.secondary)
+                                Button { sheet = .study } label: {
+                                    Text(verse.text)
+                                        .font(.system(size: scaledSize * textSize / 28 * padScale, design: useSerif ? .serif : .default))
+                                        .dynamicTypeSize(...DynamicTypeSize.accessibility5)
+                                        .multilineTextAlignment(.center)
+                                        .lineSpacing(7)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("\(verse.reference). \(verse.text)")
+                                .accessibilityHint("Opens verse study")
+                                .accessibilityIdentifier("reader.verse.\(verse.passageID)")
+                                .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
+                                Text(model.edition.name).font(.caption).foregroundStyle(.tertiary)
+                                Spacer(minLength: 20)
+                                // Only on the first verse: on later pages it peeked in under the status bar.
+                                Label("Swipe to keep reading", systemImage: "chevron.up")
+                                    .font(.caption).foregroundStyle(.secondary)
+                                    .padding(.bottom, 12)
+                                    .opacity(verse.passageID == model.verses.first?.passageID ? 1 : 0)
+                            }
+                            .padding(.leading, 28).padding(.trailing, 60)
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: geometry.size.height)
+                            .id(verse.passageID)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("\(verse.reference). \(verse.text)")
-                        .accessibilityHint("Opens verse study")
-                        .accessibilityIdentifier("reader.verse.\(verse.passageID)")
-                        .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
-                        Text("King James Version").font(.caption).foregroundStyle(.tertiary)
-                        Spacer(minLength: 20)
-                        // Only on the first verse: on later pages it peeked in under the status bar.
-                        Label("Swipe to keep reading", systemImage: "chevron.up")
-                            .font(.caption).foregroundStyle(.secondary)
-                            .padding(.bottom, 12)
-                            .opacity(verse.passageID == model.verses.first?.passageID ? 1 : 0)
+                        if let error = model.nextError {
+                            VStack(spacing: 12) {
+                                Text(error).font(.callout).foregroundStyle(.secondary)
+                                Button("Load Next Chapter") { Task { await model.loadNext() } }
+                            }.padding()
+                        } else if model.loadingNext {
+                            ProgressView("Opening next chapter…").padding()
+                        }
                     }
-                    .padding(.leading, 28).padding(.trailing, 60)
-                    .frame(maxWidth: .infinity)
-                    .frame(minHeight: geometry.size.height)
-                    .id(verse.passageID)
+                    .scrollTargetLayout()
                 }
-                if let error = model.nextError {
-                    VStack(spacing: 12) {
-                        Text(error).font(.callout).foregroundStyle(.secondary)
-                        Button("Load Next Chapter") { Task { await model.loadNext() } }
-                    }.padding()
-                } else if model.loadingNext {
-                    ProgressView("Opening next chapter…").padding()
+                .scrollIndicators(.hidden)
+                .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+                .scrollPosition(id: $model.visibleID, anchor: .center)
+                .task(id: model.scrollRequest) {
+                    guard let target = model.scrollRequest, sheet != .passage else { return }
+                    await Task.yield()
+                    guard !Task.isCancelled, model.scrollRequest == target else { return }
+                    proxy.scrollTo(target.place.id, anchor: .center)
                 }
+                .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
+                .accessibilityIdentifier("reader.feed")
             }
-            .scrollTargetLayout()
-        }
-        .scrollIndicators(.hidden)
-        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-        .scrollPosition(id: $model.visibleID)
-        .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
-        .accessibilityIdentifier("reader.feed")
         }
     }
 
     /// Minimal top chrome: translation pill, passage button, options.
     private var topBar: some View {
         HStack(spacing: 10) {
-            Text("KJV")
-                .font(.caption.weight(.semibold))
-                .padding(.horizontal, 10).padding(.vertical, 5)
-                .overlay(Capsule().stroke(Color.primary.opacity(0.15)))
-                .accessibilityLabel("King James Version")
+            Menu {
+                ForEach(ReaderEdition.allCases, id: \.self) { edition in
+                    Button {
+                        Task { await model.switchEdition(edition) }
+                    } label: {
+                        if model.edition == edition { Label(edition.name, systemImage: "checkmark") }
+                        else { Text(edition.name) }
+                    }
+                }
+            } label: {
+                Label(model.edition.rawValue, systemImage: "chevron.down")
+                    .labelStyle(.titleAndIcon).font(.caption.weight(.semibold))
+                    .frame(minHeight: 44)
+            }
+            .accessibilityLabel("Translation, \(model.edition.name)")
+            .accessibilityIdentifier("reader.translation")
             Spacer(minLength: 0)
             Button { sheet = .passage } label: {
                 HStack(spacing: 5) {
@@ -192,7 +257,7 @@ struct ScriptureReaderView: View {
             Button {
                 if let highlight = saved(verse) { pendingRemoval = highlight }
                 else { highlights.addHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse,
-                                               verseText: verse.text, color: .yellow) }
+                                               verseText: verse.text, translation: verse.translation, color: .yellow) }
             } label: {
                 Image(systemName: saved(verse) == nil ? "heart" : "heart.fill")
                     .foregroundStyle(saved(verse) == nil ? Color.primary : Color.red)
@@ -218,7 +283,7 @@ struct ScriptureReaderView: View {
 
     private func openRequestedPassage() async {
         if let place = requestedPlace {
-            if await model.open(place) {
+            if await model.open(place, asSharedPassage: true, edition: .kjv) {
                 requestedPlace = nil
                 if let invite = GrowthStore.shared.acceptedInvitation, invite.readingPlace == place {
                     GrowthStore.shared.recordFirstReading(for: invite)
@@ -229,6 +294,6 @@ struct ScriptureReaderView: View {
     }
 
     private func saved(_ verse: BibleVerse) -> Highlight? {
-        highlights.getHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse)
+        highlights.getHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse, translation: verse.translation)
     }
 }

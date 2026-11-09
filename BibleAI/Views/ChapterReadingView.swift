@@ -11,8 +11,9 @@ struct ChapterReadingView: View {
     let book: BibleBookInfo
     let chapter: Int
     var invitationPlanID: UUID? = nil
+    var edition: ReaderEdition = .preferred()
+    var onRead: (() -> Void)? = nil
 
-    @StateObject private var bibleService = EnhancedBibleService.shared
     @StateObject private var highlightService = HighlightService.shared
     @State private var verses: [BibleVerse] = []
     @State private var isLoading = true
@@ -33,7 +34,8 @@ struct ChapterReadingView: View {
                     Text("Chapter not available")
                         .font(.headline)
 
-                    Text("This chapter is currently being loaded. Please try again.")
+                    Button("Try Again") { Task { await loadChapter() } }
+                    Text("Connect to the internet to open this chapter for the first time.")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -42,6 +44,14 @@ struct ChapterReadingView: View {
                 .padding()
             } else {
                 LazyVStack(alignment: .leading, spacing: 12) {
+                    Text(edition.name).font(.caption).foregroundStyle(.secondary)
+                    if let first = verses.first, let guide = GospelTourGuide.study(for: first) {
+                        NavigationLink {
+                            StudyDetailView(study: guide, canSave: true)
+                        } label: { Label(guide.title, systemImage: "book.pages") }
+                        .accessibilityIdentifier("chapter.guide")
+                        .padding(.vertical, 8)
+                    }
                     ForEach(verses) { verse in
                         VerseRowView(
                             verse: verse,
@@ -74,9 +84,13 @@ struct ChapterReadingView: View {
 
     private func loadChapter() async {
         isLoading = true
-        verses = await bibleService.getChapter(book: book.name, chapter: chapter) ?? []
+        verses = (try? await ScriptureChapterStore.shared.chapter(book: book.name, number: chapter, edition: edition)) ?? []
+        guard !Task.isCancelled else { return }
         isLoading = false
-        if !verses.isEmpty { GrowthStore.shared.recordReaderActivation() }
+        if !verses.isEmpty {
+            GrowthStore.shared.recordReaderActivation()
+            onRead?()
+        }
         if !verses.isEmpty, let planID = invitationPlanID,
            let invitation = GrowthStore.shared.acceptedInvitation, invitation.planID == planID,
            let plan = ReadingPlanService.shared.availablePlans.first(where: { $0.id == planID }),
@@ -98,7 +112,7 @@ struct VerseRowView: View {
     @State private var showNoteEditor = false
 
     private var existingHighlight: Highlight? {
-        highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse)
+        highlightService.getHighlight(book: book, chapter: chapter, verse: verse.verse, translation: verse.translation)
     }
 
     var body: some View {
@@ -156,6 +170,7 @@ struct VerseRowView: View {
                             chapter: chapter,
                             verse: verse.verse,
                             verseText: verse.text,
+                            translation: verse.translation,
                             color: color
                         )
                     }
@@ -171,6 +186,7 @@ struct VerseRowView: View {
                 chapter: chapter,
                 verse: verse.verse,
                 verseText: verse.text,
+                translation: verse.translation,
                 isPresented: $showNoteEditor
             )
         }

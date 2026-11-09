@@ -21,7 +21,7 @@ struct SharedScriptureLink: Codable, Equatable, Identifiable {
     ].compactMap(UUID.init(uuidString:)))
 
     init?(verse: BibleVerse, inviteID: UUID = UUID()) {
-        guard verse.translation == "KJV",
+        guard ReaderEdition(rawValue: verse.translation) != nil,
               Self.validPassage(book: verse.book, chapter: verse.chapter, verse: verse.verse) else { return nil }
         self.kind = .verse
         self.book = verse.book

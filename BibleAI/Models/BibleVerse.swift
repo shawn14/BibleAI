@@ -7,6 +7,23 @@
 
 import Foundation
 
+enum ReaderEdition: String, CaseIterable, Codable {
+    case kjv = "KJV"
+    case web = "WEB"
+
+    static let preferenceKey = "reader.preferredEdition"
+    static func preferred(in defaults: UserDefaults = .standard) -> Self {
+        defaults.string(forKey: preferenceKey).flatMap(Self.init(rawValue:)) ?? .kjv
+    }
+
+    var name: String {
+        switch self {
+        case .kjv: return "King James Version"
+        case .web: return "World English Bible"
+        }
+    }
+}
+
 struct BibleVerse: Identifiable, Codable {
     let id: UUID
     let book: String

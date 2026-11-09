@@ -39,7 +39,7 @@ enum AppleStudy {
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
             let session = LanguageModelSession(instructions: """
-                You are a careful, warm Bible study guide for everyday readers. Use the King James Version \
+                You are a careful, warm Bible study guide for everyday readers. Use the cited translation and the \
                 text you are given. Write plain, concise prose with short paragraphs. Distinguish what the \
                 text says from interpretation, and note where Christian traditions differ. Never invent \
                 quotations, statistics, Strong's numbers or sources. Only cite Bible references you are sure of.
@@ -99,6 +99,12 @@ struct VerseStudySheet: View {
                     Text(verse.text).font(.system(.title3, design: .serif)).lineSpacing(5)
                     Text(verse.fullReference).font(.subheadline).foregroundStyle(.secondary)
                     Divider()
+                    if let guide = GospelTourGuide.study(for: verse) {
+                        NavigationLink {
+                            StudyDetailView(study: guide, canSave: true)
+                        } label: { Label(guide.title, systemImage: "book.pages") }
+                        .accessibilityIdentifier("study.guide")
+                    }
                     ForEach(StudyMode.allCases) { mode in
                         Button { study(mode) } label: {
                             HStack {
@@ -123,6 +129,8 @@ struct VerseStudySheet: View {
                             .accessibilityIdentifier("study.answer")
                         Text("Apple Intelligence study · Read alongside the chapter")
                             .font(.caption).foregroundStyle(.secondary)
+                        StudySaveButton(study: SavedStudy(verse: verse, source: .generated,
+                                                         title: selected.rawValue, body: answer))
                         Link(destination: reportURL(mode: selected, answer: answer)) {
                             Label("Report a problem with this study", systemImage: "flag")
                                 .font(.footnote)

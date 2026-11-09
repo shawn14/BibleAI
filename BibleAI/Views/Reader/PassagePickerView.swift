@@ -80,6 +80,7 @@ struct PassagePickerView: View {
                 Image(systemName: "arrow.up.right").foregroundStyle(.secondary)
             }
         }
+        .accessibilityIdentifier("passage.shortcut.\(place.id)")
     }
 
     private func open(_ place: ReadingPlace) {

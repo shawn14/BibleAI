@@ -8,7 +8,7 @@ app:
   project: BibleAI.xcodeproj
   workspace: BibleAI.xcworkspace
 data_sources:
-  - https://bible-api.com/ (KJV, requested one chapter at a time)
+  - https://bible-api.com/ (KJV and World English Bible, requested one chapter at a time)
   - On-device saved reading position, highlights, notes and reading-plan progress
   - On-device FoundationModels verse study on eligible iOS 26 devices (device proof outstanding)
   - Existing RevenueCat store products and eligibility (purchase/restore proof outstanding)
@@ -16,6 +16,7 @@ data_sources:
 canvas: null
 canonical_deploy_script: null
 canonical_scripts:
+  reading_core_test: bash scripts/reading-core-proof.sh
   growth_core_test: bash scripts/growth-core-proof.sh
   check_growth_publication: bash scripts/publish-growth.sh --check
   publish_growth: bash scripts/publish-growth.sh --publish
@@ -40,8 +41,10 @@ canonical_scripts:
   apply_rebrand: node scripts/aso-rebrand.mjs apply
   verify_rebrand: node scripts/aso-rebrand.mjs verify
   render_streak_screenshots: python3 docs/aso/creative-src/render_pro.py docs/aso/creative-src/captures docs/aso docs/aso/creative-src/fonts
+  publish_reading_source: git push --set-upstream origin codex/todays-reading
   publish_streak_source: git push --set-upstream origin codex/streak-listing
-  merge_streak_release: bash scripts/publish-streak-candidate.sh
+  merge_streak_release: bash scripts/publish-release-candidate.sh codex/streak-listing 2.0.3 11
+  merge_reading_release: bash scripts/publish-release-candidate.sh codex/todays-reading 2.0.4 12
   apply_streak_listing: bash scripts/streak-listing.sh apply
   streak_review_state: bash scripts/streak-listing.sh state
   verify_streak_listing: bash scripts/streak-listing.sh verify
@@ -52,7 +55,7 @@ canonical_scripts:
   publish_account_branch: git push --set-upstream origin codex/standard-account
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
-  testflight: fastlane beta_committed version:2.0.3 build:11
+  testflight: fastlane beta_committed version:2.0.4 build:12
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
@@ -77,7 +80,7 @@ canonical_scripts:
   listing_push: cd ~/projects/fastlane-configs && fastlane bibleai_listing mode:push version:2.0.1 && cd ~/projects/BibleAI && PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/media.mjs && cat scripts/asc/media.out.json
 mac_runner:
   timeout_minutes: 30
-  ask_first: [merge_streak_release, apply_streak_listing, publish_streak_source, create_version, cancel_review, publish_account_branch,enable_apple_account,prepare_account_device,publish_growth, apply_rebrand, testflight, listing_push, publish_review_branch, apply_aso, resume_aso_videos, submit_review, store_assets, swap_to_201]
+  ask_first: [merge_reading_release, publish_reading_source, merge_streak_release, apply_streak_listing, publish_streak_source, create_version, cancel_review, publish_account_branch,enable_apple_account,prepare_account_device,publish_growth, apply_rebrand, testflight, listing_push, publish_review_branch, apply_aso, resume_aso_videos, submit_review, store_assets, swap_to_201]
 capabilities:
   - ~/projects/CAPABILITIES.md (mac-run native execution)
   - ~/projects/my-ai-brain/playbooks/interaction-verification.md

@@ -6,6 +6,7 @@ struct NoteEditorView: View {
     let chapter: Int
     let verse: Int
     let verseText: String
+    var translation = "KJV"
     @Binding var isPresented: Bool
     @StateObject private var highlights = HighlightService.shared
     @State private var note = ""
@@ -16,6 +17,7 @@ struct NoteEditorView: View {
         NavigationStack {
             List {
                 Section {
+                    Text(translation).font(.caption).foregroundStyle(.secondary)
                     Text(verseText).font(.system(.body, design: .serif)).lineSpacing(4)
                         .textSelection(.enabled)
                     Button { showShare = true } label: {
@@ -45,7 +47,7 @@ struct NoteEditorView: View {
                             highlights.updateHighlight(id: highlight.id, color: color, note: note)
                         } else {
                             highlights.addHighlight(book: book, chapter: chapter, verse: verse,
-                                                    verseText: verseText, color: color, note: note)
+                                                    verseText: verseText, translation: translation, color: color, note: note)
                         }
                         isPresented = false
                     }.accessibilityIdentifier("note.save")
@@ -53,7 +55,7 @@ struct NoteEditorView: View {
             }
         }
         .sheet(isPresented: $showShare) {
-            ScriptureShareView(verse: BibleVerse(book: book, chapter: chapter, verse: verse, text: verseText))
+            ScriptureShareView(verse: BibleVerse(book: book, chapter: chapter, verse: verse, text: verseText, translation: translation))
         }
         .onAppear {
             note = highlight?.note ?? ""

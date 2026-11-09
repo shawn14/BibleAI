@@ -1,4 +1,43 @@
-# Waiting for review — November 9, 2026
+# BibleAI 2.0.4 (12) TestFlight candidate — November 9, 2026
+
+All four iPhone simulator journeys passed on the versioned Today reading source
+`b5b7cf2`. Independent QA checked all 64 screenshots. The Mac release lane
+verifies the signed IPA and uploads it to App Store Connect. Use `builds_list`
+for Apple’s processing and internal testing state. [QA sign-off](docs/testing/build12-qa-signoff.md).
+
+## Daily reading feature branch — November 9, 2026
+
+- `codex/todays-reading` builds Continue today’s reading on The Bible tab. It opens the first
+  unfinished day of the most recently used active plan. Chapter visits from Plans and Today
+  share a cursor. Shared passages, including picker navigation inside them, preserve the
+  reader’s personal verse and preferred edition.
+- The translation menu switches between KJV and World English Bible at the same reference.
+  Each edition has its own chapter cache and saved notes. Older clients continue to read
+  the original KJV iCloud key. WEB sharing includes its own text and artwork and labels the
+  existing KJV invitation. All five single-chapter books returned complete chapters in
+  both editions in the live provider check.
+- Four prepared guides cover Matthew 1–2 and Luke 1–2 in Gospel Tour. They also open
+  from verse study. Readers can save guides and generated studies to the searchable,
+  device-local library. The feature review checked all four guides against their sources.
+- The [iPhone 17 Pro run](https://github.com/shawn14/BibleAI/actions/runs/42668570788)
+  passed all four native journeys at `5ad224b`. Its Today test quit on Matthew 2, resumed
+  it, reopened the next chapter initially read from Plans, marked the day complete, and
+  saw Gospel Tour Day 2 after quitting again. The saved Matthew guide reopened with its
+  WEB quotation. Local `reading_core_test`, `sync_logic_test` and `growth_core_test` passed.
+- The [final hosted run](https://github.com/shawn14/BibleAI/actions/runs/42673219952/attempts/3)
+  passed all four iPhone simulator journeys at `e304229`. An iPhone SE (3rd generation)
+  running iOS 18.6 previously showed John 3:17 after selecting John 3:16. It now displays
+  John 3:16 after search, switching editions and a cold launch. On the same SE, Today
+  resumed Matthew 2, picked up Luke 1 from Plans and advanced to Day 2 after explicit
+  completion. The saved Matthew guide reopened with its WEB quotation. The three iPhone
+  17 Pro journeys passed for the reader, Apple sign-in cancellation, and system sharing.
+  The live-provider model checks also passed. A separate Mac run reached its 30-minute
+  limit after the reader test passed and removed its disposable simulator.
+- These changes are on the feature branch for a future release. The existing 2.0.3
+  submission is separate. Physical Apple Intelligence generation and two-device iCloud
+  sync remain unverified.
+
+## 2.0.3 submitted for review — November 9, 2026
 
 - Apple accepted **BibleAI: Scroll Scripture 2.0.3 (11)** for review. At 11:14 a.m. CST,
   App Store Connect returned WAITING_FOR_REVIEW on the version and its review item, build

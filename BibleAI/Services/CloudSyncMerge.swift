@@ -6,7 +6,10 @@ import Foundation
 enum CloudSyncMerge {
     typealias Tombstones = [String: Double]
 
-    static func verseKey(_ h: Highlight) -> String { "\(h.book)|\(h.chapter)|\(h.verse)" }
+    static func verseKey(_ h: Highlight) -> String {
+        let passage = "\(h.book)|\(h.chapter)|\(h.verse)"
+        return h.citationEdition == "KJV" ? passage : "\(passage)|\(h.citationEdition)"
+    }
 
     /// One saved verse per reference; the most recently edited copy wins (its note and color).
     static func highlights(_ a: [Highlight], _ b: [Highlight], deleted: Tombstones) -> [Highlight] {
