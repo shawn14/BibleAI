@@ -1,4 +1,29 @@
-# Waiting for review — November 9, 2026
+# Daily reading feature branch — November 9, 2026
+
+- `codex/todays-reading` builds Continue today’s reading on The Bible tab. It opens the first
+  unfinished day of the most recently used active plan. Chapter visits from Plans and Today
+  share a cursor. Shared passages, including picker navigation inside them, preserve the
+  reader’s personal verse and preferred edition.
+- The translation menu switches between KJV and World English Bible at the same reference.
+  Each edition has its own chapter cache and saved notes. Older clients continue to read
+  the original KJV iCloud key. WEB sharing includes its own text and artwork and labels the
+  existing KJV invitation. All five single-chapter books returned complete chapters in
+  both editions in the live provider check.
+- Four prepared guides cover Matthew 1–2 and Luke 1–2 in Gospel Tour. They also open
+  from verse study. Readers can save guides and generated studies to the searchable,
+  device-local library. The feature review checked all four guides against their sources.
+- The [iPhone 17 Pro run](https://github.com/shawn14/BibleAI/actions/runs/42668570788)
+  passed all four native journeys at `5ad224b`. Its Today test quit on Matthew 2, resumed
+  it, reopened the next chapter initially read from Plans, marked the day complete, and
+  saw Gospel Tour Day 2 after quitting again. The saved Matthew guide reopened with its
+  WEB quotation. Local `reading_core_test`, `sync_logic_test` and `growth_core_test` passed.
+- On iOS 18.6 the pre-fix SE recording showed John 3:17 after selecting John 3:16.
+  `e304229` explicitly centers the selected verse after search dismissal. The live-provider
+  model checks passed at this revision. Hosted run 42673219952 received two workflow-level
+  internal server errors during GitHub’s Actions outage. Next: verify the fix on the SE.
+  Physical Apple Intelligence generation and two-device iCloud sync remain separate checks.
+
+## 2.0.3 submitted for review — November 9, 2026
 
 - Apple accepted **BibleAI: Scroll Scripture 2.0.3 (11)** for review. At 11:14 a.m. CST,
   App Store Connect returned WAITING_FOR_REVIEW on the version and its review item, build
