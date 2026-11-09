@@ -163,4 +163,11 @@ if __name__ == '__main__':
     kinds = sys.argv[4].split(',') if len(sys.argv) > 4 else ['iphone', 'medium', 'ipad']
     allp = []
     for k in kinds: allp += render(k)
+    if kinds == ['iphone', 'medium', 'ipad']:
+        board = Image.new('RGB', (1320, 1545), '#F5F5F7')
+        for index, screenshot in enumerate(allp):
+            with Image.open(screenshot) as shot:
+                shot.thumbnail((206, 490))
+                board.paste(shot, ((index % 6) * 220 + 7, (index // 6) * 515 + 12))
+        board.save(OUT / 'preview-board.png')
     print('\n'.join(map(str, allp)))
