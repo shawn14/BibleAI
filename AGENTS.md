@@ -21,12 +21,16 @@ Project BibleAI.xcodeproj; CocoaPods workspace BibleAI.xcworkspace; existing Pod
 Use existing RevenueCat integration/config identifiers; never guess product ids, credentials or prices.
 Source declarations in old README are historical, not proof of current behavior.
 
-ScriptureFeedModel/ScriptureChapterStore fetch actual KJV chapters from bible-api.com, cache chapters,
-and keep a bounded in-memory window. Never invent Scripture or load a complete monolith at launch.
-Cache only covers opened chapters; do not claim full offline availability. The active verse-study
-path is AppleStudy in VerseStudySheet.swift, using on-device FoundationModels on eligible iOS 26
-devices. AIService is legacy code, not that active study path. Device study and two-device iCloud
-sync still need real-device checks. Never commit secrets or manufacture AI answers.
+ScriptureFeedModel/ScriptureChapterStore fetch actual KJV and World English Bible chapters from
+bible-api.com, cache opened chapters per edition, and keep a bounded in-memory window. Never
+invent Scripture or load a complete Bible at launch. Today resumes the next unfinished day and
+its last opened chapter. Received passages preserve the personal bookmark. Existing public
+invitations open the KJV reference. WEB shares retain the WEB text and artwork.
+
+Gospel Tour day one has four prepared chapter guides. Generated studies use AppleStudy and
+on-device FoundationModels on eligible iOS 26 devices. Saved studies use an atomic device-local
+file. KJV highlights retain the legacy iCloud key and WEB uses a separate key for old-client
+compatibility. Device generation and two-device iCloud sync still need real-device checks.
 
 ## Verification and execution
 

@@ -95,7 +95,7 @@ final class ReaderJourneyTests: XCTestCase {
         app.scrollViews["reader.feed"].swipeUp()
         XCTAssertTrue(app.buttons["reader.returnToPlace"].exists)
         app.buttons["reader.passage"].tap()
-        let beginning = app.buttons.containing(.staticText, identifier: "The Beginning").firstMatch
+        let beginning = app.buttons["passage.shortcut.Genesis|1|1"]
         XCTAssertTrue(beginning.waitForExistence(timeout: 5))
         beginning.tap()
         XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].waitForExistence(timeout: 20))

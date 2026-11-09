@@ -48,7 +48,7 @@ struct StudySaveButton: View {
         let saved = library.studies.contains { $0.matches(study) }
         Button(saved ? "Study saved" : "Save study", systemImage: saved ? "bookmark.fill" : "bookmark") {
             do { try library.save(study); error = nil }
-            catch { error = "Couldn’t save this study. Try again." }
+            catch { self.error = "Couldn’t save this study. Try again." }
         }
         .disabled(saved)
         .accessibilityIdentifier("study.save")
