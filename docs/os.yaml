@@ -50,7 +50,7 @@ canonical_scripts:
   publish_account_branch: git push --set-upstream origin codex/standard-account
   publish_review_branch: git push --set-upstream origin claude/scroll-parity
   verify_interactions: python3 ~/projects/my-ai-brain/packs/interaction-qa/qa.py check --repo .
-  testflight: cd ~/projects/fastlane-configs && fastlane beta app:bibleai
+  testflight: fastlane beta_committed version:2.0.3 build:11
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json

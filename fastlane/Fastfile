@@ -50,6 +50,50 @@ platform :ios do
     UI.success("✅ Build uploaded to TestFlight!")
   end
 
+  desc "Archive the committed BibleAI version, verify the signed IPA and upload it"
+  lane :beta_committed do |options|
+    require 'json'
+    require 'shellwords'
+    require 'xcodeproj'
+    root = File.expand_path('..', __dir__)
+    shared = File.expand_path('~/projects/fastlane-configs/scripts')
+    scheme = 'BibleAI'
+    project = File.join(root, 'BibleAI.xcodeproj')
+    version = options.fetch(:version).to_s
+    build = options.fetch(:build).to_s
+    args = ['ruby', File.join(shared, 'verify_release_source.rb'), '--project', project,
+            '--version', version, '--build', build, '--ancestor', '57c7e65']
+    source = JSON.parse(sh(Shellwords.join(args))).fetch('source_sha')
+    signoff = File.join(root, 'docs', 'testing', "build#{build}-qa-signoff.md")
+    UI.user_error!("Release QA sign-off required for build #{build}") unless File.file?(signoff)
+    target = Xcodeproj::Project.open(project).targets.find { |t| t.name == scheme }
+    release = target.build_configurations.find { |c| c.name == 'Release' }.build_settings
+    bundle = release.fetch('PRODUCT_BUNDLE_IDENTIFIER')
+    out = File.join(root, 'build', "candidate-#{version}-#{build}")
+    ipa = build_app(
+      workspace: File.join(root, 'BibleAI.xcworkspace'), scheme: scheme,
+      export_method: 'app-store', output_directory: out, archive_path: File.join(out, 'BibleAI.xcarchive'),
+      derived_data_path: File.join(root, 'build', 'reader'), xcargs: '-jobs 2',
+      export_options: { signingStyle: 'manual', teamID: release.fetch('DEVELOPMENT_TEAM'),
+                        manageAppVersionAndBuildNumber: false,
+                        provisioningProfiles: { bundle => release.fetch('PROVISIONING_PROFILE_SPECIFIER') } }
+    )
+    sh(Shellwords.join(args + ['--expected-sha', source]))
+    checks = [
+      { plist_key: 'CFBundleIdentifier', contains: bundle },
+      { plist_key: 'CFBundleVersion', contains: build },
+      { plist_key: 'CFBundleShortVersionString', contains: version },
+      { entitlement: 'com.apple.developer.applesignin' },
+      { entitlement: 'com.apple.developer.ubiquity-kvstore-identifier' },
+    ]
+    sh(Shellwords.join(['ruby', File.join(shared, 'verify_ipa.rb'), '--ipa', ipa, '--spec-json', checks.to_json]))
+    transporter = '/Applications/Transporter.app/Contents/itms'
+    ENV['FASTLANE_ITMS_TRANSPORTER_PATH'] ||= transporter if File.directory?(transporter)
+    key = app_store_connect_api_key(key_id: '6T6GWQ6BW7', issuer_id: '69a6de83-d381-47e3-e053-5b8c7c11a4d1',
+                                    key_filepath: File.expand_path('~/.appstoreconnect/private_keys/AuthKey_6T6GWQ6BW7.p8'))
+    upload_to_testflight(ipa: ipa, app_identifier: bundle, api_key: key, skip_waiting_for_build_processing: true)
+  end
+
   desc "Build and upload to App Store"
   lane :release do
     # Increment build number
