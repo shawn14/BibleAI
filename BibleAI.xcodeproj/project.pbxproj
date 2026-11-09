@@ -33,6 +33,7 @@
 		9E699A0DDE221FD2249F13DC /* ReadingPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6400A3B7575E8311BF998985 /* ReadingPlace.swift */; };
 		BA1000001 /* BibleAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000001 /* BibleAIApp.swift */; };
 		BA1000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000002 /* ContentView.swift */; };
+		BC8FA29B9400000000000001 /* GospelTourGuides.json in Resources */ = {isa = PBXBuildFile; fileRef = BC8FA29B9400000000000002 /* GospelTourGuides.json */; };
 		BA1000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA2000003 /* Assets.xcassets */; };
 		BA1000004 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000005 /* Message.swift */; };
 		BA1000005 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2000006 /* Conversation.swift */; };
@@ -104,6 +105,7 @@
 		AC5160A07B29470ABA269CD5 /* ReadingPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlan.swift; sourceTree = "<group>"; };
 		BA2000001 /* BibleAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleAIApp.swift; sourceTree = "<group>"; };
 		BA2000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BC8FA29B9400000000000002 /* GospelTourGuides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/GospelTourGuides.json; sourceTree = "<group>"; };
 		BA2000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BA2000004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA2000005 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				BA5000006 /* ViewModels */,
 				BA5000007 /* Services */,
 				BA5000008 /* Utilities */,
+				BC8FA29B9400000000000002 /* GospelTourGuides.json */,
 				BA2000003 /* Assets.xcassets */,
 				EF312009A1A2000000000004 /* ScriptureIndex */,
 				BA2000004 /* Info.plist */,
@@ -426,6 +429,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC8FA29B9400000000000001 /* GospelTourGuides.json in Resources */,
 				BA1000003 /* Assets.xcassets in Resources */,
 				EF312009A1A2000000000003 /* ScriptureIndex in Resources */,
 			);

@@ -8,7 +8,8 @@ app:
   project: BibleAI.xcodeproj
   workspace: BibleAI.xcworkspace
 data_sources:
-  - https://bible-api.com/ (KJV and World English Bible, requested one chapter at a time)
+  - Bundled SQLite index of the KJV and World English Bible from the bible-api.com source data; one chapter or search page per query
+  - https://bible-api.com/ (chapter fallback)
   - On-device saved reading position, highlights, notes and reading-plan progress
   - On-device FoundationModels verse study on eligible iOS 26 devices (device proof outstanding)
   - Existing RevenueCat store products and eligibility (purchase/restore proof outstanding)

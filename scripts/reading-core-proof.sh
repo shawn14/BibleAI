@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 [[ -n "${MAC_RUNNER_JOB_ID:-}" ]] || { echo 'Use mac-run BibleAI reading_core_test'; exit 1; }
+python3 scripts/tests/search/corpus.py
+python3 scripts/tests/reading/check-gospel-guides.py
 mkdir -p build
 binary=$(mktemp build/reading-core.XXXXXX)
 trap 'rm -f "$binary"' EXIT

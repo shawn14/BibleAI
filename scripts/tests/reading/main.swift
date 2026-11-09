@@ -69,6 +69,14 @@ struct ReadingProof {
         let jude = try await store.chapter(book: "Jude", number: 1, edition: .web)
         try check(jude.count == 25 && jude.last?.verse == 25, "all 25 verses of a single-chapter book are readable")
         let index = ScriptureIndex(file: URL(fileURLWithPath: "BibleAI/ScriptureIndex/scripture.sqlite3"))
+        for ref in shortEntries {
+            guard let expected = ref.verseRange else { throw Failure(message: "missing range") }
+            for edition in [ReaderEdition.kjv, .web] {
+                let chapter = try await index.chapter(book: ref.book, number: ref.startChapter, edition: edition)
+                let actual = chapter.filter { expected.contains($0.verse) }
+                try check(actual.map(\.verse) == Array(expected), "complete short passage: " + ref.displayText + " " + edition.rawValue)
+            }
+        }
         let kjvHits = try await index.search("ONLY, begotten Son", edition: .kjv)
         try check(kjvHits.verses.contains { $0.place == john && $0.translation == "KJV" },
                   "KJV phrase lookup finds John 3:16 across case and punctuation")

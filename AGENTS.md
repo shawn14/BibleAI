@@ -21,13 +21,16 @@ Project BibleAI.xcodeproj; CocoaPods workspace BibleAI.xcworkspace; existing Pod
 Use existing RevenueCat integration/config identifiers; never guess product ids, credentials or prices.
 Source declarations in old README are historical, not proof of current behavior.
 
-ScriptureFeedModel/ScriptureChapterStore fetch actual KJV and World English Bible chapters from
-bible-api.com, cache opened chapters per edition, and keep a bounded in-memory window. Never
-invent Scripture or load a complete Bible at launch. Today resumes the next unfinished day and
-its last opened chapter. Received passages preserve the personal bookmark. Existing public
-invitations open the KJV reference. WEB shares retain the WEB text and artwork.
+The reader opens one chapter at a time from the bundled KJV and WEB index. Never load the
+whole Bible into memory. Search previews and received passages preserve the personal reading
+place and edition; direct reference navigation sets the reading place. The original public plan
+invitations retain their KJV landing pages. Before distributing the bundled KJV in the UK,
+confirm digital redistribution rights or review territorial availability; see BibleAI/ScriptureIndex/NOTICE.txt.
 
-Gospel Tour day one has four prepared chapter guides. Generated studies use AppleStudy and
+Five minutes starts an eight-day Gospel passage plan with one reflection per day; ten minutes
+starts the one-chapter Proverbs plan. Preserve the four original plan IDs and saved progress.
+Today resumes the next unfinished day and its last opened chapter and shows the current streak.
+All 23 chapters of the eight-day Gospel Tour have prepared guides and offline related passages. Generated studies use AppleStudy and
 on-device FoundationModels on eligible iOS 26 devices. Saved studies use an atomic device-local
 file. KJV highlights retain the legacy iCloud key and WEB uses a separate key for old-client
 compatibility. Device generation and two-device iCloud sync still need real-device checks.
