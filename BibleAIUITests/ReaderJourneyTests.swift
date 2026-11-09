@@ -125,7 +125,8 @@ final class ReaderJourneyTests: XCTestCase {
                             evaluatedWith: app.staticTexts["The Beginning"])], timeout: 5), .completed)
         exact.tap()
         let john = app.buttons["reader.verse.John|3|16"]
-        XCTAssertTrue(john.waitForExistence(timeout: 30))
+        let selectedVerse = NSPredicate(format: "isHittable == true AND label CONTAINS %@", "only begotten Son")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: selectedVerse, evaluatedWith: john)], timeout: 30), .completed)
         app.buttons["reader.translation"].tap()
         app.buttons["World English Bible"].tap()
         let web = NSPredicate(format: "isHittable == true AND label CONTAINS %@", "one and only Son")

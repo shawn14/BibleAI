@@ -11,6 +11,7 @@ struct ScriptureReaderView: View {
     @ObservedObject private var plans = ReadingPlanService.shared
     @State private var today: ReadingPlanService.PlanReading?
     @State private var sheet: ReaderSheet?
+    @State private var pickedPassage: ScriptureFeedModel.ScrollRequest?
     @State private var showSettings = false
     @State private var pendingRemoval: Highlight?
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -77,13 +78,23 @@ struct ScriptureReaderView: View {
             }
             .task(id: isActive) { if isActive { await openRequestedPassage() } }
             .onChange(of: requestedPlace) { _, _ in if isActive { Task { await openRequestedPassage() } } }
-            .onChange(of: model.visibleID) { _, _ in Task { await model.didScroll() } }
-            .sheet(item: $sheet) { destination in
+            .onChange(of: model.visibleID) { _, _ in
+                if sheet != .passage && pickedPassage == nil { Task { await model.didScroll() } }
+            }
+            .sheet(item: $sheet, onDismiss: {
+                // Dismissing the search keyboard changes the usable page height on smaller phones.
+                if let pickedPassage, model.scrollRequest == pickedPassage { model.focus(pickedPassage.place) }
+                pickedPassage = nil
+            }) { destination in
                 switch destination {
                 case .share:
                     if let verse = model.current { ScriptureShareView(verse: verse) }
                 case .passage:
-                    PassagePickerView { place in await model.open(place, asSharedPassage: model.isReadingSharedPassage) }
+                    PassagePickerView { place in
+                        guard await model.open(place, asSharedPassage: model.isReadingSharedPassage) else { return false }
+                        pickedPassage = model.scrollRequest
+                        return true
+                    }
                 case .study:
                     if let verse = model.current { VerseStudySheet(verse: verse) }
                 case .note:
@@ -126,58 +137,66 @@ struct ScriptureReaderView: View {
 
     private var reader: some View {
         GeometryReader { geometry in
-        ScrollView(.vertical) {
-            LazyVStack(spacing: 0) {
-                ForEach(model.verses, id: \.passageID) { verse in
-                    VStack(spacing: 24) {
-                        Spacer(minLength: 20)
-                        Text(verse.reference)
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(.secondary)
-                        Button { sheet = .study } label: {
-                            Text(verse.text)
-                                .font(.system(size: scaledSize * textSize / 28 * padScale, design: useSerif ? .serif : .default))
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility5)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(7)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .foregroundStyle(.primary)
-                                .frame(maxWidth: .infinity)
+            ScrollViewReader { proxy in
+                ScrollView(.vertical) {
+                    LazyVStack(spacing: 0) {
+                        ForEach(model.verses, id: \.passageID) { verse in
+                            VStack(spacing: 24) {
+                                Spacer(minLength: 20)
+                                Text(verse.reference)
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(.secondary)
+                                Button { sheet = .study } label: {
+                                    Text(verse.text)
+                                        .font(.system(size: scaledSize * textSize / 28 * padScale, design: useSerif ? .serif : .default))
+                                        .dynamicTypeSize(...DynamicTypeSize.accessibility5)
+                                        .multilineTextAlignment(.center)
+                                        .lineSpacing(7)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("\(verse.reference). \(verse.text)")
+                                .accessibilityHint("Opens verse study")
+                                .accessibilityIdentifier("reader.verse.\(verse.passageID)")
+                                .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
+                                Text(model.edition.name).font(.caption).foregroundStyle(.tertiary)
+                                Spacer(minLength: 20)
+                                // Only on the first verse: on later pages it peeked in under the status bar.
+                                Label("Swipe to keep reading", systemImage: "chevron.up")
+                                    .font(.caption).foregroundStyle(.secondary)
+                                    .padding(.bottom, 12)
+                                    .opacity(verse.passageID == model.verses.first?.passageID ? 1 : 0)
+                            }
+                            .padding(.leading, 28).padding(.trailing, 60)
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: geometry.size.height)
+                            .id(verse.passageID)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("\(verse.reference). \(verse.text)")
-                        .accessibilityHint("Opens verse study")
-                        .accessibilityIdentifier("reader.verse.\(verse.passageID)")
-                        .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
-                        Text(model.edition.name).font(.caption).foregroundStyle(.tertiary)
-                        Spacer(minLength: 20)
-                        // Only on the first verse: on later pages it peeked in under the status bar.
-                        Label("Swipe to keep reading", systemImage: "chevron.up")
-                            .font(.caption).foregroundStyle(.secondary)
-                            .padding(.bottom, 12)
-                            .opacity(verse.passageID == model.verses.first?.passageID ? 1 : 0)
+                        if let error = model.nextError {
+                            VStack(spacing: 12) {
+                                Text(error).font(.callout).foregroundStyle(.secondary)
+                                Button("Load Next Chapter") { Task { await model.loadNext() } }
+                            }.padding()
+                        } else if model.loadingNext {
+                            ProgressView("Opening next chapter…").padding()
+                        }
                     }
-                    .padding(.leading, 28).padding(.trailing, 60)
-                    .frame(maxWidth: .infinity)
-                    .frame(minHeight: geometry.size.height)
-                    .id(verse.passageID)
+                    .scrollTargetLayout()
                 }
-                if let error = model.nextError {
-                    VStack(spacing: 12) {
-                        Text(error).font(.callout).foregroundStyle(.secondary)
-                        Button("Load Next Chapter") { Task { await model.loadNext() } }
-                    }.padding()
-                } else if model.loadingNext {
-                    ProgressView("Opening next chapter…").padding()
+                .scrollIndicators(.hidden)
+                .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
+                .scrollPosition(id: $model.visibleID, anchor: .center)
+                .task(id: model.scrollRequest) {
+                    guard let target = model.scrollRequest, sheet != .passage else { return }
+                    await Task.yield()
+                    guard !Task.isCancelled, model.scrollRequest == target else { return }
+                    proxy.scrollTo(target.place.id, anchor: .center)
                 }
+                .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
+                .accessibilityIdentifier("reader.feed")
             }
-            .scrollTargetLayout()
-        }
-        .scrollIndicators(.hidden)
-        .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-        .scrollPosition(id: $model.visibleID)
-        .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
-        .accessibilityIdentifier("reader.feed")
         }
     }
 

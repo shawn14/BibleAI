@@ -86,6 +86,12 @@ enum ScriptureError: LocalizedError {
 @MainActor
 final class ScriptureFeedModel: ObservableObject {
     @Published private(set) var verses: [BibleVerse] = []
+    struct ScrollRequest: Equatable {
+        let place: ReadingPlace
+        let revision: UUID
+    }
+
+    @Published private(set) var scrollRequest: ScrollRequest?
     @Published var visibleID: String?
     @Published private(set) var loading = false
     @Published private(set) var loadingNext = false
@@ -147,14 +153,20 @@ final class ScriptureFeedModel: ObservableObject {
             isReadingSharedPassage = asSharedPassage && savedPlace != nil
             edition = targetEdition
             verses = result
-            visibleID = selected.passageID
-            save(selected)
+            focus(selected.place)
             return true
         } catch {
             guard generation == request else { return false }
             self.error = error.localizedDescription
             return false
         }
+    }
+
+    func focus(_ place: ReadingPlace) {
+        guard let verse = verses.first(where: { $0.place == place }) else { return }
+        visibleID = verse.passageID
+        scrollRequest = ScrollRequest(place: place, revision: UUID())
+        save(verse)
     }
 
     func didScroll() async {
