@@ -12,14 +12,19 @@ INK, MUTED = (28, 26, 23), (110, 104, 96)
 TOP, BOTTOM = (251, 248, 243), (236, 229, 216)
 
 STORY = [
-    ('reader', 'Scroll\nScripture.', 'The Bible, one verse at a time.'),
+    ('habit', 'Finish today’s\nreading.', 'See your streak.'),
+    ('progress', 'Know where to\nstart tomorrow.', 'Pick up at your next plan reading.'),
+    ('reader', 'One verse\nat a time.', 'Read the King James Version at your pace.'),
     ('study', 'Explore\nthe passage.', 'Study tools on Apple Intelligence devices.'),
-    ('habit', 'Build a habit\nthat lasts.', 'Finish a reading. Watch your streak grow.'),
-    ('plans', 'A little reading.\nEvery day.', 'Four guided plans. One clear next step.'),
-    ('share', 'Share a verse\nyou love.', 'Send Scripture as a beautiful card.'),
-    ('account', 'Your account.\nYour choice.', 'Optional Sign in with Apple. Delete anytime.'),
+    ('share', 'Share a verse\nyou love.', 'Send Scripture as a verse card.'),
+    ('account', 'Your account.\nYour choice.', 'Optional Sign in with Apple.'),
 ]
-IPAD = STORY[:5] + [('invite', 'Read with\nsomeone.', 'Invite a friend to follow a plan with you.')]
+IPAD = [
+    STORY[0],
+    ('plans', 'Choose your\nreading plan.', 'Follow the Gospels, Psalms, Proverbs, or New Testament.'),
+    *STORY[2:5],
+    ('invite', 'Read with\nsomeone.', 'Invite a friend to follow a plan with you.'),
+]
 
 
 def font(name, size, wght):
@@ -158,4 +163,11 @@ if __name__ == '__main__':
     kinds = sys.argv[4].split(',') if len(sys.argv) > 4 else ['iphone', 'medium', 'ipad']
     allp = []
     for k in kinds: allp += render(k)
+    if kinds == ['iphone', 'medium', 'ipad']:
+        board = Image.new('RGB', (1320, 1545), '#F5F5F7')
+        for index, screenshot in enumerate(allp):
+            with Image.open(screenshot) as shot:
+                shot.thumbnail((206, 490))
+                board.paste(shot, ((index % 6) * 220 + 7, (index // 6) * 515 + 12))
+        board.save(OUT / 'preview-board.png')
     print('\n'.join(map(str, allp)))
