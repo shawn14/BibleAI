@@ -15,21 +15,23 @@ AppleCharts research stopped at missing CLI dependencies; no review counts were 
 
 - The Bible / Plans / Saved, using native SwiftUI tabs, sheets, search, SF Symbols, and semantic
   colors. Scripture is the primary reading surface; controls use clear primary/secondary weight.
-- One verse at a time, restored reading place, reference search, save, notes, and sharing.
-  The reader offers KJV and World English Bible, with an edition-specific cache of opened
-  chapters. Switching editions keeps the current verse. The publisher permits redistribution
+- One verse at a time, restored reading place, reference and phrase search, save, notes, and sharing.
+  The reader offers KJV and World English Bible, with an offline index queried one chapter or page of results at a time. Switching editions keeps the current verse. The publisher permits redistribution
   of the unmodified WEB text. [World English Bible rights](https://ebible.org/engwebp/copyright.htm).
 - Continue today’s reading opens the first unfinished day of the most recently read active plan
-  at the chapter last opened on this device. Shared passages keep the personal reading place.
-  Four reading plans retain saved progress, day completion, and a reading streak. Typography,
+  at the chapter last opened on this device, beside the current streak. Shared passages and
+  word-search previews keep the personal reading place and edition.
+  The original four plans retain saved progress, day completion, and a reading streak. Typography,
   spacing, and separators organize content. Containers are reserved for controls and overlays.
 - Onboarding follows the reference funnel, with personal reading preferences and a hold-to-commit
   step. The superseded three-page first pass is not a product lock. Free reading remains
   accessible by closing Premium; store trial pages appear only for eligible products.
 - Keep BibleAI branding. Show only real testimonials; the reviews page stays hidden while its
   source is empty. Prices and trial length come from RevenueCat/store products, never invented copy.
-- Gospel Tour day one includes prepared guides for Matthew 1–2 and Luke 1–2. Readers can save
-  these guides and generated studies in their device-local study library.
+- Five minutes selects a separate eight-day plan: two to four verses and one reflection per day.
+  Ten minutes selects one chapter of Proverbs. Both plans are available from Plans.
+- All 23 chapters of the eight-day Gospel Tour have an offline guide and a related passage that
+  opens in the same edition. Readers can save the commentary to their device-local study library.
 - Generated verse study uses AppleStudy in VerseStudySheet.swift and on-device FoundationModels on eligible
   iOS 26 devices. Legacy AIService is not the current study path. Study is commentary, not a
   validated original-language interlinear source.

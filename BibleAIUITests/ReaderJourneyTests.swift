@@ -149,6 +149,8 @@ final class ReaderJourneyTests: XCTestCase {
             XCTAssertTrue(app.buttons["reader.verse.Genesis|1|1"].waitForExistence(timeout: 10))
             XCTAssertFalse(back.exists)
         }
+        app.buttons["reader.translation"].tap()
+        app.buttons["King James Version"].tap()
     }
 
     func testTodayTranslationAndStudyLibrary() throws {
