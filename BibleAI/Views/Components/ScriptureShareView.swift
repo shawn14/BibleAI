@@ -26,7 +26,9 @@ struct ScriptureShareView: View {
                         Text("Paper").tag(false)
                         Text("Night").tag(true)
                     }.pickerStyle(.segmented).accessibilityIdentifier("share.theme")
-                    Text("Includes this verse, its reference, and a link to read it in BibleAI. Your notes stay private.")
+                    Text(verse.translation == "KJV"
+                         ? "Includes this verse, its reference, and a link to read it in BibleAI. Your notes stay private."
+                         : "Shares the \(verse.translation) text and image. The BibleAI invitation opens the same passage in KJV.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }.padding(24)
             }
@@ -62,7 +64,10 @@ struct ScriptureShareView: View {
         if let image = renderer.uiImage { items.append(image) }
         else { message = "The artwork could not be created. You can still share the verse as text." }
         var text = "\(verse.text)\n\n\(verse.fullReference)\n\nBibleAI"
-        if let link { text += "\n\(link.webURL.absoluteString)" }
+        if let link {
+            if verse.translation != "KJV" { text += "\nRead this passage in KJV:" }
+            text += "\n\(link.webURL.absoluteString)"
+        }
         else { message = "A reading link is unavailable for this passage. The verse can still be shared." }
         items.append(text)
         if let link { GrowthStore.shared.record(.sharePresented, for: link) }

@@ -102,6 +102,91 @@ final class ReaderJourneyTests: XCTestCase {
         exerciseAccount(app)
     }
 
+    func testTodayTranslationAndStudyLibrary() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["-hasCompletedOnboarding", "YES"]
+        app.launch()
+        let passage = app.buttons["reader.passage"]
+        XCTAssertTrue(passage.waitForExistence(timeout: 15))
+        passage.tap()
+        let field = app.searchFields.firstMatch
+        field.tap()
+        field.typeText("John 3:16")
+        let exact = app.buttons["passage.openReference"]
+        XCTAssertTrue(exact.waitForExistence(timeout: 8))
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: NSPredicate(format: "exists == false"),
+                            evaluatedWith: app.staticTexts["The Beginning"])], timeout: 5), .completed)
+        exact.tap()
+        let john = app.buttons["reader.verse.John|3|16"]
+        XCTAssertTrue(john.waitForExistence(timeout: 30))
+        app.buttons["reader.translation"].tap()
+        app.buttons["World English Bible"].tap()
+        let web = NSPredicate(format: "isHittable == true AND label CONTAINS %@", "one and only Son")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: web, evaluatedWith: john)], timeout: 20), .completed)
+        app.terminate()
+        app.launch()
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: web, evaluatedWith: john)], timeout: 20), .completed)
+        capture("reader-web-resume")
+
+        tab("Plans", in: app).tap()
+        openPlan("Gospel Tour", in: app)
+        let start = app.buttons["plan.start"]
+        if !start.exists {
+            app.buttons["Plan Options"].tap()
+            app.buttons["Reset Progress"].tap()
+            app.buttons["Reset Progress"].tap()
+        }
+        XCTAssertTrue(start.waitForExistence(timeout: 5))
+        start.tap()
+        app.buttons["Done"].tap()
+        tab("The Bible", in: app).tap()
+        let today = app.buttons["reader.today"]
+        XCTAssertTrue(today.waitForExistence(timeout: 5) && today.label.contains("Day 1"))
+        today.tap()
+        let guide = app.buttons["chapter.guide"]
+        XCTAssertTrue(guide.waitForExistence(timeout: 25))
+        guide.tap()
+        let save = app.buttons["study.save"]
+        save.tap()
+        XCTAssertTrue(save.label.contains("saved"))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.buttons["Next chapter"].tap()
+        XCTAssertTrue(app.navigationBars["Matthew 2"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.buttons["chapter.guide"].waitForExistence(timeout: 25))
+        app.terminate()
+        app.launch()
+        today.tap()
+        XCTAssertTrue(app.navigationBars["Matthew 2"].waitForExistence(timeout: 8))
+        for title in ["Luke 1", "Luke 2"] {
+            let next = app.buttons["Next chapter"]
+            let enabled = NSPredicate(format: "isEnabled == true")
+            XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: enabled, evaluatedWith: next)], timeout: 25), .completed)
+            next.tap()
+            XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 8))
+        }
+        let finish = app.buttons["today.finish"]
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: NSPredicate(format: "isEnabled == true"),
+                          evaluatedWith: finish)], timeout: 25), .completed)
+        finish.tap()
+        XCTAssertTrue(app.staticTexts["streak.title"].waitForExistence(timeout: 5))
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(today.waitForExistence(timeout: 10) && today.label.contains("Day 2"))
+        capture("today-next-reading")
+        tab("Saved", in: app).tap()
+        let saved = app.buttons["saved.study.Matthew|1|1"]
+        XCTAssertTrue(saved.waitForExistence(timeout: 5) && saved.label.contains("WEB"))
+        saved.tap()
+        XCTAssertTrue(app.staticTexts["study.body"].label.contains("Luke 1:26–33"))
+        capture("saved-gospel-study")
+        tab("The Bible", in: app).tap()
+        app.buttons["reader.translation"].tap()
+        app.buttons["King James Version"].tap()
+        let kjv = NSPredicate(format: "isHittable == true AND label CONTAINS %@", "only begotten Son")
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: kjv, evaluatedWith: john)], timeout: 20), .completed)
+    }
+
     private func launchReader() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()

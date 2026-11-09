@@ -1,7 +1,7 @@
 name: BibleAI release journeys
 on:
   push:
-    branches: [codex/streak-listing]
+    branches: [codex/streak-listing, codex/todays-reading]
     paths:
       - 'BibleAI/**'
       - 'BibleAIUITests/**'
@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        journey: [testReadSaveNoteResumeAndSearch, testAppleSignInCancellation, testZShareAndInvitationJourney]
+        journey: [testReadSaveNoteResumeAndSearch, testAppleSignInCancellation, testZShareAndInvitationJourney, testTodayTranslationAndStudyLibrary]
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1

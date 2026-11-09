@@ -39,7 +39,7 @@ class HighlightService: ObservableObject {
 
     // MARK: - Highlight Management
 
-    func addHighlight(book: String, chapter: Int, verse: Int, verseText: String, color: HighlightColor, note: String? = nil) {
+    func addHighlight(book: String, chapter: Int, verse: Int, verseText: String, translation: String = "KJV", color: HighlightColor, note: String? = nil) {
         // Check if already highlighted
         if let existing = getHighlight(book: book, chapter: chapter, verse: verse) {
             // Update existing highlight
@@ -52,6 +52,7 @@ class HighlightService: ObservableObject {
             chapter: chapter,
             verse: verse,
             verseText: verseText,
+            translation: translation,
             color: color,
             note: note
         )
@@ -79,6 +80,7 @@ class HighlightService: ObservableObject {
                 chapter: updated.chapter,
                 verse: updated.verse,
                 verseText: updated.verseText,
+                translation: updated.translation,
                 color: color,
                 note: note ?? updated.note,
                 createdAt: updated.createdAt,
@@ -91,6 +93,7 @@ class HighlightService: ObservableObject {
                 chapter: updated.chapter,
                 verse: updated.verse,
                 verseText: updated.verseText,
+                translation: updated.translation,
                 color: updated.color,
                 note: note,
                 createdAt: updated.createdAt,

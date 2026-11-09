@@ -41,17 +41,20 @@ struct Highlight: Identifiable, Codable {
     let chapter: Int
     let verse: Int
     let verseText: String
+    let translation: String?
+    var citationEdition: String { translation ?? "KJV" }
     let color: HighlightColor
     var note: String?
     let createdAt: Date
     var updatedAt: Date
 
-    init(id: UUID = UUID(), book: String, chapter: Int, verse: Int, verseText: String, color: HighlightColor, note: String? = nil, createdAt: Date = Date(), updatedAt: Date = Date()) {
+    init(id: UUID = UUID(), book: String, chapter: Int, verse: Int, verseText: String, translation: String? = nil, color: HighlightColor, note: String? = nil, createdAt: Date = Date(), updatedAt: Date = Date()) {
         self.id = id
         self.book = book
         self.chapter = chapter
         self.verse = verse
         self.verseText = verseText
+        self.translation = translation
         self.color = color
         self.note = note
         self.createdAt = createdAt

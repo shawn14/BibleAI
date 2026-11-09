@@ -89,14 +89,14 @@ struct ScriptureReaderView: View {
                 case .note:
                     if let verse = model.current {
                         NoteEditorView(highlight: saved(verse), book: verse.book, chapter: verse.chapter,
-                                       verse: verse.verse, verseText: verse.text,
+                                       verse: verse.verse, verseText: verse.text, translation: verse.translation,
                                        isPresented: Binding(get: { sheet == .note }, set: { if !$0 { sheet = nil } }))
                     }
                 case .chapter:
                     if let verse = model.current,
                        let book = BibleBookInfo.allBooks.first(where: { $0.name == verse.book }) {
                         NavigationStack {
-                            ChapterReadingView(book: book, chapter: verse.chapter)
+                            ChapterReadingView(book: book, chapter: verse.chapter, edition: model.edition)
                                 .toolbar { ToolbarItem(placement: .confirmationAction) {
                                     Button("Done") { sheet = nil }
                                 } }
@@ -104,6 +104,10 @@ struct ScriptureReaderView: View {
                     }
                 }
             }
+            .alert("Couldn't open this passage", isPresented: Binding(
+                get: { model.error != nil && !model.verses.isEmpty && sheet == nil },
+                set: { if !$0 { model.error = nil } }
+            )) { Button("OK") { model.error = nil } } message: { Text(model.error ?? "") }
             .sheet(item: $today) { reading in
                 TodayReadingView(reading: reading) { today = $0 }.id(reading.id)
             }
@@ -145,7 +149,7 @@ struct ScriptureReaderView: View {
                         .accessibilityHint("Opens verse study")
                         .accessibilityIdentifier("reader.verse.\(verse.passageID)")
                         .frame(maxWidth: sizeClass == .regular ? 820 : .infinity)
-                        Text("King James Version").font(.caption).foregroundStyle(.tertiary)
+                        Text(model.edition.name).font(.caption).foregroundStyle(.tertiary)
                         Spacer(minLength: 20)
                         // Only on the first verse: on later pages it peeked in under the status bar.
                         Label("Swipe to keep reading", systemImage: "chevron.up")
@@ -180,11 +184,22 @@ struct ScriptureReaderView: View {
     /// Minimal top chrome: translation pill, passage button, options.
     private var topBar: some View {
         HStack(spacing: 10) {
-            Text("KJV")
-                .font(.caption.weight(.semibold))
-                .padding(.horizontal, 10).padding(.vertical, 5)
-                .overlay(Capsule().stroke(Color.primary.opacity(0.15)))
-                .accessibilityLabel("King James Version")
+            Menu {
+                ForEach(ReaderEdition.allCases, id: \.self) { edition in
+                    Button {
+                        Task { await model.switchEdition(edition) }
+                    } label: {
+                        if model.edition == edition { Label(edition.name, systemImage: "checkmark") }
+                        else { Text(edition.name) }
+                    }
+                }
+            } label: {
+                Label(model.edition.rawValue, systemImage: "chevron.down")
+                    .labelStyle(.titleAndIcon).font(.caption.weight(.semibold))
+                    .frame(minHeight: 44)
+            }
+            .accessibilityLabel("Translation, \(model.edition.name)")
+            .accessibilityIdentifier("reader.translation")
             Spacer(minLength: 0)
             Button { sheet = .passage } label: {
                 HStack(spacing: 5) {
@@ -223,7 +238,7 @@ struct ScriptureReaderView: View {
             Button {
                 if let highlight = saved(verse) { pendingRemoval = highlight }
                 else { highlights.addHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse,
-                                               verseText: verse.text, color: .yellow) }
+                                               verseText: verse.text, translation: verse.translation, color: .yellow) }
             } label: {
                 Image(systemName: saved(verse) == nil ? "heart" : "heart.fill")
                     .foregroundStyle(saved(verse) == nil ? Color.primary : Color.red)
@@ -249,7 +264,7 @@ struct ScriptureReaderView: View {
 
     private func openRequestedPassage() async {
         if let place = requestedPlace {
-            if await model.open(place, asSharedPassage: true) {
+            if await model.open(place, asSharedPassage: true, edition: .kjv) {
                 requestedPlace = nil
                 if let invite = GrowthStore.shared.acceptedInvitation, invite.readingPlace == place {
                     GrowthStore.shared.recordFirstReading(for: invite)
