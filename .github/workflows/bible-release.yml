@@ -22,13 +22,18 @@ jobs:
         journey: [testReadSaveNoteResumeAndSearch, testAppleSignInCancellation, testZShareAndInvitationJourney]
     steps:
       - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
       - name: Select Xcode and install locked dependencies
         run: |
           set -euo pipefail
           xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
           sudo xcode-select -s "$xcode/Contents/Developer"
           xcodebuild -version
-          pod install --deployment
+          pod_version=$(awk '/^COCOAPODS:/ {print $2}' Podfile.lock)
+          gem install cocoapods --version "$pod_version" --no-document
+          pod "_${pod_version}_" install --deployment
       - name: Run the native journey on a fresh iPhone simulator
         env:
           JOURNEY: ${{ matrix.journey }}
