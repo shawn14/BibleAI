@@ -10,10 +10,12 @@ extension BibleVerse {
 actor ScriptureChapterStore {
     static let shared = ScriptureChapterStore()
     private let directory: URL
+    private let index: ScriptureIndex
 
     init(directory: URL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("Scripture", isDirectory: true)) {
+        .appendingPathComponent("Scripture", isDirectory: true), index: ScriptureIndex = .shared) {
         self.directory = directory
+        self.index = index
     }
 
     /// The provider breaks some verses across lines ("darkness\nwas\nupon"); show each verse as one sentence.
@@ -24,6 +26,9 @@ actor ScriptureChapterStore {
     func chapter(book: String, number: Int, edition: ReaderEdition = .kjv) async throws -> [BibleVerse] {
         guard let info = BibleBookInfo.allBooks.first(where: { $0.name == book }),
               (1...info.chapterCount).contains(number) else { throw ScriptureError.invalidPassage }
+        if let indexed = try? await index.chapter(book: book, number: number, edition: edition),
+           valid(indexed, in: info, chapter: number, edition: edition) { return indexed }
+        try Task.checkCancellation()
         let folder = directory.appendingPathComponent(edition.rawValue, isDirectory: true)
         let cache = folder.appendingPathComponent("\(info.abbreviation)-\(number).json")
         if let data = try? Data(contentsOf: cache),
@@ -136,6 +141,15 @@ final class ScriptureFeedModel: ObservableObject {
 
     @discardableResult
     func open(_ place: ReadingPlace, asSharedPassage: Bool = false, edition requestedEdition: ReaderEdition? = nil) async -> Bool {
+        await load(place, preservingPlace: asSharedPassage && (isReadingSharedPassage || savedPlace != nil),
+                   edition: requestedEdition ?? edition)
+    }
+
+    func previewSearchResult(_ place: ReadingPlace) async -> Bool {
+        await load(place, preservingPlace: true, edition: edition)
+    }
+
+    private func load(_ place: ReadingPlace, preservingPlace: Bool, edition targetEdition: ReaderEdition) async -> Bool {
         let request = UUID()
         generation = request
         loading = true
@@ -143,14 +157,12 @@ final class ScriptureFeedModel: ObservableObject {
         nextError = nil
         defer { if generation == request { loading = false } }
         do {
-            let targetEdition = requestedEdition ?? edition
             let result = try await chapters.chapter(book: place.book, number: place.chapter, edition: targetEdition)
             guard generation == request else { return false }
             guard let selected = result.first(where: { $0.verse == place.verse }) else {
                 throw ScriptureError.invalidPassage
             }
-            // With no personal bookmark yet, the invitation is the reader's first passage.
-            isReadingSharedPassage = asSharedPassage && savedPlace != nil
+            isReadingSharedPassage = preservingPlace
             edition = targetEdition
             verses = result
             focus(selected.place)

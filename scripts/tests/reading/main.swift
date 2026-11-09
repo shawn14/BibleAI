@@ -68,6 +68,44 @@ struct ReadingProof {
         try check(reopened.current?.text == web.text && !reopened.isReadingSharedPassage, "Return restores the original reading")
         let jude = try await store.chapter(book: "Jude", number: 1, edition: .web)
         try check(jude.count == 25 && jude.last?.verse == 25, "all 25 verses of a single-chapter book are readable")
+        let index = ScriptureIndex(file: URL(fileURLWithPath: "BibleAI/ScriptureIndex/scripture.sqlite3"))
+        let kjvHits = try await index.search("ONLY, begotten Son", edition: .kjv)
+        try check(kjvHits.verses.contains { $0.place == john && $0.translation == "KJV" },
+                  "KJV phrase lookup finds John 3:16 across case and punctuation")
+        let webHits = try await index.search("one and only Son", edition: .web)
+        try check(webHits.verses.contains { $0.place == john && $0.text == web.text },
+                  "WEB result text equals the actual provider's John 3:16")
+        let page1 = try await index.search("God", edition: .kjv)
+        let page2 = try await index.search("God", edition: .kjv, page: 1)
+        try check(page1.hasNext && page1.verses.count == ScriptureIndex.pageSize &&
+                  Set(page1.verses.map(\.passageID)).isDisjoint(with: page2.verses.map(\.passageID)),
+                  "common words return bounded distinct pages in canonical order")
+        let noHits = try await index.search("zzzzzzzzq", edition: .web)
+        try check(noHits.verses.isEmpty && !noHits.hasNext, "no matches remain empty")
+        let cancelled = await Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            do {
+                _ = try await index.search("God", edition: .kjv)
+                return false
+            } catch {
+                return error is CancellationError
+            }
+        }.value
+        try check(cancelled, "a superseded search cannot publish results")
+        let offline = ScriptureChapterStore(directory: folder.appendingPathComponent("offline"), index: index)
+        let preview = ScriptureFeedModel(defaults: defaults, chapters: offline)
+        await preview.start()
+        try check(await preview.previewSearchResult(psalm), "word search opens an uncached complete preview chapter")
+        await preview.switchEdition(.kjv)
+        preview.visibleID = "Psalms|23|2"
+        await preview.didScroll()
+        let restoredReading = ScriptureFeedModel(defaults: defaults, chapters: offline)
+        await restoredReading.start()
+        try check(restoredReading.current?.place == john && restoredReading.edition == .web,
+                  "quitting a search preview preserves the personal bookmark and edition")
+        await preview.returnToReading()
+        try check(preview.current?.text == web.text && !preview.isReadingSharedPassage,
+                  "returning from a text result restores the exact saved reading")
         let file = folder.appendingPathComponent("library/studies.json")
         let library = StudyLibrary(file: file)
         let study = SavedStudy(verse: web, source: .guide, title: "Persistence check", body: "A saved study body")

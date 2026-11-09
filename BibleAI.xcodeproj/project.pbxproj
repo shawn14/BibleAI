@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF312009A1A2000000000001 /* ScriptureIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF312009A1A2000000000002 /* ScriptureIndex.swift */; };
+		EF312009A1A2000000000003 /* ScriptureIndex in Resources */ = {isa = PBXBuildFile; fileRef = EF312009A1A2000000000004 /* ScriptureIndex */; };
 		02C679D6E9376F589D72DDA9 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAED42D504C5CA6E7020AD3 /* PaywallView.swift */; };
 		1691751D660E40ADA1C8FB9A /* ReadingPlansListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A95904A397E41AAB8538F93 /* ReadingPlansListView.swift */; };
 		1B188558DEEE24CB5155735C /* ScriptureReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284A594FCAAD1416944D1380 /* ScriptureReaderView.swift */; };
@@ -78,6 +80,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EF312009A1A2000000000002 /* ScriptureIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptureIndex.swift; sourceTree = "<group>"; };
+		EF312009A1A2000000000004 /* ScriptureIndex */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ScriptureIndex; sourceTree = "<group>"; };
 		00242C81F8F51DD5D96FC071 /* GrowthStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrowthStore.swift; sourceTree = "<group>"; };
 		0231C42B9B3D49C296EB3F45 /* ReadingPlanService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingPlanService.swift; sourceTree = "<group>"; };
 		21B74E2FC9BF35556AF46874 /* InvitationLandingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InvitationLandingView.swift; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 				BA5000007 /* Services */,
 				BA5000008 /* Utilities */,
 				BA2000003 /* Assets.xcassets */,
+				EF312009A1A2000000000004 /* ScriptureIndex */,
 				BA2000004 /* Info.plist */,
 				CC2000006 /* BibleAI.entitlements */,
 				3EC2AF4CED80002389582A6F /* Config.revenuecat.swift */,
@@ -304,6 +309,7 @@
 				A3DC3601FE000C7F43067E71 /* SubscriptionManager.swift */,
 				8167941F7A659EC50F35A4B3 /* RevenueCatManager.swift */,
 				6B36EF96152EA9339F60590D /* ScriptureFeedModel.swift */,
+				EF312009A1A2000000000002 /* ScriptureIndex.swift */,
 				00242C81F8F51DD5D96FC071 /* GrowthStore.swift */,
 				384F9CBCCE316D923C5CBDA1 /* AppleAccount.swift */,
 			);
@@ -421,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA1000003 /* Assets.xcassets in Resources */,
+				EF312009A1A2000000000003 /* ScriptureIndex in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +529,7 @@
 				1FD9B7FF36210DC7843B5724 /* Config.revenuecat.swift in Sources */,
 				9E4DFD83E019458394B69C89 /* OnboardingView.swift in Sources */,
 				D786AD1AF80CB298F3A0116B /* ScriptureFeedModel.swift in Sources */,
+				EF312009A1A2000000000001 /* ScriptureIndex.swift in Sources */,
 				1B188558DEEE24CB5155735C /* ScriptureReaderView.swift in Sources */,
 				25EC7B4611A670710013DA9F /* PassagePickerView.swift in Sources */,
 				9A6E1FE1A461FBEB3DE6C92C /* VerseStudySheet.swift in Sources */,

@@ -100,8 +100,14 @@ struct ScriptureReaderView: View {
                 case .share:
                     if let verse = model.current { ScriptureShareView(verse: verse) }
                 case .passage:
-                    PassagePickerView { place in
-                        guard await model.open(place, asSharedPassage: model.isReadingSharedPassage) else { return false }
+                    PassagePickerView(edition: model.edition) { place, isSearchResult in
+                        let opened: Bool
+                        if isSearchResult {
+                            opened = await model.previewSearchResult(place)
+                        } else {
+                            opened = await model.open(place, asSharedPassage: model.isReadingSharedPassage)
+                        }
+                        guard opened else { return false }
                         pickedPassage = model.scrollRequest
                         return true
                     }

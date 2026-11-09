@@ -1,0 +1,28 @@
+Scripture editions used by BibleAI
+
+The King James Version (standardized 1769 text) and the World English Bible
+come from the open-bibles data repository used by bible-api.com.
+https://github.com/seven1m/bible_api
+https://github.com/seven1m/open-bibles/tree/8b330654ade69f7c96268c761da18dc83a1f49b7
+
+King James Version. Courtesy of the CrossWire Bible Society and eBible.org.
+The text is public domain outside the United Kingdom. The source identifies
+UK Crown rights under letters patent. Cambridge University Press administers
+permissions for the Authorized Version. UK commercial app permission has
+not been established by the source repository's public domain label.
+https://ebible.org/eng-kjv/copyright.htm
+https://www.cambridge.org/gb/rights-and-permissions
+
+World English Bible. Public domain. The name “World English Bible” is a
+trademark of eBible.org and is reserved for faithful copies of the translation.
+https://ebible.org/engwebp/copyright.htm
+
+The bundled edition covers the reader's 66-book canon. It retains the
+provider's verse numbers and text, normalizing only display whitespace.
+Headings, notes and five WEB verse numbers containing only footnotes are
+excluded, following the provider's text-only representation.
+
+Rebuild with bible_parser 1.1.4 (the provider's pinned parser), Ruby sqlite3
+with FTS5, and the two XML files from the repository revision above.
+Pass the directory containing eng-kjv.osis.xml and eng-web.usfx.xml to
+ruby scripts/build-scripture-index.rb. The builder checks both SHA-256 hashes.
