@@ -1,4 +1,15 @@
-# BibleAI 2.0.4 (12) on internal TestFlight — November 9, 2026
+# Reading improvements — November 9, 2026
+
+Source: `codex/todays-reading`; the latest candidate is `24129ad`. This work is newer than TestFlight build 12.
+
+- Five Minutes in the Gospels offers eight short readings and one reflection each. The finish button is on the passage itself, including when opened from Plans. The Bible tab shows the next plan day and the streak. Ten minutes selects one chapter of Proverbs. Existing plans and progress retain their IDs.
+- KJV and WEB word/phrase search runs offline across all 66 books. A result opens temporarily; Return brings back the personal verse and edition. A direct reference still moves the personal reading place.
+- The eight-day Gospel Tour has offline commentary for all 23 chapters and a related passage in the same edition. The four original guides retain their saved wording.
+- Checks: the five-minute regression failed on the old source, then `mac-run BibleAI reading_core_test` passed on the candidate. Both complete book/chapter indexes and all 472 addressed guide-verse rows passed. KJV and WEB each return Psalm 46:10 for “be still.”
+- [First iPhone run](https://github.com/shawn14/BibleAI/actions/runs/42695779121): on SE/iOS 18.6 the actual KJV John 3:16 was above the screen and John 3:17 was visible after the picker closed. The corrected candidate measures the target row and repositions it after layout. Its matching iPhone verification is pending.
+- Before a public release with the complete KJV bundled: confirm UK digital rights or the app's distribution territories; see [edition notice](BibleAI/ScriptureIndex/NOTICE.txt).
+
+## BibleAI 2.0.4 (12) on internal TestFlight — November 9, 2026
 
 Apple accepted build 12 from clean main `cd7f742` and marked it VALID.
 The signed IPA verifies the bundle ID, version, build, Apple sign-in and iCloud
