@@ -1,0 +1,163 @@
+[
+  {
+    "focus": {"book": "Matthew", "chapter": 1, "first": 1, "last": 17},
+    "title": "Why Matthew starts with a family tree",
+    "explanation": "Matthew introduces Jesus through Abraham and David, then traces the family down to Joseph and Mary. Look for David and the exile as landmarks in the list",
+    "related": {"book": "Luke", "chapter": 1, "first": 26, "last": 33},
+    "reflection": "Where does David appear in the angel’s words to Mary?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 2, "first": 1, "last": 12},
+    "title": "Two responses to a new king",
+    "explanation": "When visitors ask about the newborn king, Herod seeks information and the visitors bring gifts. Follow what each does after hearing about Bethlehem",
+    "related": {"book": "Micah", "chapter": 5, "first": 2, "last": 2},
+    "reflection": "Notice why Bethlehem enters the conversation in Matthew 2:4–6."
+  },
+  {
+    "focus": {"book": "Luke", "chapter": 1, "first": 26, "last": 38},
+    "title": "Mary hears the news",
+    "explanation": "Gabriel tells Mary about the child she will bear. Notice Mary’s question and her response after the angel answers",
+    "related": {"book": "Matthew", "chapter": 1, "first": 18, "last": 25},
+    "reflection": "What does Joseph learn about the same child?"
+  },
+  {
+    "focus": {"book": "Luke", "chapter": 2, "first": 8, "last": 20},
+    "title": "Who hears the birth announcement?",
+    "explanation": "The shepherds hear the news while watching their flock. Follow them to Bethlehem, then notice what they tell others and what Mary keeps in mind",
+    "related": {"book": "Luke", "chapter": 1, "first": 46, "last": 55},
+    "reflection": "What connections do you see between Mary’s song and the people who first hear this news?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 3, "first": 7, "last": 10},
+    "title": "What repentance looks like",
+    "explanation": "At the river, John compares his listeners to trees. He asks the people who claim Abraham as their father to show the fruit of repentance",
+    "related": {"book": "Luke", "chapter": 3, "first": 10, "last": 14},
+    "reflection": "What does John ask of someone who has two coats? Where could you practice that kind of change?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 4, "first": 1, "last": 4},
+    "title": "Bread in the wilderness",
+    "explanation": "After forty days of fasting, Jesus is hungry. When the tempter tells him to make bread from stones, Jesus answers with words that Moses spoke to Israel",
+    "related": {"book": "Deuteronomy", "chapter": 8, "first": 2, "last": 3},
+    "reflection": "What did Israel learn from receiving manna in the wilderness? How does that memory help you hear Jesus’ reply?"
+  },
+  {
+    "focus": {"book": "Mark", "chapter": 1, "first": 35, "last": 39},
+    "title": "Where Jesus goes next",
+    "explanation": "Before daylight, Jesus goes out alone to pray. Simon finds him with news that everyone is looking for him. Jesus tells Simon he wants to preach in the towns nearby",
+    "related": {"book": "Luke", "chapter": 4, "first": 42, "last": 44},
+    "reflection": "What reason does Jesus give the people who want him to stay?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 5, "first": 43, "last": 48},
+    "title": "Praying for an enemy",
+    "explanation": "Jesus asks his listeners to pray for people who persecute them. He points to the sun rising and the rain falling on people who act justly and people who do harm",
+    "related": {"book": "Luke", "chapter": 6, "first": 27, "last": 28},
+    "reflection": "Which of the actions Jesus names could you try the next time someone treats you badly?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 6, "first": 25, "last": 30},
+    "title": "What the lilies can teach",
+    "explanation": "Speaking to people worried about food and clothing, Jesus asks them to look closely at birds and lilies. Even Solomon’s clothes, he says, fall short of a flower’s beauty",
+    "related": {"book": "Luke", "chapter": 12, "first": 27, "last": 28},
+    "reflection": "Why do you think Jesus asks people to notice something that blooms for so short a time?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 7, "first": 24, "last": 27},
+    "title": "What holds a house up?",
+    "explanation": "At the close of the sermon, two houses face wind and rising water. Jesus compares the builder whose house stands to someone who puts his words into practice",
+    "related": {"book": "James", "chapter": 1, "first": 22, "last": 25},
+    "reflection": "James describes someone walking away from a mirror. Which saying from the sermon would you like to put to use today?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 8, "first": 5, "last": 10},
+    "title": "A centurion asks for help",
+    "explanation": "A centurion asks Jesus to help a suffering servant. He explains why he trusts that a word from Jesus will be enough by describing how orders travel among his own soldiers",
+    "related": {"book": "Luke", "chapter": 7, "first": 6, "last": 9},
+    "reflection": "In Luke, friends carry the centurion’s message. What about his request draws praise from Jesus in both accounts?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 9, "first": 9, "last": 13},
+    "title": "Who gets a place at the table?",
+    "explanation": "Jesus calls Matthew from his tax booth. Later, when the Pharisees see Jesus eating with tax collectors and sinners, he asks them to consider what God means by mercy",
+    "related": {"book": "Hosea", "chapter": 6, "first": 6, "last": 6},
+    "reflection": "How might Hosea’s words change the way the people watching that meal see its guests?"
+  },
+  {
+    "focus": {"book": "Luke", "chapter": 8, "first": 4, "last": 8},
+    "title": "When seed takes root",
+    "explanation": "As a farmer scatters seed, some is trampled, some dries out, and some is choked by thorns. Jesus ends the story of the harvest by asking his listeners to hear",
+    "related": {"book": "Mark", "chapter": 4, "first": 16, "last": 20},
+    "reflection": "What does Mark say the thorns stand for? Which of those things takes up room in your attention?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 10, "first": 11, "last": 15},
+    "title": "When the wolf comes",
+    "explanation": "Jesus calls himself the good shepherd. Watch what the hired worker does when a wolf appears and what Jesus says he is willing to give for the sheep he knows",
+    "related": {"book": "Ezekiel", "chapter": 34, "first": 11, "last": 12},
+    "reflection": "In Ezekiel, what does God promise to do for sheep that have been scattered?"
+  },
+  {
+    "focus": {"book": "Luke", "chapter": 15, "first": 3, "last": 7},
+    "title": "One sheep worth searching for",
+    "explanation": "A shepherd leaves ninety-nine sheep to look for one. He brings it home on his shoulders and asks his neighbors to rejoice. Jesus connects that joy with one person turning back to God",
+    "related": {"book": "Matthew", "chapter": 18, "first": 12, "last": 14},
+    "reflection": "Matthew also tells of a lost sheep. Whom does Jesus ask his listeners to keep in mind at the end of that telling?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 13, "first": 12, "last": 15},
+    "title": "A towel and a teacher",
+    "explanation": "After washing his disciples’ feet, Jesus asks whether they understand what he has done. He gives them the same task to do for one another",
+    "related": {"book": "Luke", "chapter": 22, "first": 24, "last": 27},
+    "reflection": "In Luke the disciples are arguing over who is greatest. How might washing someone’s feet answer that argument?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 14, "first": 25, "last": 27},
+    "title": "Peace before a parting",
+    "explanation": "Jesus tells his disciples that the Holy Spirit will help them remember what he has taught. Then he gives them his peace as they face what comes next",
+    "related": {"book": "John", "chapter": 16, "first": 32, "last": 33},
+    "reflection": "What does Jesus say about trouble in the same breath as his promise of peace?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 26, "first": 36, "last": 46},
+    "title": "Staying awake in the garden",
+    "explanation": "At Gethsemane, Jesus tells his companions how deeply troubled he is and asks them to stay awake with him. He returns from prayer to find them asleep",
+    "related": {"book": "Mark", "chapter": 14, "first": 37, "last": 38},
+    "reflection": "What does Jesus ask Peter to do when he finds him sleeping? Which part of that request feels harder to you?"
+  },
+  {
+    "focus": {"book": "Luke", "chapter": 23, "first": 50, "last": 56},
+    "title": "Those who stay for the burial",
+    "explanation": "Joseph of Arimathea asks Pilate for Jesus’ body and wraps it in linen. The women from Galilee follow to see where he is laid, then prepare spices before the Sabbath",
+    "related": {"book": "John", "chapter": 19, "first": 38, "last": 42},
+    "reflection": "Which act of care does John record from Nicodemus? What details of the burial would you have missed reading only Luke?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 19, "first": 25, "last": 27},
+    "title": "A home for his mother",
+    "explanation": "From the cross, Jesus speaks to his mother and the disciple he loves. John ends this exchange with a small detail about where his mother went to live",
+    "related": {"book": "Luke", "chapter": 2, "first": 33, "last": 35},
+    "reflection": "What words did Simeon speak to Mary when Jesus was a child? How do they sound beside this scene?"
+  },
+  {
+    "focus": {"book": "Matthew", "chapter": 28, "first": 7, "last": 10},
+    "title": "A meeting promised in Galilee",
+    "explanation": "The women leave the tomb with fear and joy. Jesus meets them on the way and gives them a message about where his followers will see him",
+    "related": {"book": "Matthew", "chapter": 26, "first": 31, "last": 32},
+    "reflection": "What had Jesus already told the disciples about Galilee before his arrest?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 20, "first": 11, "last": 18},
+    "title": "Mary hears her name",
+    "explanation": "Mary Magdalene mistakes Jesus for the gardener. When he calls her by name, she turns and answers him as her teacher. She then carries his message to the disciples",
+    "related": {"book": "John", "chapter": 10, "first": 3, "last": 4},
+    "reflection": "What does Jesus say about names and familiar voices in his picture of a shepherd?"
+  },
+  {
+    "focus": {"book": "John", "chapter": 21, "first": 15, "last": 17},
+    "title": "What Jesus asks of Peter",
+    "explanation": "After breakfast, Jesus asks Peter three times about his love. Each answer leads to a task involving the lambs or the sheep",
+    "related": {"book": "John", "chapter": 18, "first": 25, "last": 27},
+    "reflection": "What questions was Peter answering beside the fire in this earlier scene? What has changed in the questions he hears now?"
+  }
+]

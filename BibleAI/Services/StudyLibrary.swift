@@ -1,6 +1,18 @@
 import Foundation
 import Combine
 
+struct StudyPassage: Codable, Equatable {
+    let book: String
+    let chapter: Int
+    let first: Int
+    let last: Int
+
+    var reference: String {
+        let verses = first == last ? String(first) : "\(first)–\(last)"
+        return "\(book) \(chapter):\(verses)"
+    }
+}
+
 struct SavedStudy: Identifiable, Codable {
     enum Source: String, Codable {
         case guide = "Gospel Tour reading guide"
@@ -13,12 +25,16 @@ struct SavedStudy: Identifiable, Codable {
     let title: String
     let body: String
 
-    init(verse: BibleVerse, source: Source, title: String, body: String) {
+    // Older saves have the quotation and commentary but no structured cross-reference.
+    let relatedPassage: StudyPassage?
+
+    init(verse: BibleVerse, source: Source, title: String, body: String, relatedPassage: StudyPassage? = nil) {
         self.id = UUID()
         self.verse = verse
         self.source = source
         self.title = title
         self.body = body
+        self.relatedPassage = relatedPassage
     }
 
     func matches(_ other: SavedStudy) -> Bool {

@@ -77,6 +77,24 @@ struct ReadingProof {
         try check(restored.studies.count == 1 && restored.studies.first?.matches(study) == true, "exact content and edition reopen once from the atomic study file")
         try restored.remove(study.id)
         try check(StudyLibrary(file: file).studies.isEmpty, "removed study stays removed after reopening")
+        // Build 12 saved these five fields without a relatedPassage field.
+        let oldID = UUID()
+        let legacyRecord: [String: Any] = [
+            "id": oldID.uuidString, "verse": try JSONSerialization.jsonObject(with: JSONEncoder().encode(web)),
+            "source": SavedStudy.Source.guide.rawValue, "title": "Previously saved", "body": "Original commentary"
+        ]
+        try JSONSerialization.data(withJSONObject: [legacyRecord]).write(to: file)
+        let mixedLibrary = StudyLibrary(file: file)
+        try check(mixedLibrary.studies.first?.id == oldID && mixedLibrary.studies.first?.relatedPassage == nil &&
+                  mixedLibrary.studies.first?.body == "Original commentary", "build 12 saved-study schema reads unchanged")
+        let related = StudyPassage(book: "Luke", chapter: 1, first: 26, last: 33)
+        let linked = SavedStudy(verse: web, source: .guide, title: "Linked guide", body: "Saved with a cross-reference",
+                                relatedPassage: related)
+        try mixedLibrary.save(linked)
+        let reopenedStudies = StudyLibrary(file: file).studies
+        try check(reopenedStudies.count == 2 && reopenedStudies.first?.relatedPassage == related &&
+                  reopenedStudies.first?.verse.translation == "WEB" && reopenedStudies.last?.id == oldID,
+                  "the linked WEB guide and existing entry survive disk reload together")
         let invalid = Data("invalid".utf8)
         try invalid.write(to: file)
         let corrupt = StudyLibrary(file: file)
