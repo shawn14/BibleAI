@@ -1,14 +1,16 @@
-# App Store update — November 9, 2026
+# Waiting for review — November 9, 2026
 
-- U.S. subtitle **Bible Streak Tracker & Plans** for **BibleAI: Scroll Scripture**. Version
-  2.0.3 (11) uses the existing app identity and manual release. The earlier 2.0.2 (10)
-  became publicly available November 5.
-- Apple accepted the new draft copy and 18 English screenshots. Six images per device
-  family lead with a real completed reading and a one-day streak. The iPhone second
-  image shows restored plan progress. [Screenshot board](docs/aso/preview-board.png).
-- All three hosted iPhone release journeys passed and the independent reviewer inspected
-  the screenshots. [Build 11 QA](docs/testing/build11-qa-signoff.md). Next: verify the
-  signed archive, upload, submit, and read back the exact Apple review item.
+- Apple accepted **BibleAI: Scroll Scripture 2.0.3 (11)** for review. At 11:14 a.m. CST,
+  App Store Connect returned WAITING_FOR_REVIEW on the version and its review item, build
+  11 VALID, release MANUAL. Release source `5118672`. 2.0.2 (10) is the live version.
+- Verified the submitted en-US **Bible Streak Tracker & Plans** subtitle, description,
+  keywords, promotional text, release notes, and all 18 screenshot filenames/order/MD5s
+  with Apple reporting COMPLETE. The previous app preview and creative placements carried
+  forward. [Screenshot board](docs/aso/preview-board.png).
+- All three independent iPhone CI shards passed. The full local simulator suite passed
+  its three journeys, with the opt-in preview recorder skipped. The signed archive verified
+  version, build, bundle ID, Sign in with Apple and iCloud entitlements. [QA sign-off](docs/testing/build11-qa-signoff.md).
+- Next: Apple review. A manual public release follows approval at Shawn’s direction.
 
 # Submitted — November 4, 2026 06:41 CST
 
