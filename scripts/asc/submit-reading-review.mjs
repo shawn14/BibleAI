@@ -10,13 +10,19 @@ export default async api=>{
   assert(target && target.build===build && target.release==='MANUAL','Wrong draft, build or public-release mode');
   const linked=(await api.get('/v1/appStoreVersions/'+target.id+'/build')).data;
   assert.equal(linked.attributes.version,build);assert.equal(linked.attributes.processingState,'VALID');
+  assert.equal(linked.attributes.usesNonExemptEncryption,false,'Missing export compliance for this exact build');
   const pre=(await api.get('/v1/builds/'+linked.id+'/preReleaseVersion')).data;
   assert.equal(pre.attributes.version,version); assert.equal(pre.attributes.platform,'IOS');
   const done=live.review.find(s=>['WAITING_FOR_REVIEW','IN_REVIEW'].includes(s.state) && s.items.some(i=>i.versionId===target.id));
   if(done)return {alreadySubmitted:true,version,build,id:done.id,state:done.state};
   assert(live.review.length<=1,'Review slot is occupied; no review will be canceled');
   const draft=live.review[0];
-  if(draft)assert(draft.state==='READY_FOR_REVIEW' && draft.items.length===1 && draft.items[0].versionId===target.id,'A different review is open');
+  const identity={version,build,versionId:target.id,buildId:linked.id};
+  const receipt='build/reading-review-'+version+'-'+build+'.json';
+  const saved=fs.existsSync(receipt)?JSON.parse(fs.readFileSync(receipt,'utf8')):null;
+  const ours=saved && Object.entries(identity).every(([k,v])=>saved[k]===v);
+  if(draft)assert(draft.state==='READY_FOR_REVIEW' && ((draft.items.length===1 && draft.items[0].versionId===target.id) || (draft.items.length===0 && ours && saved.id===draft.id)),'A different review is open');
+  if(!draft && ours)throw Error('Verify the saved review ID with Apple before creating another submission: '+saved.id);
   requireDistributionClearance(live.GBR,version,build);
   const loc=(await api.all('/v1/appStoreVersions/'+target.id+'/appStoreVersionLocalizations')).find(l=>l.attributes.locale==='en-US');
   assert(loc);const txt=n=>fs.readFileSync('docs/aso/en-US/'+n+'.txt','utf8').trim();
@@ -32,9 +38,22 @@ export default async api=>{
     assert.equal(files.length,6);
     assert.deepEqual(shots.map(s=>[s.attributes.sourceFileChecksum,s.attributes.assetDeliveryState.state]),files.map(f=>[api.md5(folder+'/'+f),'COMPLETE']));
   }
+  const media=JSON.parse(fs.readFileSync('docs/testing/build'+build+'-store-media.json','utf8'));
+  const nativePreviews=[];
+  for(const set of await api.all('/v1/appStoreVersionLocalizations/'+loc.id+'/appPreviewSets')){
+    for(const file of await api.all('/v1/appPreviewSets/'+set.id+'/appPreviews')){
+      nativePreviews.push([set.attributes.previewType,file.attributes.sourceFileChecksum,file.attributes.assetDeliveryState?.state]);
+    }
+  }
+  assert.deepEqual(nativePreviews.sort(),media.previews,'App preview differs from the approved listing');
+  const placements=await api.all('/v1/appStoreVersionLocalizations/'+loc.id+'/placements?include=video');
+  const active=placements.map(p=>[p.attributes.placementType,p.relationships?.video?.data?.id]).filter(p=>p[1]).sort();
+  assert.deepEqual(active,media.placements,'App Store video placements differ from the approved listing');
+  fs.mkdirSync('build',{recursive:true});
   const ref=(type,id)=>({data:{type,id}});
   const sub=draft??(await api.post('/v1/reviewSubmissions',{data:{type:'reviewSubmissions',attributes:{platform:'IOS'},relationships:{app:ref('apps',app)}}})).data;
-  if(!draft)await api.post('/v1/reviewSubmissionItems',{data:{type:'reviewSubmissionItems',relationships:{reviewSubmission:ref('reviewSubmissions',sub.id),appStoreVersion:ref('appStoreVersions',target.id)}}});
+  if(!draft)fs.writeFileSync(receipt,JSON.stringify({...identity,id:sub.id}),{mode:0o600});
+  if(!draft || !draft.items.length)await api.post('/v1/reviewSubmissionItems',{data:{type:'reviewSubmissionItems',relationships:{reviewSubmission:ref('reviewSubmissions',sub.id),appStoreVersion:ref('appStoreVersions',target.id)}}});
   const items=await api.all('/v1/reviewSubmissions/'+sub.id+'/items?include=appStoreVersion');
   assert.equal(items.length,1);assert.equal(items[0].relationships.appStoreVersion.data.id,target.id);
   await api.patch('/v1/reviewSubmissions/'+sub.id,{data:{type:'reviewSubmissions',id:sub.id,attributes:{submitted:true}}});

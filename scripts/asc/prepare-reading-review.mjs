@@ -15,6 +15,7 @@ export default async api => {
   const versionIDs = new Set((builds.included??[]).filter(v=>v.type==='preReleaseVersions' && v.attributes.version===version && v.attributes.platform==='IOS').map(v=>v.id));
   const found = builds.data.filter(b=>versionIDs.has(b.relationships.preReleaseVersion.data?.id) && b.attributes.version===build && b.attributes.processingState==='VALID' && !b.attributes.expired);
   assert.equal(found.length,1,'Missing exact, non-expired, VALID iOS candidate');
+  assert.equal(found[0].attributes.usesNonExemptEncryption,false,'Missing export compliance for this exact build');
   const versions=await api.all('/v1/apps/'+app+'/appStoreVersions?filter[platform]=IOS');
   const current=versions.filter(v=>['READY_FOR_SALE','READY_FOR_DISTRIBUTION'].includes(v.attributes.appStoreState)).sort((a,b)=>b.attributes.versionString.localeCompare(a.attributes.versionString,'en',{numeric:true}))[0];
   assert(current?.attributes.copyright,'Missing reference copyright');

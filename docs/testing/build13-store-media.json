@@ -1,0 +1,24 @@
+{
+  "referenceVersion": "2.0.3",
+  "previews": [
+    [
+      "IPHONE_67",
+      "f819e82ff1f7c367019e4b8e54ee53bf",
+      "COMPLETE"
+    ]
+  ],
+  "placements": [
+    [
+      "APP_PREVIEW",
+      "dac00019-2b3d-8106-811c-4c2f0013250f"
+    ],
+    [
+      "APP_STORE_SEARCH_RESULTS_ASSET",
+      "4ec00019-2b3d-8106-8121-ebda33293d22"
+    ],
+    [
+      "PRODUCT_PAGE_HEADER_ASSET",
+      "a6c00019-2b3d-8106-8127-42678bf25b2a"
+    ]
+  ]
+}
