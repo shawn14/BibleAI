@@ -77,25 +77,40 @@ export default async function listing(api) {
   }
   const checksum = shot => shot.attributes.sourceFileChecksum;
   const uploaded = shot => shot.attributes.assetDeliveryState?.state;
-  for (const {display, files, hashes} of sets) {
-    let assets = await shots(display);
-    if (apply && JSON.stringify(assets.map(checksum)) !== JSON.stringify(hashes)) await screenshotSet(api, locale.id, display, files);
-    const deadline = Date.now() + 180000;
-    do {
-      assets = await shots(display);
-      if (assets.length === files.length && assets.every(s => uploaded(s) === 'COMPLETE')) break;
-      assert(!assets.some(s => uploaded(s) === 'FAILED'), 'Failed screenshot in ' + display);
-      if (Date.now() >= deadline || !apply) break;
-      await new Promise(resolve => setTimeout(resolve, 4000));
-    } while (true);
-    assert.deepEqual(assets.map(a => [a.attributes.fileName, checksum(a), uploaded(a)]), files.map((f,i) => [path.basename(f), hashes[i], 'COMPLETE']), display);
-    console.log(display + ' verified (' + files.length + ')');
+  // Apple's sourceFileChecksum may be null during processing. Preserve a
+  // matching in-flight set and upload the other device sizes independently.
+  if (apply) {
+    for (const {display, files, hashes} of sets) {
+      const assets = await shots(display);
+      const same = assets.length === files.length && assets.every((a, i) => {
+        const pending = !checksum(a) && ['UPLOAD_COMPLETE', 'PROCESSING'].includes(uploaded(a));
+        return a.attributes.fileName === path.basename(files[i])
+          && a.attributes.fileSize === fs.statSync(files[i]).size
+          && (checksum(a) === hashes[i] || pending);
+      });
+      if (!same) await screenshotSet(api, locale.id, display, files);
+    }
   }
+  const pending = [];
+  for (const {display, files, hashes} of sets) {
+    const assets = await shots(display);
+    assert.deepEqual(assets.map(a => a.attributes.fileName), files.map(f => path.basename(f)), display);
+    for (const [index, shot] of assets.entries()) {
+      assert.equal(shot.attributes.fileSize, fs.statSync(files[index]).size);
+      const delivery = uploaded(shot);
+      if (delivery === 'COMPLETE') assert.equal(checksum(shot), hashes[index], shot.attributes.fileName);
+      else {
+        assert(['UPLOAD_COMPLETE', 'PROCESSING'].includes(delivery), shot.attributes.fileName + ': ' + delivery);
+        pending.push(shot.attributes.fileName);
+      }
+    }
+  }
+  if (!apply) assert.equal(pending.length, 0, 'Apple is processing: ' + pending.join(', '));
   let build;
   try {
     build = (await api.get('/v1/appStoreVersions/' + draft.id + '/build')).data;
   } catch (error) {
     if (error.status !== 404) throw error;
   }
-  return { version, state: state(draft), release: draft.attributes.releaseType, build: build?.attributes?.version, processing: build?.attributes?.processingState, subtitle: infoFields.subtitle, screenshots: 18 };
+  return { version, state: state(draft), release: draft.attributes.releaseType, build: build?.attributes?.version, processing: build?.attributes?.processingState, subtitle: infoFields.subtitle, screenshots: 18, pending };
 }
