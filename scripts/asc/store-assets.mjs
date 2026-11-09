@@ -17,7 +17,7 @@ async function asset(api, kind, rel, relType, relId, file, extra = {}) {
   await api.patch(`/v1/${kind}/${res.id}`, { data: { type: kind, id: res.id, attributes: { uploaded: true, sourceFileChecksum: api.md5(file) } } });
   return res.id;
 }
-async function screenshotSet(api, loc, type, files) {
+export async function screenshotSet(api, loc, type, files) {
   const sets = (await api.get(`/v1/appStoreVersionLocalizations/${loc}/appScreenshotSets`)).data;
   let set = sets.find((s) => s.attributes.screenshotDisplayType === type);
   if (set) { for (const s of (await api.get(`/v1/appScreenshotSets/${set.id}/appScreenshots`)).data) await api.del(`/v1/appScreenshots/${s.id}`); }
