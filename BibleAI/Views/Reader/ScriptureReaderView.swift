@@ -14,6 +14,8 @@ struct ScriptureReaderView: View {
     @State private var today: ReadingPlanService.PlanReading?
     @State private var sheet: ReaderSheet?
     @State private var pickedPassage: ScriptureFeedModel.ScrollRequest?
+    @State private var aligningJump: UUID?
+    @State private var targetFrame: ReaderTargetFrame?
     @State private var showSettings = false
     @State private var pendingRemoval: Highlight?
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -89,7 +91,7 @@ struct ScriptureReaderView: View {
             .task(id: isActive) { if isActive { await openRequestedPassage() } }
             .onChange(of: requestedPlace) { _, _ in if isActive { Task { await openRequestedPassage() } } }
             .onChange(of: model.visibleID) { _, _ in
-                if sheet != .passage && pickedPassage == nil { Task { await model.didScroll() } }
+                if sheet != .passage && pickedPassage == nil && aligningJump == nil { Task { await model.didScroll() } }
             }
             .sheet(item: $sheet, onDismiss: {
                 // Dismissing the search keyboard changes the usable page height on smaller phones.
@@ -188,6 +190,15 @@ struct ScriptureReaderView: View {
                             .padding(.leading, 28).padding(.trailing, 60)
                             .frame(maxWidth: .infinity)
                             .frame(minHeight: geometry.size.height)
+                            .background {
+                                if let jump = model.scrollRequest, jump.place.id == verse.passageID {
+                                    GeometryReader { bounds in
+                                        Color.clear.preference(key: ReaderTargetFrameKey.self,
+                                            value: ReaderTargetFrame(revision: jump.revision,
+                                                top: bounds.frame(in: .named("scriptureViewport")).minY))
+                                    }
+                                }
+                            }
                             .id(verse.passageID)
                         }
                         if let error = model.nextError {
@@ -203,12 +214,34 @@ struct ScriptureReaderView: View {
                 }
                 .scrollIndicators(.hidden)
                 .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-                .scrollPosition(id: $model.visibleID, anchor: .center)
+                .coordinateSpace(name: "scriptureViewport")
+                .onPreferenceChange(ReaderTargetFrameKey.self) { targetFrame = $0 }
+                .scrollPosition(id: Binding(get: { model.visibleID }, set: { value in
+                    if aligningJump == nil { model.visibleID = value }
+                }), anchor: .top)
+                .simultaneousGesture(DragGesture(minimumDistance: 4).onChanged { _ in
+                    // A swipe takes precedence over a programmatic jump.
+                    if aligningJump != nil { aligningJump = nil }
+                })
                 .task(id: model.scrollRequest) {
                     guard let target = model.scrollRequest, sheet != .passage else { return }
-                    await Task.yield()
-                    guard !Task.isCancelled, model.scrollRequest == target else { return }
-                    proxy.scrollTo(target.place.id, anchor: .center)
+                    aligningJump = target.revision
+                    defer { if aligningJump == target.revision { aligningJump = nil } }
+                    // A lazy stack estimates offsets before the destination row exists. Recheck its
+                    // actual frame during keyboard dismissal; never save an intermediate neighbor.
+                    var stable = 0
+                    for _ in 0..<20 {
+                        guard !Task.isCancelled, aligningJump == target.revision,
+                              model.scrollRequest == target else { return }
+                        if let targetFrame, targetFrame.revision == target.revision, abs(targetFrame.top) <= 2 {
+                            stable += 1
+                            if stable >= 5 { break }
+                        } else {
+                            stable = 0
+                            proxy.scrollTo(target.place.id, anchor: .top)
+                        }
+                        do { try await Task.sleep(for: .milliseconds(55)) } catch { return }
+                    }
                 }
                 .overlay { if model.loading { ProgressView("Opening passage…").padding().background(.regularMaterial) } }
                 .accessibilityIdentifier("reader.feed")
@@ -311,5 +344,17 @@ struct ScriptureReaderView: View {
 
     private func saved(_ verse: BibleVerse) -> Highlight? {
         highlights.getHighlight(book: verse.book, chapter: verse.chapter, verse: verse.verse, translation: verse.translation)
+    }
+}
+
+private struct ReaderTargetFrame: Equatable {
+    let revision: UUID
+    let top: CGFloat
+}
+
+private struct ReaderTargetFrameKey: PreferenceKey {
+    static let defaultValue: ReaderTargetFrame? = nil
+    static func reduce(value: inout ReaderTargetFrame?, nextValue: () -> ReaderTargetFrame?) {
+        if let next = nextValue() { value = next }
     }
 }
