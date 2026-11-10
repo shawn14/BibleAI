@@ -1,6 +1,6 @@
 # App Review preparation — November 9, 2026
 
-Apple read at 4:06 p.m. CST: 2.0.2 (10) is live, 2.0.3 (11) is WAITING_FOR_REVIEW with manual release, and 2.0.4 (12) is the latest processed build. UK is one of 174 enabled territories. The new feature candidate is 2.0.4 (13); release and reviewer notes are staged. Do not replace the current review or change UK availability until the full-KJV distribution decision is resolved. No new submission yet.
+Shawn chose to exclude the UK and submit the reading update. Apple readback at 7:02 p.m. CST: GBR alone was removed; 173 of 175 storefronts are enabled and USA is unchanged. This also applies to the current live version. UK must remain unavailable while distributing the complete KJV without UK rights. The live version is 2.0.2 (10); 2.0.3 (11) remains Waiting for Review with manual release. 2.0.4 (13) is running its [versioned iPhone checks](https://github.com/shawn14/BibleAI/actions/runs/42732534552); it has not yet been submitted.
 
 # Reading improvements — November 9, 2026
 

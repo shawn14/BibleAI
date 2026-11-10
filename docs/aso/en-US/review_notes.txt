@@ -6,6 +6,6 @@ Prepared Gospel Tour guides and their related passages work offline on supported
 
 The study allowance is five per day. Monthly or yearly Premium unlocks unlimited study on compatible devices. StoreKit/RevenueCat determines introductory eligibility and the app displays the actual duration, renewal price and terms before purchase. Restore is available on the subscription screen. No universal trial eligibility is promised.
 
-The app includes a searchable offline Scripture index. No account credentials are needed for review.
+The app includes the complete King James Version and World English Bible in a searchable offline Scripture index. The United Kingdom is excluded from App Store distribution. No account credentials are needed for review.
 
 Onboarding offers goal, familiarity, reading-time and reminder choices. Daily reminders can be changed or disabled in Settings > Daily Reading. iCloud key-value sync uses the user's existing Apple account; no separate BibleAI account is created.
