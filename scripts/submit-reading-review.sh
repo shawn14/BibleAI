@@ -9,6 +9,6 @@ export READING_VERSION="${1:?version}" READING_BUILD="${2:?build}"
 git fetch origin main
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]]
 test -s "docs/testing/build$READING_BUILD-qa-signoff.md"
-BUNDLE_ID=com.shawncarpenter.bibleai-companion ASC_APP_ID=6756225286 REQUIRE_SUB=1 ruby "$HOME/projects/fastlane-configs/scripts/check_subscription_state.rb"
+bash scripts/reading-subscription-check.sh
 node scripts/asc/asc.mjs scripts/asc/submit-reading-review.mjs
 cat scripts/asc/submit-reading-review.out.json

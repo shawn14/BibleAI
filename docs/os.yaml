@@ -60,6 +60,7 @@ canonical_scripts:
   add_tester: cd ~/projects/fastlane-configs && fastlane add_internal_tester app:bibleai
   preview_video: bash scripts/preview-video.sh
   testflight_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/testflight.mjs && cat scripts/asc/testflight.out.json
+  check_reading_subscriptions: bash scripts/reading-subscription-check.sh
   prepare_reading_review: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH READING_VERSION=2.0.4 READING_BUILD=13 node scripts/asc/asc.mjs scripts/asc/prepare-reading-review.mjs && cat scripts/asc/prepare-reading-review.out.json
   submit_review: bash scripts/submit-reading-review.sh 2.0.4 13
   version_check: PATH=/opt/homebrew/bin:/usr/local/bin:$PATH node scripts/asc/asc.mjs scripts/asc/version-check.mjs && cat scripts/asc/version-check.out.json
