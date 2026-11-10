@@ -23,7 +23,7 @@ struct SettingsView: View {
                         }
                         .accessibilityIdentifier("settings.textSize")
                     }
-                    LabeledContent("Translation", value: "King James Version")
+                    LabeledContent("Translation", value: ReaderEdition.preferred().name)
                 }
                 Section("Daily Reading") {
                     Picker("Reminder", selection: Binding(
@@ -36,7 +36,7 @@ struct SettingsView: View {
                     LabeledContent("Reading Streak", value: StreakStore.shared.currentStreakDescription)
                 }
                 Section {
-                    Text("Opened chapters are cached on this iPhone. New chapters need a connection.")
+                    Text("You can read and search both the King James Version and the World English Bible offline.")
                         .font(.footnote).foregroundStyle(.secondary)
                 }
                 Section("BibleAI") {

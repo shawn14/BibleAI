@@ -82,6 +82,7 @@ final class ReaderJourneyTests: XCTestCase {
         app.buttons["Reading Settings"].tap()
         XCTAssertTrue(app.sliders["settings.textSize"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.switches["Serif Type"].exists)
+        XCTAssertTrue(app.staticTexts["You can read and search both the King James Version and the World English Bible offline."].exists)
         capture("reading-settings")
         app.buttons["Done"].tap()
         XCTAssertTrue(app.buttons["reader.study"].waitForExistence(timeout: 5))
@@ -135,9 +136,12 @@ final class ReaderJourneyTests: XCTestCase {
             app.buttons["reader.passage"].tap()
             let field = app.searchFields.firstMatch
             field.tap()
-            field.typeText(phrase)
+            // Submit the phrase to dismiss the keyboard, then wait for the indexed results.
+            field.typeText(phrase + "\n")
             let result = app.buttons["passage.result.John|3|16"]
-            reveal(result, in: app)
+            let ready = NSPredicate(format: "exists == true AND isHittable == true AND label CONTAINS[c] %@", phrase)
+            XCTAssertEqual(XCTWaiter.wait(for: [expectation(for: ready, evaluatedWith: result)], timeout: 15), .completed)
+            capture("phrase-search-" + edition)
             XCTAssertTrue(result.label.localizedCaseInsensitiveContains(phrase))
             result.tap()
             let verse = app.buttons["reader.verse.John|3|16"]
